@@ -36,7 +36,7 @@ public class StormCooldown extends BukkitRunnable {
         if (isPlayerExposed(p)) {
             if (time < 240) {
                 time += 4;
-                Cooldowns.Player2StormCoolDown.put(p, time);
+                Cooldowns.stormCooldowns.put(p, time);
                 if (time >= 240) {
                     Bar.setStormBarProgress(p, 1.0d);
                 } else {
@@ -49,7 +49,7 @@ public class StormCooldown extends BukkitRunnable {
                 Main.WORLD.strikeLightningEffect(p.getLocation());
                 time = 0;
                 Bar.setStormBarProgress(p, 0);
-                BotBowsManager.Player2HP.put(p, 0);
+                BotBowsManager.playerHP.put(p, 0);
                 p.damage(0.5);
                 p.setGameMode(GameMode.SPECTATOR);
                 BotBowsManager.messagePlayers(BotBowsManager.getTeamColor(p) + p.getPlayerListName() + ChatColor.AQUA + " was electrocuted to a crisp!");
@@ -58,7 +58,7 @@ public class StormCooldown extends BukkitRunnable {
         } else {
             if (time > 0) {
                 time -= 1;
-                Cooldowns.Player2StormCoolDown.put(p, time);
+                Cooldowns.stormCooldowns.put(p, time);
                 Bar.setStormBarProgress(p, time/240d);
                 if (time == 0) {
                     Bar.setStormBarVisibility(p, false);

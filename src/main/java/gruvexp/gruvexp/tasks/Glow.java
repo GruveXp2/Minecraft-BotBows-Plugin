@@ -19,7 +19,7 @@ public class Glow extends BukkitRunnable {
         if (time == 0) {
             p.setGlowing(true);
             p.setInvulnerable(true);
-            BotBowsManager.Player2IsDamaged.put(p, true);
+            BotBowsManager.isDamaged.put(p, true);
             for (int i = 0; i < 9; i++) {
                 p.getInventory().setItem(i, new ItemStack(Material.BARRIER));
             }
@@ -27,7 +27,7 @@ public class Glow extends BukkitRunnable {
         } else if (time == 1) {
             p.setGlowing(false);
             p.setInvulnerable(false);
-            BotBowsManager.Player2IsDamaged.put(p, false);
+            BotBowsManager.isDamaged.put(p, false);
             for (int i = 0; i < 9; i++) {
                 p.getInventory().setItem(i, null);
             }

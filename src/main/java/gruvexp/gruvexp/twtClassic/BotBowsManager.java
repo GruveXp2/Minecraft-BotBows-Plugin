@@ -6,10 +6,12 @@ import gruvexp.gruvexp.tasks.RoundCountdown;
 import gruvexp.gruvexp.tasks.StartStorm;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scoreboard.ScoreboardManager;
 
@@ -24,10 +26,10 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
     public static final ArrayList<Location> BLUE_SPAWN = new ArrayList<>(4);
     public static final ArrayList<Location> RED_SPAWN = new ArrayList<>(4);
     private static final ArrayList<ArrayList<ArrayList<Integer>>> PLAYER_HEALTH_ARMOR = new ArrayList<>(); // Når man tar damag så kan man gette em liste med hvilke armor pieces som skal fjernes
-    private static final ArrayList<Double> STORM_FREQUENCY_DOUBLE = new ArrayList<>(List.of(0.05, 0.1, 0.25, 0.5, 1.0));
-    public static HashMap<Player, Integer> Player2HP = new HashMap<>();
-    public static HashMap<Player, Integer> Player2MaxHP = new HashMap<>();
-    public static HashMap<Player, Boolean> Player2IsDamaged = new HashMap<>();
+    private static final ArrayList<Double> STORM_FREQUENCY = new ArrayList<>(List.of(0.05, 0.1, 0.25, 0.5, 1.0));
+    public static HashMap<Player, Integer> playerHP = new HashMap<>();
+    public static HashMap<Player, Integer> playerMaxHP = new HashMap<>();
+    public static HashMap<Player, Boolean> isDamaged = new HashMap<>();
     public static ArrayList<Player> teamBlue = new ArrayList<>();
     public static ArrayList<Player> teamRed = new ArrayList<>();
     private static int[] teamPoints = new int[] {0, 0}; // blue, red
@@ -50,8 +52,9 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         meta.addEnchant(Enchantment.POWER, 10, true);
         meta.addEnchant(Enchantment.PUNCH, 10, true);
         meta.addChargedProjectile(new ItemStack(Material.ARROW));
-        BOTBOW.setItemMeta(meta);
-        BOTBOW.setDurability((short) 464);
+        Damageable damageable = (Damageable) meta;
+        damageable.setDamage((short) 464);
+        BOTBOW.setItemMeta(damageable);
         return BOTBOW;
     }
 
@@ -106,14 +109,14 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
             PLAYERS.add(p);
             teamBlue.add(p);
             if (PLAYERS.size() > 1) {
-                Player2MaxHP.put(p, maxHP);
-                Main.Id2Menu.get("botbows settings 1").callInternalFunction(0);
-                Main.Id2Menu.get("botbows settings 2").callInternalFunction(0);
+                playerMaxHP.put(p, maxHP);
+                Main.menus.get("botbows settings 1").callInternalFunction(0);
+                Main.menus.get("botbows settings 2").callInternalFunction(0);
             } else {
-                Player2MaxHP.put(p, 3);
+                playerMaxHP.put(p, 3);
             }
-            p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Player2MaxHP.get(p) * 2);
-            p.setHealth(Player2MaxHP.get(p) * 2);
+            p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(playerMaxHP.get(p) * 2);
+            p.setHealth(playerMaxHP.get(p) * 2);
             for (Player q : PLAYERS) {
                 q.sendMessage(p.getPlayerListName() +" has joined BotBows Classic! ("+ PLAYERS.size() +")");
             }
@@ -123,9 +126,9 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         }
     }
 
-    public static void startGame(Player p) {
+    public static void startGame(CommandSender sender) {
         activeGame = true;
-        messagePlayers(ChatColor.GRAY + p.getName() + ": " + ChatColor.GREEN + "The game has started!");
+        messagePlayers(ChatColor.GRAY + sender.getName() + ": " + ChatColor.GREEN + "The game has started!");
         sneakBarInit();
         Cooldowns.CoolDownInit(PLAYERS);
         Board.createBoard();
@@ -136,7 +139,7 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
 
         // legger til player liv osv
         for (Player q : PLAYERS) {
-            Player2IsDamaged.put(q, false);
+            isDamaged.put(q, false);
             Board.updatePlayerScore(q);
         }
         Board.updateTeamScores();
@@ -155,8 +158,8 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         round += 1;
         // alle har fullt med liv
         for (Player p : PLAYERS) {
-            Player2HP.put(p, Player2MaxHP.get(p));
-            p.setHealth(Player2HP.get(p) * 2);
+            playerHP.put(p, playerMaxHP.get(p));
+            p.setHealth(playerHP.get(p) * 2);
             updateArmor(p);
             Board.updatePlayerScore(p);
             p.setGameMode(GameMode.ADVENTURE);
@@ -171,15 +174,15 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         canMove = false;
         new RoundCountdown().runTaskTimer(PLUGIN, 0L, 20L); // mens de er på spawn, kan de ikke bevege seg og det er nedtelling til det begynner
 
-        if (stormMode && Math.random() < STORM_FREQUENCY_DOUBLE.get(stormFrequency)) {
+        if (stormMode && Math.random() < STORM_FREQUENCY.get(stormFrequency)) {
             activeStorm = true;
             new StartStorm().runTaskTimer(PLUGIN, 100L, 100L); // starter storm og timers
         }
     }
 
     public static void updateArmor(Player p) { // updates the armor pieces of the player
-        int maxHP = Player2MaxHP.get(p); // Maks hp til playeren
-        if (Player2HP.get(p) == maxHP) { // hvis playeren har maxa liv så skal de få fullt ut med armor
+        int maxHP = BotBowsManager.playerMaxHP.get(p); // Maks hp til playeren
+        if (playerHP.get(p) == maxHP) { // hvis playeren har maxa liv så skal de få fullt ut med armor
             Color color;
             if (teamBlue.contains(p)) {
                 color = Color.BLUE;
@@ -190,12 +193,12 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
             return;
         }
         ArrayList<Integer> slots;
-        if (Player2MaxHP.get(p) > 5) {
+        if (BotBowsManager.playerMaxHP.get(p) > 5) {
             float d = (float) maxHP / 5;
-            int i = (int) Math.ceil((maxHP - Player2HP.get(p)) / d);
+            int i = (int) Math.ceil((maxHP - playerHP.get(p)) / d);
             slots = PLAYER_HEALTH_ARMOR.get(3).get(i - 1);
         } else {
-            slots = PLAYER_HEALTH_ARMOR.get(maxHP - 2).get(maxHP - Player2HP.get(p) - 1);
+            slots = PLAYER_HEALTH_ARMOR.get(maxHP - 2).get(maxHP - playerHP.get(p) - 1);
         }
 
         for (Integer slot : slots) {
@@ -210,7 +213,7 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
 
     public static void setPlayerMaxHP(int hp) {
         for (Player p : PLAYERS) {
-            Player2MaxHP.put(p, hp);
+            playerMaxHP.put(p, hp);
         }
     }
 
@@ -224,8 +227,8 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
     }
 
     public static void handleHit(Player p, Player q) { // When a player gets hit this function will handle it. p=def, q=atk.
-        int playerHealth = Player2HP.get(p) - 1;
-        Player2HP.put(p, playerHealth);
+        int playerHealth = playerHP.get(p) - 1;
+        playerHP.put(p, playerHealth);
         messagePlayers(getTeamColor(p) + p.getPlayerListName() + " was sniped by " + getTeamColor(q) + q.getPlayerListName() + "; " + getTeamColor(p) + playerHealth + " hp left.");
         if (playerHealth == 0) {
             p.setGameMode(GameMode.SPECTATOR);
@@ -250,7 +253,7 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
     public static void checkTeam4Victory(ArrayList<Player> team1, ArrayList<Player> team2, String team1ColorName) {
 
         for (Player p: team2) { // hvis teamet fortsatt lever
-            if (Player2HP.get(p) > 0) {
+            if (playerHP.get(p) > 0) {
                 return;
             }
         }
@@ -270,12 +273,12 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         int winScore = 0;
         if (dynamicScoring) {
             for (Player p : team1) {
-                winScore += Player2HP.get(p);
+                winScore += playerHP.get(p);
             }
             int enemyTeamMaxHP = 0;
             messagePlayers(team1Color + "+" + winScore + "p for remaining hp");
             for (Player p : team2) {
-                enemyTeamMaxHP += Player2MaxHP.get(p);
+                enemyTeamMaxHP += playerMaxHP.get(p);
             }
             winScore += enemyTeamMaxHP;
             messagePlayers(team1Color + "+" + enemyTeamMaxHP + "p for enemy hp lost");
@@ -335,7 +338,7 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
     public static void updatePlayerMaxHP(int maxHP) { // updates the amount of hearts the player has
         for (Player p : PLAYERS) {
             p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2 * maxHP);
-            p.setHealth(Player2MaxHP.get(p) * 2);
+            p.setHealth(BotBowsManager.playerMaxHP.get(p) * 2);
         }
     }
 
@@ -352,27 +355,27 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
             p.sendMessage(ChatColor.RED + "You cant leave when you're not in a game");
             return;
         }
-        if (Bar.Player2ShiftBar.containsKey(p)) {
-            Bar.Player2ShiftBar.get(p).setVisible(false);
-            Bar.Player2ShiftBar.get(p).removeAll();
-            Bar.Player2ShiftBar.remove(p);
+        if (Bar.sneakBars.containsKey(p)) {
+            Bar.sneakBars.get(p).setVisible(false);
+            Bar.sneakBars.get(p).removeAll();
+            Bar.sneakBars.remove(p);
         }
-        Cooldowns.Player2SneakCoolDown.remove(p);
-        if (Cooldowns.Player2SneakRunnable.containsKey(p)) {
-            Cooldowns.Player2SneakRunnable.get(p).cancel();
-            Cooldowns.Player2SneakRunnable.remove(p);
+        Cooldowns.sneakCooldowns.remove(p);
+        if (Cooldowns.sneakRunnables.containsKey(p)) {
+            Cooldowns.sneakRunnables.get(p).cancel();
+            Cooldowns.sneakRunnables.remove(p);
         }
-        Player2IsDamaged.remove(p);
-        Player2MaxHP.remove(p);
-        Player2HP.remove(p);
+        isDamaged.remove(p);
+        playerMaxHP.remove(p);
+        playerHP.remove(p);
         PLAYERS.remove(p);
         if (teamBlue.contains(p)) {
             teamBlue.remove(p);
         } else {
             teamRed.remove(p);
         }
-        Main.Id2Menu.get("botbows settings 1").callInternalFunction(0);
-        Main.Id2Menu.get("botbows settings 2").callInternalFunction(0);
+        Main.menus.get("botbows settings 1").callInternalFunction(0);
+        Main.menus.get("botbows settings 2").callInternalFunction(0);
         p.sendMessage(ChatColor.YELLOW + "You left BotBows Classic");
         messagePlayers(ChatColor.YELLOW + p.getPlayerListName() + " has left the game (" + PLAYERS.size() + ")");
     }
@@ -396,9 +399,9 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
             ScoreboardManager sm = Bukkit.getServer().getScoreboardManager();
             assert sm != null;
             p.setScoreboard(sm.getNewScoreboard());
-            Bar.Player2ShiftBar.get(p).setVisible(false);
-            if (Cooldowns.Player2SneakRunnable.containsKey(p)) {
-                Cooldowns.Player2SneakRunnable.get(p).cancel();
+            Bar.sneakBars.get(p).setVisible(false);
+            if (Cooldowns.sneakRunnables.containsKey(p)) {
+                Cooldowns.sneakRunnables.get(p).cancel();
             }
             p.setGlowing(false);
             p.setInvulnerable(false);
@@ -407,16 +410,16 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         }
         Board.resetTeams();
         Cooldowns.resetStormRunnable();
-        Player2IsDamaged.clear();
+        isDamaged.clear();
         PLAYERS.clear();
         teamBlue.clear();
         teamRed.clear();
         teamPoints = new int[]{0, 0};
         round = 0;
         canMove = true;
-        Bar.Player2ShiftBar.clear();
-        Cooldowns.Player2SneakCoolDown.clear();
-        Cooldowns.Player2SneakRunnable.clear();
+        Bar.sneakBars.clear();
+        Cooldowns.sneakCooldowns.clear();
+        Cooldowns.sneakRunnables.clear();
         Main.MenuInit();
     }
 

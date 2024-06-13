@@ -18,7 +18,7 @@ public class LeaveCommand implements CommandExecutor {
             return true;
         }
         BotBowsManager.leaveGame(p);
-        Main.Id2Menu.get("botbows settings 1").callInternalFunction(0); // recalculate
+        Main.menus.get("botbows settings 1").callInternalFunction(0); // recalculate
 
         return true;
     }

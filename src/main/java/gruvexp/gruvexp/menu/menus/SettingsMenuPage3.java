@@ -57,9 +57,9 @@ public class SettingsMenuPage3 extends Menu {
                 break;
             case LIGHT_BLUE_STAINED_GLASS_PANE:
                 if (e.getSlot() == 12) {
-                    Main.Id2Menu.get("botbows settings 2").open(clicker);
+                    Main.menus.get("botbows settings 2").open(clicker);
                 } else {
-                    Main.Id2Menu.get("botbows settings 4").open(clicker);
+                    Main.menus.get("botbows settings 4").open(clicker);
                 }
         }
     }

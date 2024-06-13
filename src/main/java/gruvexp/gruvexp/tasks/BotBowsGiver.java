@@ -16,7 +16,7 @@ public class BotBowsGiver  extends BukkitRunnable {
                 cancel();
                 return;
             }
-            if (!BotBowsManager.Player2IsDamaged.get(p)) {
+            if (!BotBowsManager.isDamaged.get(p)) {
                 p.getInventory().setItem(0, BOTBOW);
             }
         }

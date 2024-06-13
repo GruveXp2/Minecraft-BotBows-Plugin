@@ -19,15 +19,15 @@ public class HitListener implements Listener {
         if (!(arrow.getShooter() instanceof Player)) {return;} // den som skøyt
         if (!(e.getEntity() instanceof Player)) {return;} // den som blei hitta
         arrow.setKnockbackStrength(8);
-        Player attacking_p = (Player) arrow.getShooter();
-        Player defending_p = (Player) e.getEntity();
-        if (BotBowsManager.getTeamColor(attacking_p) == BotBowsManager.getTeamColor(defending_p) || attacking_p.isGlowing()) {
+        Player attacker = (Player) arrow.getShooter();
+        Player defender = (Player) e.getEntity();
+        if (BotBowsManager.getTeamColor(attacker) == BotBowsManager.getTeamColor(defender) || attacker.isGlowing()) {
             arrow.remove(); // friendly fire off
             e.setCancelled(true);
             return;
         }
         e.setDamage(0.01); // de skal ikke daue men bli satt i spectator mode til runda er ferig
-        BotBowsManager.handleHit(defending_p, attacking_p);
-        new Glow(defending_p).runTaskTimer(Main.getPlugin(), 0L, 40L); // 2 SEKUNDER GLOWING
+        BotBowsManager.handleHit(defender, attacker);
+        new Glow(defender).runTaskTimer(Main.getPlugin(), 0L, 40L); // 2 SEKUNDER GLOWING
     }
 }

@@ -16,7 +16,7 @@ public class MenuCommand implements CommandExecutor {
 
         Player p = (Player) sender; // grabs which player did the command. endrer datatype til Player
 
-        Main.Id2Menu.get("game menu").open(p);
+        Main.menus.get("game menu").open(p);
 
         return true;
     }

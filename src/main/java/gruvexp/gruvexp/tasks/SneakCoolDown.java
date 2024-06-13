@@ -20,7 +20,7 @@ public class SneakCoolDown extends BukkitRunnable {
         if (p.isSneaking()) {
             if (time < 200) {
                 time += 2;
-                Cooldowns.Player2SneakCoolDown.put(p, time);
+                Cooldowns.sneakCooldowns.put(p, time);
                 Bar.setSneakBarProgress(p, time/200d);
             } else {
                 p.setSneaking(false);
@@ -28,7 +28,7 @@ public class SneakCoolDown extends BukkitRunnable {
             }
         } else {
             time -= 1;
-            Cooldowns.Player2SneakCoolDown.put(p, time);
+            Cooldowns.sneakCooldowns.put(p, time);
             Bar.setSneakBarProgress(p, time/200d);
             if (time <=0) {
                 cancel();

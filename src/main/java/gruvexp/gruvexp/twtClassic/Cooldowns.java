@@ -10,37 +10,37 @@ import java.util.HashMap;
 
 public class Cooldowns { // Inneholder shifting og storm logic
 
-    public static HashMap<Player, BukkitTask> Player2SneakRunnable = new HashMap<>();
-    public static HashMap<Player, BukkitTask> Player2StormRunnable = new HashMap<>();
-    public static HashMap<Player, Integer> Player2SneakCoolDown = new HashMap<>();
-    public static HashMap<Player, Integer> Player2StormCoolDown = new HashMap<>();
+    public static HashMap<Player, BukkitTask> sneakRunnables = new HashMap<>();
+    public static HashMap<Player, BukkitTask> stormRunnables = new HashMap<>();
+    public static HashMap<Player, Integer> sneakCooldowns = new HashMap<>();
+    public static HashMap<Player, Integer> stormCooldowns = new HashMap<>();
 
     public static void CoolDownInit(ArrayList<Player> players) {
         for (Player p : players) {
-            Player2SneakCoolDown.put(p, 0);
+            sneakCooldowns.put(p, 0);
         }
         if (BotBowsManager.stormMode) {
             for (Player p : players) {
-                Player2StormCoolDown.put(p, 0);
+                stormCooldowns.put(p, 0);
             }
         }
     }
 
     public static void stormRunnableInit() {
         for (Player p : BotBowsManager.getPlayers()) {
-            Player2StormRunnable.put(p, new StormCooldown(p).runTaskTimer(Main.getPlugin(), 0L, 2L));
+            stormRunnables.put(p, new StormCooldown(p).runTaskTimer(Main.getPlugin(), 0L, 2L));
         }
     }
 
     public static void resetStormRunnable() {
         for (Player p : BotBowsManager.getPlayers()) {
-            Player2StormCoolDown.put(p, 0);
-            if (Player2StormRunnable.containsKey(p)) {
-                Player2StormRunnable.get(p).cancel();
+            stormCooldowns.put(p, 0);
+            if (stormRunnables.containsKey(p)) {
+                stormRunnables.get(p).cancel();
             }
             Bar.setStormBarProgress(p, 0d);
             Bar.setStormBarVisibility(p, false);
         }
-        Player2StormRunnable.clear();
+        stormRunnables.clear();
     }
 }

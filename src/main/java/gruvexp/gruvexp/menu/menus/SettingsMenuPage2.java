@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class SettingsMenuPage2 extends Menu {
 
-    boolean advanced_hp = true;
+    boolean advancedHp = true;
     private static final ItemStack DYNAMIC_POINTS_DISABLED = makeItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Dynamic points",
             ChatColor.DARK_RED + "Disabled", "If enabled, winning team gets 1", "point for each remaining hp.", "If disbabled, winning team only gets 1 point.");
     private static final ItemStack DYNAMIC_POINTS_ENABLED = makeItem(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "Dynamic points",
@@ -53,7 +53,7 @@ public class SettingsMenuPage2 extends Menu {
                 } else {
                     inventory.setItem(6, CUSTOM_HP_ENABLED);
                     enableCustomHP();
-                    advanced_hp = true;
+                    advancedHp = true;
                 }
                 break;
             case LIME_STAINED_GLASS_PANE:
@@ -63,7 +63,7 @@ public class SettingsMenuPage2 extends Menu {
                 } else {
                     inventory.setItem(6, CUSTOM_HP_DISABLED);
                     updateMenu();
-                    advanced_hp = false;
+                    advancedHp = false;
                 }
                 break;
             case PLAYER_HEAD:
@@ -85,16 +85,16 @@ public class SettingsMenuPage2 extends Menu {
                 inventory.setItem(slot, head);
                 p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 2);
                 p.setHealth(hp * 2);
-                BotBowsManager.Player2MaxHP.put(p, hp);
+                BotBowsManager.playerMaxHP.put(p, hp);
                 break;
             case BARRIER:
                 clicker.closeInventory();
                 break;
             case LIGHT_BLUE_STAINED_GLASS_PANE:
                 if (e.getSlot() == 21) {
-                    Main.Id2Menu.get("botbows settings 1").open(clicker);
+                    Main.menus.get("botbows settings 1").open(clicker);
                 } else if (e.getSlot() == 23) {
-                    Main.Id2Menu.get("botbows settings 3").open(clicker);
+                    Main.menus.get("botbows settings 3").open(clicker);
                 }
         }
     }
@@ -115,17 +115,17 @@ public class SettingsMenuPage2 extends Menu {
 
     @Override
     public void callInternalFunction(int i) {
-        if (i == 0 && advanced_hp) {enableCustomHP();}
+        if (i == 0 && advancedHp) {enableCustomHP();}
     }
 
     public void updateMenu() { // The normal menu with a slider
-        int max_hp = BotBowsManager.maxHP;
+        int maxHP = BotBowsManager.maxHP;
 
         inventory.setItem(9, null);
         inventory.setItem(10, FILLER_GLASS);
         for (int i = 0; i < 5; i++) {
             ItemStack is = makeItem(Material.WHITE_STAINED_GLASS_PANE, ChatColor.WHITE + "" + (i + 1));
-            if (i < max_hp) {
+            if (i < maxHP) {
                 is = makeItem(Material.PINK_STAINED_GLASS_PANE, ChatColor.RED + "" + (i + 1));
             }
             inventory.setItem(i + 11, is);
@@ -133,8 +133,8 @@ public class SettingsMenuPage2 extends Menu {
         inventory.setItem(16, FILLER_GLASS);
         inventory.setItem(17, null);
 
-        BotBowsManager.setPlayerMaxHP(max_hp);
-        BotBowsManager.updatePlayerMaxHP(max_hp);
+        BotBowsManager.setPlayerMaxHP(maxHP);
+        BotBowsManager.updatePlayerMaxHP(maxHP);
     }
     
     public void enableCustomHP() {
@@ -144,24 +144,24 @@ public class SettingsMenuPage2 extends Menu {
         for (int i = 0; i < BotBowsManager.teamBlue.size(); i++) {
             Player p = BotBowsManager.teamBlue.get(i);
             ItemStack item = makeHeadItem(p, ChatColor.BLUE);
-            item.setAmount(BotBowsManager.Player2MaxHP.get(p));
+            item.setAmount(BotBowsManager.playerMaxHP.get(p));
             inventory.setItem(i + 9, item);
         }
         for (int i = 0; i < BotBowsManager.teamRed.size(); i++) {
             Player p = BotBowsManager.teamRed.get(i);
             ItemStack item = makeHeadItem(p, ChatColor.RED);
-            item.setAmount(BotBowsManager.Player2MaxHP.get(p));
+            item.setAmount(BotBowsManager.playerMaxHP.get(p));
             inventory.setItem(17 - i, item);
         }
 
         inventory.setItem(13, FILLER_GLASS);
     }
 
-    public ItemStack makeHeadItem(Player p, ChatColor teamcolor) {
+    public ItemStack makeHeadItem(Player p, ChatColor teamColor) {
 
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta itemMeta = (SkullMeta) item.getItemMeta();
-        itemMeta.setDisplayName(teamcolor + p.getPlayerListName());
+        itemMeta.setDisplayName(teamColor + p.getPlayerListName());
         itemMeta.getPersistentDataContainer().set(new NamespacedKey(Main.getPlugin(), "uuid"), PersistentDataType.STRING, p.getUniqueId().toString());
         itemMeta.setOwningPlayer(Bukkit.getPlayer(p.getName()));
 

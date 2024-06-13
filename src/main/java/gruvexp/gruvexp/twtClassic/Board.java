@@ -66,8 +66,8 @@ public class Board {
             }
         }
 
-        int hp = BotBowsManager.Player2HP.get(p);
-        int max_hp = BotBowsManager.Player2MaxHP.get(p);
+        int hp = BotBowsManager.playerHP.get(p);
+        int max_hp = BotBowsManager.playerMaxHP.get(p);
         int p_score;
         if (BotBowsManager.teamBlue.contains(p)) {
             p_score = BotBowsManager.teamBlue.indexOf(p) + BotBowsManager.teamRed.size() + 1;
@@ -88,7 +88,7 @@ public class Board {
 
     public static void updateTeamScores() {
         Scoreboard sb = objective.getScoreboard();
-        int win_threshold = BotBowsManager.winThreshold;
+        int winThreshold = BotBowsManager.winThreshold;
 
         for (Objective ignored : sb.getObjectives()) {
             for (String entries : sb.getEntries()) {
@@ -100,41 +100,41 @@ public class Board {
                 }
             }
         }
-        if (win_threshold == -1) {
+        if (winThreshold == -1) {
             setScore(ChatColor.BLUE + "Blue: " + ChatColor.RESET + BotBowsManager.getPoints("blue"), 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
             setScore(ChatColor.RED + "Red:  " + ChatColor.RESET + BotBowsManager.getPoints("red"), 3 + BotBowsManager.getTotalPlayers());
-        } else if (win_threshold >= 35) {
-            setScore(ChatColor.BLUE + "Blue: " + ChatColor.RESET + BotBowsManager.getPoints("blue") + " / " + ChatColor.GRAY + win_threshold, 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
-            setScore(ChatColor.RED + "Red:  " + ChatColor.RESET + BotBowsManager.getPoints("red") + " / " + ChatColor.GRAY + win_threshold, 3 + BotBowsManager.getTotalPlayers());
+        } else if (winThreshold >= 35) {
+            setScore(ChatColor.BLUE + "Blue: " + ChatColor.RESET + BotBowsManager.getPoints("blue") + " / " + ChatColor.GRAY + winThreshold, 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
+            setScore(ChatColor.RED + "Red:  " + ChatColor.RESET + BotBowsManager.getPoints("red") + " / " + ChatColor.GRAY + winThreshold, 3 + BotBowsManager.getTotalPlayers());
         } else { // få plass til mest mulig streker
             String c = "";
-            if (win_threshold < 8) {
+            if (winThreshold < 8) {
                 c = "█";
-            } else if (win_threshold < 9) {
+            } else if (winThreshold < 9) {
                 c = "▉";
-            } else if (win_threshold < 10) {
+            } else if (winThreshold < 10) {
                 c = "▊";
-            } else if (win_threshold < 12) {
+            } else if (winThreshold < 12) {
                 c = "▋";
-            } else if (win_threshold < 15) {
+            } else if (winThreshold < 15) {
                 c = "▌";
-            } else if (win_threshold < 17) {
+            } else if (winThreshold < 17) {
                 c = "▍";
-            } else if (win_threshold < 23) {
+            } else if (winThreshold < 23) {
                 c = "▎";
-            } else if (win_threshold < 34) {
+            } else if (winThreshold < 34) {
                 c = "▏";
             }
             int blue_points = BotBowsManager.getPoints("blue");
             int red_points = BotBowsManager.getPoints("red");
-            if (blue_points > win_threshold) { // antall points cappes på win_threshold, så hvis noen hadde 3p og fikk 2p, men win thresholden er 4, så står det at de har 4p
-                blue_points = win_threshold;
-            } else if (red_points > win_threshold) {
-                red_points = win_threshold;
+            if (blue_points > winThreshold) { // antall points cappes på win_threshold, så hvis noen hadde 3p og fikk 2p, men win thresholden er 4, så står det at de har 4p
+                blue_points = winThreshold;
+            } else if (red_points > winThreshold) {
+                red_points = winThreshold;
             }
 
-            setScore(ChatColor.BLUE + "Blue: " + ChatColor.GREEN + c.repeat(blue_points) + ChatColor.GRAY + c.repeat(win_threshold - blue_points), 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
-            setScore(ChatColor.RED + "Red:  " + ChatColor.GREEN + c.repeat(red_points) + ChatColor.GRAY + c.repeat(win_threshold - red_points), 3 + BotBowsManager.getTotalPlayers());
+            setScore(ChatColor.BLUE + "Blue: " + ChatColor.GREEN + c.repeat(blue_points) + ChatColor.GRAY + c.repeat(winThreshold - blue_points), 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
+            setScore(ChatColor.RED + "Red:  " + ChatColor.GREEN + c.repeat(red_points) + ChatColor.GRAY + c.repeat(winThreshold - red_points), 3 + BotBowsManager.getTotalPlayers());
         }
     }
 

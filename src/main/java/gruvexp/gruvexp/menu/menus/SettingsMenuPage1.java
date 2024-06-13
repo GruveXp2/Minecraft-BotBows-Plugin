@@ -41,10 +41,10 @@ public class SettingsMenuPage1 extends Menu {
                     BotBowsManager.teamBlue.add(p);
                 }
                 recalculateTeam();
-                Main.Id2Menu.get("botbows settings 2").callInternalFunction(0);
+                Main.menus.get("botbows settings 2").callInternalFunction(0);
             }
             case BARRIER -> clicker.closeInventory();
-            case LIGHT_BLUE_STAINED_GLASS_PANE -> Main.Id2Menu.get("botbows settings 2").open(clicker);
+            case LIGHT_BLUE_STAINED_GLASS_PANE -> Main.menus.get("botbows settings 2").open(clicker);
         }
     }
 

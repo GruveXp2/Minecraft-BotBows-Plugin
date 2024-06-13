@@ -27,8 +27,8 @@ public class ShiftListener implements Listener {
             return;
         }
 
-        if (Cooldowns.Player2SneakCoolDown.get(p) <= 0) {
-            Cooldowns.Player2SneakRunnable.put(p, new SneakCoolDown(p).runTaskTimer(Main.getPlugin(), 0L, 1L));
+        if (Cooldowns.sneakCooldowns.get(p) <= 0) {
+            Cooldowns.sneakRunnables.put(p, new SneakCoolDown(p).runTaskTimer(Main.getPlugin(), 0L, 1L));
             Bar.setSneakBarVisibility(p, true);
         } else {
             e.setCancelled(true);

@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public final class Main extends JavaPlugin {
 
-    public static HashMap<String, Menu> Id2Menu = new HashMap<>();
+    public static HashMap<String, Menu> menus = new HashMap<>();
     private static Main instance;
     public static World WORLD;
     public static Main getPlugin() {
@@ -48,10 +48,10 @@ public final class Main extends JavaPlugin {
     }
 
     public static void MenuInit() {
-        Id2Menu.put("game menu", new GameMenu());
-        Id2Menu.put("botbows settings 1", new SettingsMenuPage1());
-        Id2Menu.put("botbows settings 2", new SettingsMenuPage2());
-        Id2Menu.put("botbows settings 3", new SettingsMenuPage3());
-        Id2Menu.put("botbows settings 4", new SettingsMenuPage4());
+        menus.put("game menu", new GameMenu());
+        menus.put("botbows settings 1", new SettingsMenuPage1());
+        menus.put("botbows settings 2", new SettingsMenuPage2());
+        menus.put("botbows settings 3", new SettingsMenuPage3());
+        menus.put("botbows settings 4", new SettingsMenuPage4());
     }
 }
