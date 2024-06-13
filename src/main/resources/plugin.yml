@@ -1,0 +1,27 @@
+name: BotBows
+version: '${project.version}'
+main: gruvexp.gruvexp.Main
+api-version: 1.19
+authors: [ GruveXp ]
+description: Plugin for the BotBows server
+
+commands:
+  menu:
+    usage: /menu
+    description: Used to access the game menu
+    aliases:
+      - /join
+      - /play
+  settings:
+    usage: /settings
+    description: Used when you want to view or change the settings of the game
+  start:
+    usage: /start
+    description: Run this command to start the game
+  leave:
+    usage: /leave
+    description: Leave the game
+  stopgame:
+    usage: /stopgame
+    description: Stops the game
+
