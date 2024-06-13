@@ -47,8 +47,8 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         CrossbowMeta meta = (CrossbowMeta) BOTBOW.getItemMeta();
         meta.setDisplayName(ChatColor.BOLD + "" + ChatColor.GREEN + "BotBow");
         meta.setLore(Arrays.asList("The strongest bow", "ever known to man"));
-        meta.addEnchant(Enchantment.ARROW_DAMAGE, 10, true);
-        meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 10, true);
+        meta.addEnchant(Enchantment.POWER, 10, true);
+        meta.addEnchant(Enchantment.PUNCH, 10, true);
         meta.addChargedProjectile(new ItemStack(Material.ARROW));
         BOTBOW.setItemMeta(meta);
         BOTBOW.setDurability((short) 464);
