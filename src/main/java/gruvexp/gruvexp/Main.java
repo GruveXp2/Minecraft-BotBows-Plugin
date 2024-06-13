@@ -15,7 +15,7 @@ public final class Main extends JavaPlugin {
 
     public static HashMap<String, Menu> Id2Menu = new HashMap<>();
     private static Main instance;
-    public static World WORLD = Bukkit.getWorld("BotBows (S2E1)");
+    public static World WORLD;
     public static Main getPlugin() {
         return instance;
     }
@@ -36,6 +36,7 @@ public final class Main extends JavaPlugin {
         getCommand("start").setExecutor(new StartCommand());
         getCommand("leave").setExecutor(new LeaveCommand());
         getCommand("stopgame").setExecutor(new StopCommand());
+        WORLD = Bukkit.getWorld("BotBows (S2E1)");
         BotBowsManager.armorInit();
         BotBowsManager.spawnInit();
         MenuInit();
