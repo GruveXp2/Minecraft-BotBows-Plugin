@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class SettingsMenuPage3 extends Menu {
+public class winThresholdMenu extends Menu {
     @Override
     public String getMenuName() {
         return "Select win threshold";
@@ -89,9 +89,6 @@ public class SettingsMenuPage3 extends Menu {
         inventory.setItem(7, FILLER_GLASS);
         inventory.setItem(8, FILLER_GLASS);
     }
-
-    @Override
-    public void callInternalFunction(int i) {}
 
     private void updateMenu() {
         ItemStack is;

@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsMenuPage4 extends Menu {
+public class stormModeMenu extends Menu {
 
     private static final ArrayList<String> PERCENT = new ArrayList<>(List.of("5%", "10%", "25%", "50%", "100%")); // liste over strings som viser hvor mange % sjanse for storm, tar inn int
 
@@ -92,7 +92,4 @@ public class SettingsMenuPage4 extends Menu {
         }
 
     }
-
-    @Override
-    public void callInternalFunction(int i) {}
 }

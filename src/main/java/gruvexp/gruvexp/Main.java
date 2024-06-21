@@ -14,15 +14,15 @@ import java.util.HashMap;
 public final class Main extends JavaPlugin {
 
     public static HashMap<String, Menu> menus = new HashMap<>();
-    private static Main instance;
+    private static Main PLUGIN;
     public static World WORLD;
     public static Main getPlugin() {
-        return instance;
+        return PLUGIN;
     }
 
     @Override
     public void onEnable() { // ADD FUNNEY SCRACHT SOUNDEFFECTS OG PIOM LYD reSOURCEPACC
-        instance = this;
+        PLUGIN = this;
         Bukkit.getLogger().info("BotBows plugin enabled!");
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(new HitListener(), this);
@@ -49,9 +49,9 @@ public final class Main extends JavaPlugin {
 
     public static void MenuInit() {
         menus.put("game menu", new GameMenu());
-        menus.put("botbows settings 1", new SettingsMenuPage1());
-        menus.put("botbows settings 2", new SettingsMenuPage2());
-        menus.put("botbows settings 3", new SettingsMenuPage3());
-        menus.put("botbows settings 4", new SettingsMenuPage4());
+        menus.put("botbows settings 1", new selectTeamsMenu());
+        menus.put("botbows settings 2", new healthMenu());
+        menus.put("botbows settings 3", new winThresholdMenu());
+        menus.put("botbows settings 4", new stormModeMenu());
     }
 }

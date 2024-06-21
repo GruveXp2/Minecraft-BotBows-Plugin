@@ -17,15 +17,15 @@ public class movementListener implements Listener {
     public void onMove(PlayerMoveEvent e) { // hvis det er nedtelling og playeren er i gamet så kan dikke bevege seg
         if (BotBowsManager.canMove) {
             Player p = e.getPlayer();
-            Material material = p.getLocation().add(0, -0.05, 0).getBlock().getType();
+            Material material = p.getLocation().add(0, -0.05, 0).getBlock().getType(); // sjekker rett under, bare 0.05 itilfelle det er teppe
             if (material == Material.AIR) {
-                material = p.getLocation().add(0, -0.1, 0).getBlock().getType();
+                material = p.getLocation().add(0, -0.1, 0).getBlock().getType(); // hvis man står på kanten av et teppe kan det være en effektblokk under
             }
             switch (material) { // add effekter basert på åssen blokk som er under
                 case YELLOW_CONCRETE, YELLOW_CONCRETE_POWDER -> p.addPotionEffect(new PotionEffect(org.bukkit.potion.PotionEffectType.JUMP_BOOST, 1200, 6, true, false));
                 case CYAN_CONCRETE, CYAN_CONCRETE_POWDER, CYAN_CARPET -> {
                     double Δy = e.getTo().getY() - e.getFrom().getY();
-                    if (Δy <= 0.1) {break;}
+                    if (Δy <= 0.1) {break;} // fortsett bare viss man har hoppa (et visst antall upwards momentum)
                     double vX = p.getLocation().getDirection().getX();
                     double vZ = p.getLocation().getDirection().getZ();
 

@@ -25,7 +25,8 @@ public class GameMenu extends Menu {
 
         if (e.getCurrentItem().getType() == Material.BOW) {
             BotBowsManager.joinGame(p);
-            Main.menus.get("botbows settings 1").callInternalFunction(0); // recalculate
+            selectTeamsMenu chooseTeamsMenu = (selectTeamsMenu) Main.menus.get("botbows settings 1");
+            chooseTeamsMenu.recalculateTeam(0); // recalculate
         }
     }
 
@@ -35,10 +36,5 @@ public class GameMenu extends Menu {
         inventory.setItem(1, botbows);
 
         setFillerGlass();
-    }
-
-    @Override
-    public void callInternalFunction(int i) {
-
     }
 }

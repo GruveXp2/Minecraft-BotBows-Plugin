@@ -13,7 +13,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
-public class SettingsMenuPage2 extends Menu {
+public class healthMenu extends Menu {
 
     boolean advancedHp = true;
     private static final ItemStack DYNAMIC_POINTS_DISABLED = makeItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Dynamic points",
@@ -101,6 +101,7 @@ public class SettingsMenuPage2 extends Menu {
 
     @Override
     public void setMenuItems() {
+        disableCustomHP();
         updateMenu();
 
         inventory.setItem(2, DYNAMIC_POINTS_ENABLED);
@@ -113,48 +114,51 @@ public class SettingsMenuPage2 extends Menu {
         inventory.setItem(23, RIGHT);
     }
 
-    @Override
-    public void callInternalFunction(int i) {
-        if (i == 0 && advancedHp) {enableCustomHP();}
-    }
-
     public void updateMenu() { // The normal menu with a slider
-        int maxHP = BotBowsManager.maxHP;
-
-        inventory.setItem(9, null);
-        inventory.setItem(10, FILLER_GLASS);
-        for (int i = 0; i < 5; i++) {
-            ItemStack is = makeItem(Material.WHITE_STAINED_GLASS_PANE, ChatColor.WHITE + "" + (i + 1));
-            if (i < maxHP) {
-                is = makeItem(Material.PINK_STAINED_GLASS_PANE, ChatColor.RED + "" + (i + 1));
+        if (advancedHp) {
+            for (int i = 9; i < 18; i++) {
+                inventory.setItem(i, null);
             }
-            inventory.setItem(i + 11, is);
-        }
-        inventory.setItem(16, FILLER_GLASS);
-        inventory.setItem(17, null);
+            for (int i = 0; i < BotBowsManager.teamBlue.size(); i++) {
+                Player p = BotBowsManager.teamBlue.get(i);
+                ItemStack item = makeHeadItem(p, ChatColor.BLUE);
+                item.setAmount(BotBowsManager.playerMaxHP.get(p));
+                inventory.setItem(i + 9, item);
+            }
+            for (int i = 0; i < BotBowsManager.teamRed.size(); i++) {
+                Player p = BotBowsManager.teamRed.get(i);
+                ItemStack item = makeHeadItem(p, ChatColor.RED);
+                item.setAmount(BotBowsManager.playerMaxHP.get(p));
+                inventory.setItem(17 - i, item);
+            }
+        } else {
+            int maxHP = BotBowsManager.maxHP;
 
-        BotBowsManager.setPlayerMaxHP(maxHP);
-        BotBowsManager.updatePlayerMaxHP(maxHP);
+            for (int i = 0; i < 5; i++) {
+                ItemStack is = makeItem(Material.WHITE_STAINED_GLASS_PANE, ChatColor.WHITE + "" + (i + 1));
+                if (i < maxHP) {
+                    is = makeItem(Material.PINK_STAINED_GLASS_PANE, ChatColor.RED + "" + (i + 1));
+                }
+                inventory.setItem(i + 11, is);
+            }
+
+            BotBowsManager.setPlayerMaxHP(maxHP);
+            BotBowsManager.updatePlayerMaxHP(maxHP);
+        }
     }
     
     public void enableCustomHP() {
-        for (int i = 9; i < 18; i++) {
-            inventory.setItem(i, null);
-        }
-        for (int i = 0; i < BotBowsManager.teamBlue.size(); i++) {
-            Player p = BotBowsManager.teamBlue.get(i);
-            ItemStack item = makeHeadItem(p, ChatColor.BLUE);
-            item.setAmount(BotBowsManager.playerMaxHP.get(p));
-            inventory.setItem(i + 9, item);
-        }
-        for (int i = 0; i < BotBowsManager.teamRed.size(); i++) {
-            Player p = BotBowsManager.teamRed.get(i);
-            ItemStack item = makeHeadItem(p, ChatColor.RED);
-            item.setAmount(BotBowsManager.playerMaxHP.get(p));
-            inventory.setItem(17 - i, item);
-        }
-
+        advancedHp = true;
         inventory.setItem(13, FILLER_GLASS);
+        updateMenu();
+    }
+    public void disableCustomHP() {
+        advancedHp = false;
+        inventory.setItem(9, null);
+        inventory.setItem(10, FILLER_GLASS);
+        inventory.setItem(16, FILLER_GLASS);
+        inventory.setItem(17, null);
+        updateMenu();
     }
 
     public ItemStack makeHeadItem(Player p, ChatColor teamColor) {
