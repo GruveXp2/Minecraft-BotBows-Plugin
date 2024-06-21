@@ -26,7 +26,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getLogger().info("BotBows plugin enabled!");
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(new HitListener(), this);
-        getServer().getPluginManager().registerEvents(new CountDownListener(), this);
+        getServer().getPluginManager().registerEvents(new movementListener(), this);
         getServer().getPluginManager().registerEvents(new LeaveListener(), this);
         getServer().getPluginManager().registerEvents(new ShiftListener(), this);
         getServer().getPluginManager().registerEvents(new SwitchSpectator(), this);

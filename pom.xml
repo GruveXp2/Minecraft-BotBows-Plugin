@@ -6,7 +6,7 @@
 
     <groupId>gruvexp</groupId>
     <artifactId>gruvexp</artifactId>
-    <version>2023.09.02</version>
+    <version>2024.06.21</version>
     <packaging>jar</packaging>
 
     <name>BotBows</name>
