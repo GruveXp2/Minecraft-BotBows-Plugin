@@ -13,7 +13,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
-public class healthMenu extends Menu {
+public class HealthMenu extends Menu {
 
     boolean advancedHp = true;
     private static final ItemStack DYNAMIC_POINTS_DISABLED = makeItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Dynamic points",

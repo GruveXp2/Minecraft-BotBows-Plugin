@@ -49,9 +49,9 @@ public final class Main extends JavaPlugin {
 
     public static void MenuInit() {
         menus.put("game menu", new GameMenu());
-        menus.put("botbows settings 1", new selectTeamsMenu());
-        menus.put("botbows settings 2", new healthMenu());
-        menus.put("botbows settings 3", new winThresholdMenu());
-        menus.put("botbows settings 4", new stormModeMenu());
+        menus.put("botbows settings 1", new SelectTeamsMenu());
+        menus.put("botbows settings 2", new HealthMenu());
+        menus.put("botbows settings 3", new WinThresholdMenu());
+        menus.put("botbows settings 4", new StormModeMenu());
     }
 }

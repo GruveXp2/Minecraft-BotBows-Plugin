@@ -1,7 +1,7 @@
 package gruvexp.gruvexp.commands;
 
 import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.menus.selectTeamsMenu;
+import gruvexp.gruvexp.menu.menus.SelectTeamsMenu;
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,7 +19,7 @@ public class LeaveCommand implements CommandExecutor {
             return true;
         }
         BotBowsManager.leaveGame(p);
-        selectTeamsMenu chooseTeamsMenu = (selectTeamsMenu) Main.menus.get("botbows settings 1");
+        SelectTeamsMenu chooseTeamsMenu = (SelectTeamsMenu) Main.menus.get("botbows settings 1");
         chooseTeamsMenu.recalculateTeam(0); // recalculate
 
         return true;

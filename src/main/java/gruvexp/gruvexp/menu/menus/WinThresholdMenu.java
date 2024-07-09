@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class winThresholdMenu extends Menu {
+public class WinThresholdMenu extends Menu {
     @Override
     public String getMenuName() {
         return "Select win threshold";

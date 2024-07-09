@@ -1,8 +1,8 @@
 package gruvexp.gruvexp.twtClassic;
 
 import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.menus.selectTeamsMenu;
-import gruvexp.gruvexp.menu.menus.healthMenu;
+import gruvexp.gruvexp.menu.menus.SelectTeamsMenu;
+import gruvexp.gruvexp.menu.menus.HealthMenu;
 import gruvexp.gruvexp.tasks.BotBowsGiver;
 import gruvexp.gruvexp.tasks.RoundCountdown;
 import gruvexp.gruvexp.tasks.StartStorm;
@@ -112,8 +112,8 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
             teamBlue.add(p);
             if (PLAYERS.size() > 1) {
                 playerMaxHP.put(p, maxHP);
-                ((selectTeamsMenu) Main.menus.get("botbows settings 1")).recalculateTeam();
-                ((healthMenu) Main.menus.get("botbows settings 2")).updateMenu();
+                ((SelectTeamsMenu) Main.menus.get("botbows settings 1")).recalculateTeam();
+                ((HealthMenu) Main.menus.get("botbows settings 2")).updateMenu();
             } else {
                 playerMaxHP.put(p, 3);
             }
@@ -376,8 +376,8 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         } else {
             teamRed.remove(p);
         }
-        ((selectTeamsMenu) Main.menus.get("botbows settings 1")).recalculateTeam();
-        ((healthMenu) Main.menus.get("botbows settings 2")).updateMenu();
+        ((SelectTeamsMenu) Main.menus.get("botbows settings 1")).recalculateTeam();
+        ((HealthMenu) Main.menus.get("botbows settings 2")).updateMenu();
         p.sendMessage(ChatColor.YELLOW + "You left BotBows Classic");
         messagePlayers(ChatColor.YELLOW + p.getPlayerListName() + " has left the game (" + PLAYERS.size() + ")");
     }

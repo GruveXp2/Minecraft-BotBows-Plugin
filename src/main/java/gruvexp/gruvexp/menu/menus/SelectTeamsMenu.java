@@ -15,7 +15,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
-public class selectTeamsMenu extends Menu {
+public class SelectTeamsMenu extends Menu {
     @Override
     public String getMenuName() {
         return "Select teams";
@@ -41,7 +41,7 @@ public class selectTeamsMenu extends Menu {
                     BotBowsManager.teamBlue.add(p);
                 }
                 recalculateTeam();
-                ((healthMenu) Main.menus.get("botbows settings 2")).updateMenu(); // pga teammembers endres må health settings oppdateres pga det er basert på farger
+                ((HealthMenu) Main.menus.get("botbows settings 2")).updateMenu(); // pga teammembers endres må health settings oppdateres pga det er basert på farger
             }
             case BARRIER -> clicker.closeInventory();
             case LIGHT_BLUE_STAINED_GLASS_PANE -> Main.menus.get("botbows settings 2").open(clicker);

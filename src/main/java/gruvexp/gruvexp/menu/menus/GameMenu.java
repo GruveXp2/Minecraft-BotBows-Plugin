@@ -25,7 +25,7 @@ public class GameMenu extends Menu {
 
         if (e.getCurrentItem().getType() == Material.BOW) {
             BotBowsManager.joinGame(p);
-            selectTeamsMenu chooseTeamsMenu = (selectTeamsMenu) Main.menus.get("botbows settings 1");
+            SelectTeamsMenu chooseTeamsMenu = (SelectTeamsMenu) Main.menus.get("botbows settings 1");
             chooseTeamsMenu.recalculateTeam(0); // recalculate
         }
     }
