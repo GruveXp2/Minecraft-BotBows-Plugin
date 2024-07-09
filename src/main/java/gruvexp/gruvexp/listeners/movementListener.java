@@ -15,8 +15,8 @@ public class movementListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) { // hvis det er nedtelling og playeren er i gamet så kan dikke bevege seg
+        Player p = e.getPlayer();
         if (BotBowsManager.canMove) {
-            Player p = e.getPlayer();
             Material material = p.getLocation().add(0, -0.05, 0).getBlock().getType(); // sjekker rett under, bare 0.05 itilfelle det er teppe
             if (material == Material.AIR) {
                 material = p.getLocation().add(0, -0.1, 0).getBlock().getType(); // hvis man står på kanten av et teppe kan det være en effektblokk under
@@ -34,11 +34,11 @@ public class movementListener implements Listener {
                 }
                 default -> p.removePotionEffect(PotionEffectType.JUMP_BOOST);
             }
+            if (!BotBowsManager.isPlayerJoined(e.getPlayer())) {return;}
+        } else {
+            if (p.getLocation().getX() == BotBowsManager.getPlayerSpawn(p).getX() && p.getLocation().getZ() == BotBowsManager.getPlayerSpawn(p).getZ()) {return;}
+            // hvis det er countdown (!canMove), playeren er joina og playeren har gått vekk fra spawn blir han telportert tebake
+            p.teleport(BotBowsManager.getPlayerSpawn(p));
         }
-        if (!BotBowsManager.isPlayerJoined(e.getPlayer())) {return;}
-        Player p = e.getPlayer();
-        if (p.getLocation().getX() == BotBowsManager.getPlayerSpawn(p).getX() && p.getLocation().getZ() == BotBowsManager.getPlayerSpawn(p).getZ()) {return;}
-        // hvis det er countdown (!canMove), playeren er joina og playeren har gått vekk fra spawn blir han telportert tebake
-        p.teleport(BotBowsManager.getPlayerSpawn(p));
     }
 }
