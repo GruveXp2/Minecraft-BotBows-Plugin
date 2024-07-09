@@ -16,7 +16,7 @@ public class Bar {
 
     public static void sneakBarInit() {
         for (Player p : BotBowsManager.getPlayers()) {
-            BossBar bar = Bukkit.createBossBar(ChatColor.YELLOW + "Sneaking cooldown", BarColor.YELLOW, BarStyle.SEGMENTED_10);
+            BossBar bar = Bukkit.createBossBar(STR."\{ChatColor.YELLOW}Sneaking cooldown", BarColor.YELLOW, BarStyle.SEGMENTED_10);
             bar.addPlayer(p);
             bar.setProgress(0d);
             bar.setVisible(false);
@@ -26,7 +26,7 @@ public class Bar {
 
     public static void stormBarInit() {
         for (Player p : BotBowsManager.getPlayers()) {
-            BossBar bar = Bukkit.createBossBar(ChatColor.AQUA + "Lightning timer", BarColor.BLUE, BarStyle.SEGMENTED_6);
+            BossBar bar = Bukkit.createBossBar(STR."\{ChatColor.AQUA}Lightning timer", BarColor.BLUE, BarStyle.SEGMENTED_6);
             bar.addPlayer(p);
             bar.setProgress(0d);
             bar.setVisible(false);

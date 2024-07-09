@@ -1,6 +1,7 @@
 package gruvexp.gruvexp.listeners;
 
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -34,11 +35,12 @@ public class movementListener implements Listener {
                 }
                 default -> p.removePotionEffect(PotionEffectType.JUMP_BOOST);
             }
-            if (!BotBowsManager.isPlayerJoined(e.getPlayer())) {return;}
         } else {
-            if (p.getLocation().getX() == BotBowsManager.getPlayerSpawn(p).getX() && p.getLocation().getZ() == BotBowsManager.getPlayerSpawn(p).getZ()) {return;}
+            if (!BotBowsManager.isPlayerJoined(e.getPlayer())) {return;}
+            Location spawnPos = BotBowsManager.getPlayerSpawn(p);
+            if (p.getLocation().getX() == spawnPos.getX() && p.getLocation().getZ() == spawnPos.getZ()) {return;}
             // hvis det er countdown (!canMove), playeren er joina og playeren har gått vekk fra spawn blir han telportert tebake
-            p.teleport(BotBowsManager.getPlayerSpawn(p));
+            p.teleport(spawnPos);
         }
     }
 }

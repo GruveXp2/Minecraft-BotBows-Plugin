@@ -12,9 +12,9 @@ public class RoundCountdown extends BukkitRunnable { // LANGUAGE LEVEL = 14
     public void run() {
         switch (time) {
             case 0, 1, 2, 3, 4 ->
-                    BotBowsManager.messagePlayers(ChatColor.BOLD + "" + ChatColor.GREEN + "BotBows Classic " + ChatColor.RESET + "is starting in " + ChatColor.GOLD + (5 - time));
+                    BotBowsManager.messagePlayers(STR."\{ChatColor.BOLD}\{ChatColor.GREEN}BotBows Classic \{ChatColor.RESET}is starting in \{ChatColor.GOLD}\{5 - time}");
             case 5 -> {
-                BotBowsManager.messagePlayers(ChatColor.BOLD + "" + ChatColor.GREEN + "BotBows Classic " + ChatColor.RESET + "has started!");
+                BotBowsManager.messagePlayers(STR."\{ChatColor.BOLD}\{ChatColor.GREEN}BotBows Classic \{ChatColor.RESET}has started!");
                 BotBowsManager.canMove = true;
                 cancel(); // stopper loopen
             }

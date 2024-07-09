@@ -12,8 +12,8 @@ public class StartStorm extends BukkitRunnable {
     @Override
     public void run() {
         if (b) {
-            BotBowsManager.messagePlayers(ChatColor.DARK_RED + "STORM INCOMING!" + ChatColor.RED + " Seek shelter immediately!");
-            BotBowsManager.titlePlayers(ChatColor.RED + "STORM INCOMING", 80);
+            BotBowsManager.messagePlayers(STR."\{ChatColor.DARK_RED}STORM INCOMING!\{ChatColor.RED} Seek shelter immediately!");
+            BotBowsManager.titlePlayers(STR."\{ChatColor.RED}STORM INCOMING", 80);
             b = false;
         } else {
             Cooldowns.stormRunnableInit();

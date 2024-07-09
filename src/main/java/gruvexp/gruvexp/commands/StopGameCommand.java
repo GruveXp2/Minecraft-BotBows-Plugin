@@ -7,16 +7,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class StopCommand implements CommandExecutor {
+public class StopGameCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
 
         if (BotBowsManager.activeGame) {
-            BotBowsManager.messagePlayers("The game was ended by " + p.getPlayerListName());
+            BotBowsManager.messagePlayers(STR."The game was ended by \{p.getPlayerListName()}");
             BotBowsManager.endGame();
         } else {
-            p.sendMessage(ChatColor.RED + "The game hast even started!");
+            p.sendMessage(STR."\{ChatColor.RED}The game hast even started!");
         }
         return true;
     }

@@ -1,11 +1,12 @@
 package gruvexp.gruvexp.twtClassic;
 
 import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.menus.SelectTeamsMenu;
 import gruvexp.gruvexp.menu.menus.HealthMenu;
+import gruvexp.gruvexp.menu.menus.SelectTeamsMenu;
 import gruvexp.gruvexp.tasks.BotBowsGiver;
 import gruvexp.gruvexp.tasks.RoundCountdown;
 import gruvexp.gruvexp.tasks.StartStorm;
+import gruvexp.gruvexp.twtClassic.botbowsTeams.*;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
@@ -21,20 +22,19 @@ import java.util.*;
 
 import static gruvexp.gruvexp.twtClassic.Bar.sneakBarInit;
 
-public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN OG COMMAND RUNNES!!!
+public class BotBowsManager {
 
     private static final Main PLUGIN = Main.getPlugin();
-    private static final ArrayList<Player> PLAYERS = new ArrayList<>(); // liste med alle players som er i gamet
-    public static final ArrayList<Location> BLUE_SPAWN = new ArrayList<>(4);
-    public static final ArrayList<Location> RED_SPAWN = new ArrayList<>(4);
-    private static final ArrayList<ArrayList<ArrayList<Integer>>> PLAYER_HEALTH_ARMOR = new ArrayList<>(); // Når man tar damag så kan man gette em liste med hvilke armor pieces som skal fjernes
-    private static final ArrayList<Double> STORM_FREQUENCY = new ArrayList<>(List.of(0.05, 0.1, 0.25, 0.5, 1.0));
-    public static HashMap<Player, Integer> playerHP = new HashMap<>();
-    public static HashMap<Player, Integer> playerMaxHP = new HashMap<>();
-    public static HashMap<Player, Boolean> isDamaged = new HashMap<>();
-    public static ArrayList<Player> teamBlue = new ArrayList<>();
-    public static ArrayList<Player> teamRed = new ArrayList<>();
-    private static int[] teamPoints = new int[] {0, 0}; // blue, red
+    public static BotBowsMap currentMap = BotBowsMap.BLAUD_VS_SAUCE; // default map
+    public static BotBowsTeam team1;
+    public static BotBowsTeam team2;
+    private static final Map<Player, BotBowsTeam> PLAYER_TEAM = new HashMap<>();
+    private static final List<Player> PLAYERS = new ArrayList<>(); // liste med alle players som er i gamet
+    private static final List<List<List<Integer>>> PLAYER_HEALTH_ARMOR = new ArrayList<>(); // Når man tar damag så kan man gette em liste med hvilke armor pieces som skal fjernes
+    private static final List<Double> STORM_FREQUENCY = new ArrayList<>(List.of(0.05, 0.1, 0.25, 0.5, 1.0));
+    public static Map<Player, Integer> playerHP = new HashMap<>();
+    public static Map<Player, Integer> playerMaxHP = new HashMap<>();
+    public static Map<Player, Boolean> isDamaged = new HashMap<>();
     public static int maxHP = 3;
     public static  boolean stormMode = false;
     public static int stormFrequency = 2; // 5%, 10%, 25%, 50%, 100%
@@ -49,7 +49,7 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
     public static ItemStack getBotBow() {
         ItemStack BOTBOW = new ItemStack(Material.CROSSBOW);
         CrossbowMeta meta = (CrossbowMeta) BOTBOW.getItemMeta();
-        meta.setDisplayName(ChatColor.BOLD + "" + ChatColor.GREEN + "BotBow");
+        meta.setDisplayName(STR."\{ChatColor.BOLD}\{ChatColor.GREEN}BotBow");
         meta.setLore(Arrays.asList("The strongest bow", "ever known to man"));
         meta.addEnchant(Enchantment.POWER, 10, true);
         meta.addEnchant(Enchantment.PUNCH, 10, true);
@@ -60,15 +60,29 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         return BOTBOW;
     }
 
+    public static void setMap(BotBowsMap map) {
+        if (map == currentMap) return;
+        switch (map) {
+            case BLAUD_VS_SAUCE -> {
+                team1 = new TeamBlaud(team1);
+                team2 = new TeamSauce(team2);
+            }
+            case GRAUT_VS_WACKY -> {
+                team1 = new TeamGraut(team1);
+                team2 = new TeamWacky(team2);
+            }
+        }
+    }
+
     public static void setDynamicScoring(boolean dynamic_scoring) {
         BotBowsManager.dynamicScoring = dynamic_scoring;
     }
 
     public static void armorInit() { // definerer hvilke armor som skal mistes når playeren har x antall liv. 0=boots, 1=leggings, 2=chestplate, 3=helmet
-        ArrayList<ArrayList<Integer>> hp2 = new ArrayList<>();
-        ArrayList<ArrayList<Integer>> hp3 = new ArrayList<>();
-        ArrayList<ArrayList<Integer>> hp4 = new ArrayList<>();
-        ArrayList<ArrayList<Integer>> hp5 = new ArrayList<>();
+        List<List<Integer>> hp2 = new ArrayList<>();
+        List<List<Integer>> hp3 = new ArrayList<>();
+        List<List<Integer>> hp4 = new ArrayList<>();
+        List<List<Integer>> hp5 = new ArrayList<>();
         hp2.add(new ArrayList<>(Arrays.asList(0, 1, 2, 3)));
         hp3.add(new ArrayList<>(Arrays.asList(0, 2)));
         hp3.add(new ArrayList<>(Arrays.asList(1, 3)));
@@ -86,51 +100,47 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         PLAYER_HEALTH_ARMOR.add(hp5);
     }
 
-    public static void spawnInit() {
-
-        BLUE_SPAWN.add(new Location(Bukkit.getWorld("BotBows (S2E1)"), -215.5, 22.0, -167.5, 90, 10));
-        BLUE_SPAWN.add(new Location(Bukkit.getWorld("BotBows (S2E1)"), -215.5, 22.0, -164.5, 90, 10));
-        BLUE_SPAWN.add(new Location(Bukkit.getWorld("BotBows (S2E1)"), -213.5, 22.0, -169.5, 90, 10));
-        BLUE_SPAWN.add(new Location(Bukkit.getWorld("BotBows (S2E1)"), -213.5, 22.0, -162.5, 90, 10));
-        BLUE_SPAWN.add(new Location(Bukkit.getWorld("BotBows (S2E1)"), -212.5, 22.0, -166.0, -90, 10));
-
-        RED_SPAWN.add(new Location(Bukkit.getWorld("BotBows (S2E1)"), -268.5, 22.0, -164.5, -90, 10));
-        RED_SPAWN.add(new Location(Bukkit.getWorld("BotBows (S2E1)"), -268.5, 22.0, -167.5, -90, 10));
-        RED_SPAWN.add(new Location(Bukkit.getWorld("BotBows (S2E1)"), -270.5, 22.0, -162.5, -90, 10));
-        RED_SPAWN.add(new Location(Bukkit.getWorld("BotBows (S2E1)"), -270.5, 22.0, -169.5, -90, 10));
-        RED_SPAWN.add(new Location(Bukkit.getWorld("BotBows (S2E1)"), -271.5, 22.0, -166.0, -90, 10));
-
-    }
-
     public static void joinGame(Player p) {
         if (!PLAYERS.contains(p)) {
             if (activeGame) {
-                p.sendMessage(ChatColor.RED + "A game is already ongoing, wait until it ends before you join");
+                p.sendMessage(STR."\{ChatColor.RED}A game is already ongoing, wait until it ends before you join");
                 return;
             }
             PLAYERS.add(p);
-            teamBlue.add(p);
+            team1.join(p);
             if (PLAYERS.size() > 1) {
                 playerMaxHP.put(p, maxHP);
-                ((SelectTeamsMenu) Main.menus.get("botbows settings 1")).recalculateTeam();
-                ((HealthMenu) Main.menus.get("botbows settings 2")).updateMenu();
+                ((SelectTeamsMenu) Main.menus.get("select teams")).recalculateTeam();
+                ((HealthMenu) Main.menus.get("health")).updateMenu();
             } else {
                 playerMaxHP.put(p, 3);
             }
             p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(playerMaxHP.get(p) * 2);
             p.setHealth(playerMaxHP.get(p) * 2);
             for (Player q : PLAYERS) {
-                q.sendMessage(p.getPlayerListName() +" has joined BotBows Classic! ("+ PLAYERS.size() +")");
+                q.sendMessage(STR."\{p.getPlayerListName()} has joined BotBows Classic! (\{PLAYERS.size()})");
             }
         }
         else {
-            p.sendMessage( ChatColor.RED + "You already joined!");
+            p.sendMessage(STR."\{ChatColor.RED}You already joined!");
         }
+    }
+
+    public static void registerPlayerTeam(Player p, BotBowsTeam team) {
+        PLAYER_TEAM.put(p, team);
+    }
+
+    public static void unRegisterPlayerTeam(Player p) {
+        PLAYER_TEAM.remove(p);
+    }
+
+    public static BotBowsTeam getOppositeTeam(BotBowsTeam team) {
+        return team == team1 ? team2 : team1;
     }
 
     public static void startGame(CommandSender sender) {
         activeGame = true;
-        messagePlayers(ChatColor.GRAY + sender.getName() + ": " + ChatColor.GREEN + "The game has started!");
+        messagePlayers(STR."\{ChatColor.GRAY}\{sender.getName()}: \{ChatColor.GREEN}The game has started!");
         sneakBarInit();
         Cooldowns.CoolDownInit(PLAYERS);
         Board.createBoard();
@@ -167,12 +177,8 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
             p.setGameMode(GameMode.ADVENTURE);
         }
         // teleporterer til spawn
-        for (int i = 0; i < teamBlue.size(); i++) {
-            teamBlue.get(i).teleport(BLUE_SPAWN.get(i));
-        }
-        for (int i = 0; i < teamRed.size(); i++) {
-            teamRed.get(i).teleport(RED_SPAWN.get(i));
-        }
+        team1.tpPlayersToSpawn();
+        team2.tpPlayersToSpawn();
         canMove = false;
         new RoundCountdown().runTaskTimer(PLUGIN, 0L, 20L); // mens de er på spawn, kan de ikke bevege seg og det er nedtelling til det begynner
 
@@ -185,16 +191,11 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
     public static void updateArmor(Player p) { // updates the armor pieces of the player
         int maxHP = BotBowsManager.playerMaxHP.get(p); // Maks hp til playeren
         if (playerHP.get(p) == maxHP) { // hvis playeren har maxa liv så skal de få fullt ut med armor
-            Color color;
-            if (teamBlue.contains(p)) {
-                color = Color.BLUE;
-            } else {
-                color = Color.RED;
-            }
+            Color color = BotBowsManager.getTeam(p).DYECOLOR.getColor();
             p.getInventory().setArmorContents(new ItemStack[] {makeArmor(Material.LEATHER_BOOTS, color), makeArmor(Material.LEATHER_LEGGINGS, color), makeArmor(Material.LEATHER_CHESTPLATE, color), makeArmor(Material.LEATHER_HELMET, color)});
             return;
         }
-        ArrayList<Integer> slots;
+        List<Integer> slots;
         if (BotBowsManager.playerMaxHP.get(p) > 5) {
             float d = (float) maxHP / 5;
             int i = (int) Math.ceil((maxHP - playerHP.get(p)) / d);
@@ -231,11 +232,11 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
     public static void handleHit(Player p, Player q) { // When a player gets hit this function will handle it. p=def, q=atk.
         int playerHealth = playerHP.get(p) - 1;
         playerHP.put(p, playerHealth);
-        messagePlayers(getTeamColor(p) + p.getPlayerListName() + " was sniped by " + getTeamColor(q) + q.getPlayerListName() + "; " + getTeamColor(p) + playerHealth + " hp left.");
+        messagePlayers(STR."\{getTeam(p).COLOR + p.getPlayerListName()} was sniped by \{getTeam(q).COLOR + q.getPlayerListName()}; \{getTeam(p).COLOR}\{playerHealth} hp left.");
         if (playerHealth == 0) {
             p.setGameMode(GameMode.SPECTATOR);
             p.setSpectatorTarget(q);
-            p.sendMessage(ChatColor.GRAY + "Now spectating " + q.getPlayerListName());
+            p.sendMessage(STR."\{ChatColor.GRAY}Now spectating \{q.getPlayerListName()}");
             check4Victory(p);
         } else {
             updateArmor(p);
@@ -245,56 +246,44 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
     }
 
     public static void check4Victory(Player dedPlayer) {
-        if (teamBlue.contains(dedPlayer)) {
-            checkTeam4Victory(teamRed, teamBlue, "Red");
-        } else {
-            checkTeam4Victory(teamBlue, teamRed, "Blue");
-        }
+        BotBowsTeam dedPlayerTeam = getTeam(dedPlayer);
+        checkTeam4Victory(getOppositeTeam(dedPlayerTeam), dedPlayerTeam);
     }
 
-    public static void checkTeam4Victory(ArrayList<Player> team1, ArrayList<Player> team2, String team1ColorName) {
-
-        for (Player p: team2) { // hvis teamet fortsatt lever
+    public static void checkTeam4Victory(BotBowsTeam winningTeam, BotBowsTeam losingTeam) {
+        for (Player p: losingTeam.getPlayers()) { // hvis teamet fortsatt lever
             if (playerHP.get(p) > 0) {
                 return;
             }
         }
 
-        ChatColor team1Color = ChatColor.BLUE;
-        String team1Name = "BLAUD";
-        int team1ID = 0;
-
-        if (Objects.equals(team1ColorName, "Red")) {
-            team1Color = ChatColor.RED;
-            team1Name = "SAUCE";
-            team1ID = 1;
-        }
-
-        // TEAM1 WIN
-        messagePlayers(team1Color + team1ColorName + ChatColor.WHITE +  " won the round!");
+        messagePlayers(STR."\{winningTeam}\{ChatColor.WHITE} won the round!");
         int winScore = 0;
         if (dynamicScoring) {
-            for (Player p : team1) {
+            for (Player p : winningTeam.getPlayers()) {
                 winScore += playerHP.get(p);
             }
             int enemyTeamMaxHP = 0;
-            messagePlayers(team1Color + "+" + winScore + "p for remaining hp");
-            for (Player p : team2) {
+            messagePlayers(STR."\{winningTeam.COLOR}+\{winScore}p for remaining hp");
+            for (Player p : losingTeam.getPlayers()) {
                 enemyTeamMaxHP += playerMaxHP.get(p);
             }
             winScore += enemyTeamMaxHP;
-            messagePlayers(team1Color + "+" + enemyTeamMaxHP + "p for enemy hp lost");
+            messagePlayers(STR."\{winningTeam.COLOR}+\{enemyTeamMaxHP}p for enemy hp lost");
         } else {
             winScore = 1;
         }
 
-        teamPoints[team1ID] += winScore; // team1 gets points
-        messagePlayers(ChatColor.BLUE + "Blue: " + ChatColor.WHITE + teamPoints[0] + "\n" + ChatColor.RED + "Red: " + ChatColor.WHITE + teamPoints[1]);
-        titlePlayers(team1Color + team1ColorName + " +" + winScore, 40);
+        winningTeam.addPoints(winScore);
+        messagePlayers(STR."""
+        \{team1}: \{ChatColor.WHITE}\{team1.getPoints()}
+        \{team2}: \{ChatColor.WHITE}\{team2.getPoints()}""");
+
+        titlePlayers(STR."\{winningTeam} +\{winScore}", 40);
         Board.updateTeamScores();
-        if (teamPoints[team1ID] >= BotBowsManager.winThreshold && BotBowsManager.winThreshold > 0) {
-            postGame("TEAM " + team1Name, team1Color);
-            return; // siden team1 vinner, returner vi før vi kommer til linjen som starter ny runde
+        if (winningTeam.getPoints() >= BotBowsManager.winThreshold && BotBowsManager.winThreshold > 0) {
+            postGame(winningTeam);
+            return; // because the match is over, a new round won't start
         }
         startRound();
     }
@@ -311,32 +300,22 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         }
     }
 
-    public static ChatColor getTeamColor(Player p) {
-        return teamBlue.contains(p) ? ChatColor.BLUE : ChatColor.RED;
-    }
-
-    public static ArrayList<Player> getTeam(Player p) {
-        return teamBlue.contains(p) ? teamBlue : teamRed;
-    }
-
-    public static ArrayList<Player> getOpponentTeam(Player p) {
-        return teamBlue.contains(p) ? teamRed : teamBlue;
+    public static BotBowsTeam getTeam(Player p) {
+        return PLAYER_TEAM.get(p);
     }
 
     public static Location getPlayerSpawn(Player p) {
-        if (teamBlue.contains(p)) {
-            int i = teamBlue.indexOf(p);
-            return BLUE_SPAWN.get(i);
+        if (team1.hasPlayer(p)) {
+            return team1.getSpawnPos(p);
         } else {
-            int i = teamRed.indexOf(p);
-            return RED_SPAWN.get(i);
+            return team2.getSpawnPos(p);
         }
     }
 
     public static int getTotalPlayers() {
         return PLAYERS.size();
     }
-    public static ArrayList<Player> getPlayers() {return PLAYERS;}
+    public static List<Player> getPlayers() {return PLAYERS;}
     public static void updatePlayerMaxHP(int maxHP) { // updates the amount of hearts the player has
         for (Player p : PLAYERS) {
             p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2 * maxHP);
@@ -344,17 +323,9 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         }
     }
 
-    public static int getPoints(String team) {
-        return switch (team) {
-            case "blue" -> teamPoints[0];
-            case "red" -> teamPoints[1];
-            default -> -1;
-        };
-    }
-
     public static void leaveGame(Player p) {
         if (!PLAYERS.contains(p)) {
-            p.sendMessage(ChatColor.RED + "You cant leave when you're not in a game");
+            p.sendMessage(STR."\{ChatColor.RED}You cant leave when you're not in a game");
             return;
         }
         if (Bar.sneakBars.containsKey(p)) {
@@ -371,36 +342,42 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         playerMaxHP.remove(p);
         playerHP.remove(p);
         PLAYERS.remove(p);
-        if (teamBlue.contains(p)) {
-            teamBlue.remove(p);
-        } else {
-            teamRed.remove(p);
-        }
-        ((SelectTeamsMenu) Main.menus.get("botbows settings 1")).recalculateTeam();
-        ((HealthMenu) Main.menus.get("botbows settings 2")).updateMenu();
-        p.sendMessage(ChatColor.YELLOW + "You left BotBows Classic");
-        messagePlayers(ChatColor.YELLOW + p.getPlayerListName() + " has left the game (" + PLAYERS.size() + ")");
+        getTeam(p).leave(p);
+        ((SelectTeamsMenu) Main.menus.get("select teams")).recalculateTeam();
+        ((HealthMenu) Main.menus.get("health")).updateMenu();
+        p.sendMessage(STR."\{ChatColor.YELLOW}You left BotBows Classic");
+        messagePlayers(STR."\{ChatColor.YELLOW}\{p.getPlayerListName()} has left the game (\{PLAYERS.size()})");
     }
     public static boolean isPlayerJoined(Player p) {
         return PLAYERS.contains(p);
     }
 
-    public static void postGame(String winner, ChatColor color) {
+    public static void postGame(BotBowsTeam winningTeam) {
         activeGame = false;
-        messagePlayers(color + "================\n" + winner + " won the game after " + round + " rounds! GG\n================");
+        if (winningTeam == null) {
+            messagePlayers(STR."""
+                    \{ChatColor.LIGHT_PURPLE}================
+                    The game ended in a tie after \{round} rounds
+                    ================""");
+        } else {
+            messagePlayers(STR."""
+                    \{winningTeam.COLOR}================
+                    TEAM \{winningTeam.toString().toUpperCase()} won the game after \{round} rounds! GG
+                    ================""");
+        }
 
-        postGameTitle(winner);
+        postGameTitle(winningTeam);
 
         Main.WORLD.setThundering(false);
         Main.WORLD.setStorm(false);
         Main.WORLD.setClearWeatherDuration(10000);
 
+        ScoreboardManager sm = Bukkit.getServer().getScoreboardManager();
+        assert sm != null;
         for (Player p : PLAYERS) {
             p.getInventory().setArmorContents(null);
-
-            ScoreboardManager sm = Bukkit.getServer().getScoreboardManager();
-            assert sm != null;
             p.setScoreboard(sm.getNewScoreboard());
+            // cancel sneak detector
             Bar.sneakBars.get(p).setVisible(false);
             if (Cooldowns.sneakRunnables.containsKey(p)) {
                 Cooldowns.sneakRunnables.get(p).cancel();
@@ -414,9 +391,9 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         Cooldowns.resetStormRunnable();
         isDamaged.clear();
         PLAYERS.clear();
-        teamBlue.clear();
-        teamRed.clear();
-        teamPoints = new int[]{0, 0};
+        PLAYER_TEAM.clear();
+        team1.reset();
+        team2.reset();
         round = 0;
         canMove = true;
         Bar.sneakBars.clear();
@@ -425,36 +402,26 @@ public class BotBowsManager { // FANCY STUFF MAN KAN KLIKKE PÅ TEXT I CHATTEN O
         Main.MenuInit();
     }
 
-    private static void postGameTitle(String winner) {
-        if (Objects.equals(winner, "Nobody")) {
+    private static void postGameTitle(BotBowsTeam winningTeam) {
+        if (winningTeam == null) {
             return;
         }
-        ArrayList<Player> winningTeam = teamBlue;
-        ArrayList<Player> losingTeam = teamRed;
-        ChatColor winningColor = ChatColor.BLUE;
-        if (Objects.equals(winner, "TEAM SAUCE")) {
-            winningTeam = teamRed;
-            losingTeam = teamBlue;
-            winningColor = ChatColor.RED;
+        BotBowsTeam losingTeam = getOppositeTeam(winningTeam);
+        for (Player p :winningTeam.getPlayers()) {
+            p.sendTitle(STR."\{winningTeam.COLOR}Victory", null, 10, 60, 20);
         }
-
-        for (Player p : winningTeam) {
-            p.sendTitle(winningColor + "Victory", null, 10, 60, 20);
-        }
-        for (Player p : losingTeam) {
-            p.sendTitle(winningColor + "Defeat", null, 10, 60, 20);
+        for (Player p : losingTeam.getPlayers()) {
+            p.sendTitle(STR."\{losingTeam.COLOR}Defeat", null, 10, 60, 20);
         }
     }
 
-    public static void endGame() { // finn ut hvilke lag som leder
-        if (teamPoints[0] == teamPoints[1]) {
-            postGame("Nobody", ChatColor.LIGHT_PURPLE);
-        } else if (teamPoints[0] > teamPoints[1]) {
-            postGame("TEAM BLAUD", ChatColor.BLUE);
+    public static void endGame() { // the game has ended, check who won
+        if (team1.getPoints() == team2.getPoints()) {
+            postGame(null);
+        } else if (team1.getPoints() > team2.getPoints()) {
+            postGame(team1);
         } else {
-            postGame("TEAM SAUCE", ChatColor.RED);
+            postGame(team2);
         }
-
     }
-
 }

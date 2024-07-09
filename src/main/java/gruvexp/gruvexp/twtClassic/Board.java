@@ -1,5 +1,6 @@
 package gruvexp.gruvexp.twtClassic;
 
+import gruvexp.gruvexp.twtClassic.botbowsTeams.BotBowsTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -8,8 +9,8 @@ import org.bukkit.scoreboard.*;
 public class Board {
 
     private static Objective objective;
-    private static Team blue;
-    private static Team red;
+    private static Team sbTeam1;
+    private static Team sbTeam2;
 
     public static void createBoard() {
         ScoreboardManager manager = Bukkit.getScoreboardManager();
@@ -17,21 +18,13 @@ public class Board {
         objective = board.registerNewObjective("botbows", Criteria.DUMMY,
                 ChatColor.translateAlternateColorCodes('&', "&l&6BotBows &r&bClassic"));
 
+        BotBowsTeam team1 = BotBowsManager.team1;
+        BotBowsTeam team2 = BotBowsManager.team2;
         // setter inn scores
-        /**for (int i = 0; i < BotBowsManager.team_red.size(); i++) { // røe spillere
-            Player p = BotBowsManager.team_red.get(i);
-            setScore( ChatColor.RED + "❤".repeat(BotBowsManager.Player2MaxHP.get(p)) + " " + p.getPlayerListName(), i);
-        }**/
-        setScore(ChatColor.DARK_RED + "TEAM SAUCE", BotBowsManager.teamRed.size());
+        setScore(STR."\{ChatColor.valueOf(STR."DARK_\{team2.COLOR.name()}")}TEAM \{team2.NAME.toUpperCase()}", BotBowsManager.team2.size());
 
-        /**for (int i = 0; i < BotBowsManager.team_blue.size(); i++) { // blåe spillere //FJERN KANSKJE!!!!! <========== blir updata rett etterpå hver gang runda starter
-            Player p = BotBowsManager.team_blue.get(i);
-            setScore(ChatColor.RED + "❤".repeat(BotBowsManager.Player2MaxHP.get(p)) + " " + ChatColor.BLUE + p.getPlayerListName(), i + 1 + BotBowsManager.team_red.size());
-        }**/
-        setScore(ChatColor.DARK_BLUE + "TEAM BLAUD", BotBowsManager.getTotalPlayers() + 1);
-        setScore(ChatColor.GRAY + "----------", BotBowsManager.getTotalPlayers() + 2);
-        //setScore(ChatColor.RED + "Red:  " + ChatColor.RESET + BotBowsManager.getPoints("red"), BotBowsManager.getTotalPlayers() + 3);
-        //setScore(ChatColor.BLUE + "Blue: " + ChatColor.RESET + BotBowsManager.getPoints("blue"), BotBowsManager.getTotalPlayers() + 4);
+        setScore(STR."\{ChatColor.valueOf(STR."DARK_\{team1.COLOR.name()}")}TEAM \{team1.NAME.toUpperCase()}", BotBowsManager.getTotalPlayers() + 1);
+        setScore(STR."\{ChatColor.GRAY}----------", BotBowsManager.getTotalPlayers() + 2);
         setScore("", BotBowsManager.getTotalPlayers() + 5);
 
         for (Player p:Bukkit.getOnlinePlayers()) {
@@ -40,17 +33,17 @@ public class Board {
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         // Team stuff!
-        blue = board.registerNewTeam("Blue");
-        red = board.registerNewTeam("Red");
+        sbTeam1 = board.registerNewTeam(team1.NAME);
+        sbTeam2 = board.registerNewTeam(team2.NAME);
 
-        blue.setColor(ChatColor.BLUE);
-        red.setColor(ChatColor.RED);
+        sbTeam1.setColor(team1.COLOR);
+        sbTeam2.setColor(team1.COLOR);
 
-        for (Player p: BotBowsManager.teamBlue) {
-            blue.addPlayer(p);
+        for (Player p: team1.getPlayers()) {
+            sbTeam1.addPlayer(p);
         }
-        for (Player p: BotBowsManager.teamRed) {
-            red.addPlayer(p);
+        for (Player p: team2.getPlayers()) {
+            sbTeam2.addPlayer(p);
         }
     }
 
@@ -67,22 +60,22 @@ public class Board {
         }
 
         int hp = BotBowsManager.playerHP.get(p);
-        int max_hp = BotBowsManager.playerMaxHP.get(p);
-        int p_score;
-        if (BotBowsManager.teamBlue.contains(p)) {
-            p_score = BotBowsManager.teamBlue.indexOf(p) + BotBowsManager.teamRed.size() + 1;
+        int maxHp = BotBowsManager.playerMaxHP.get(p);
+        int playerLineIndex; // which line of the scoreboard the player stats will be shown
+        if (BotBowsManager.team1.hasPlayer(p)) { //
+            playerLineIndex = BotBowsManager.team1.getPlayerID(p) + BotBowsManager.team2.size() + 1;
         } else {
-            p_score = BotBowsManager.teamRed.indexOf(p);
+            playerLineIndex = BotBowsManager.team2.getPlayerID(p);
         }
 
-        String s;
-        if (max_hp > 5) {
-            s = ChatColor.RED + "▏".repeat(hp) + ChatColor.GRAY + "▏".repeat(max_hp - hp) + BotBowsManager.getTeamColor(p) + " " + p.getPlayerListName();
+        String healthBar;
+        if (maxHp > 5) {
+            healthBar = STR."\{ChatColor.RED}\{"▏".repeat(hp)}\{ChatColor.GRAY}\{"▏".repeat(maxHp - hp)}\{BotBowsManager.getTeam(p).COLOR} \{p.getPlayerListName()}";
         } else {
-            s = ChatColor.RED + "❤".repeat(hp) + ChatColor.GRAY + "❤".repeat(max_hp - hp) + BotBowsManager.getTeamColor(p) + " " + p.getPlayerListName();
+            healthBar = STR."\{ChatColor.RED}\{"❤".repeat(hp)}\{ChatColor.GRAY}\{"❤".repeat(maxHp - hp)}\{BotBowsManager.getTeam(p).COLOR} \{p.getPlayerListName()}";
         }
 
-        setScore(s, p_score);
+        setScore(healthBar, playerLineIndex);
 
     }
 
@@ -92,50 +85,55 @@ public class Board {
 
         for (Objective ignored : sb.getObjectives()) {
             for (String entries : sb.getEntries()) {
-                if (entries.contains("Blue: ")) { // hvis "BLUE" har mellomrom etter seg så er det den linjen som viser poeng
+                if (entries.contains(STR."\{BotBowsManager.team1.NAME}: ")) {
                     sb.resetScores(entries);
                 }
-                if (entries.contains("Red:  ")) {
+                if (entries.contains(STR."\{BotBowsManager.team2.NAME}: ")) {
                     sb.resetScores(entries);
                 }
             }
         }
         if (winThreshold == -1) {
-            setScore(ChatColor.BLUE + "Blue: " + ChatColor.RESET + BotBowsManager.getPoints("blue"), 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
-            setScore(ChatColor.RED + "Red:  " + ChatColor.RESET + BotBowsManager.getPoints("red"), 3 + BotBowsManager.getTotalPlayers());
+            setScore(STR."\{BotBowsManager.team1}: \{ChatColor.RESET}\{BotBowsManager.team1.getPoints()}", 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
+            setScore(STR."\{BotBowsManager.team2}: \{ChatColor.RESET}\{BotBowsManager.team2.getPoints()}", 3 + BotBowsManager.getTotalPlayers());
         } else if (winThreshold >= 35) {
-            setScore(ChatColor.BLUE + "Blue: " + ChatColor.RESET + BotBowsManager.getPoints("blue") + " / " + ChatColor.GRAY + winThreshold, 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
-            setScore(ChatColor.RED + "Red:  " + ChatColor.RESET + BotBowsManager.getPoints("red") + " / " + ChatColor.GRAY + winThreshold, 3 + BotBowsManager.getTotalPlayers());
+            setScore(STR."\{BotBowsManager.team1}: \{ChatColor.RESET}\{BotBowsManager.team1.getPoints()} / \{ChatColor.GRAY}\{winThreshold}", 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
+            setScore(STR."\{BotBowsManager.team2}: \{ChatColor.RESET}\{BotBowsManager.team2.getPoints()} / \{ChatColor.GRAY}\{winThreshold}", 3 + BotBowsManager.getTotalPlayers());
         } else { // få plass til mest mulig streker
-            String c = "";
-            if (winThreshold < 8) {
-                c = "█";
-            } else if (winThreshold < 9) {
-                c = "▉";
-            } else if (winThreshold < 10) {
-                c = "▊";
-            } else if (winThreshold < 12) {
-                c = "▋";
-            } else if (winThreshold < 15) {
-                c = "▌";
-            } else if (winThreshold < 17) {
-                c = "▍";
-            } else if (winThreshold < 23) {
-                c = "▎";
-            } else if (winThreshold < 34) {
-                c = "▏";
-            }
-            int blue_points = BotBowsManager.getPoints("blue");
-            int red_points = BotBowsManager.getPoints("red");
-            if (blue_points > winThreshold) { // antall points cappes på win_threshold, så hvis noen hadde 3p og fikk 2p, men win thresholden er 4, så står det at de har 4p
-                blue_points = winThreshold;
-            } else if (red_points > winThreshold) {
-                red_points = winThreshold;
+            String healthSymbol = getHealthSymbol(winThreshold);
+            int team1Points = BotBowsManager.team1.getPoints();
+            int team2Points = BotBowsManager.team2.getPoints();
+            if (team1Points > winThreshold) { // antall points cappes på win_threshold, så hvis noen hadde 3p og fikk 2p, men win thresholden er 4, så står det at de har 4p
+                team1Points = winThreshold;
+            } else if (team2Points > winThreshold) {
+                team2Points = winThreshold;
             }
 
-            setScore(ChatColor.BLUE + "Blue: " + ChatColor.GREEN + c.repeat(blue_points) + ChatColor.GRAY + c.repeat(winThreshold - blue_points), 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
-            setScore(ChatColor.RED + "Red:  " + ChatColor.GREEN + c.repeat(red_points) + ChatColor.GRAY + c.repeat(winThreshold - red_points), 3 + BotBowsManager.getTotalPlayers());
+            setScore(STR."\{BotBowsManager.team1}: \{ChatColor.GREEN}\{healthSymbol.repeat(team1Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team1Points)}", 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
+            setScore(STR."\{BotBowsManager.team2}:  \{ChatColor.GREEN}\{healthSymbol.repeat(team2Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team2Points)}", 3 + BotBowsManager.getTotalPlayers());
         }
+    }
+
+    private static String getHealthSymbol(int winThreshold) {
+        String c = "";
+        if (winThreshold < 8) {
+            c = "█";
+        } else if (winThreshold < 9) {
+            c = "▉";
+        } else if (winThreshold < 10) {
+            c = "▊";
+        } else if (winThreshold < 12) {
+            c = "▋";
+        } else if (winThreshold < 15) {
+            c = "▌";
+        } else if (winThreshold < 17) {
+            c = "▍";
+        } else if (winThreshold < 23) {
+            c = "▎";
+        } else if (winThreshold < 34) {
+            c = "▏";
+        }
+        return c;
     }
 
     private static void setScore(String text, int score) {
@@ -144,8 +142,7 @@ public class Board {
     }
 
     public static void resetTeams() {
-        blue.unregister();
-        red.unregister();
+        sbTeam1.unregister();
+        sbTeam2.unregister();
     }
-
 }

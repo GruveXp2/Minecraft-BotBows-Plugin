@@ -1,6 +1,7 @@
 package gruvexp.gruvexp.listeners;
 
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.botbowsTeams.BotBowsTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -9,31 +10,28 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SwitchSpectator implements Listener {
 
-    private static void spectateNext(Player p, boolean own_team) {
-        ArrayList<Player> team = own_team? BotBowsManager.getTeam(p) : BotBowsManager.getOpponentTeam(p);
-        String team_str = own_team? "own team" : "opponent team";
-        List<Player> alivePlayers = team.stream() // lager liste med alle de levende playersene
+    private static void spectateNext(Player p, boolean isOwnTeam) {
+        BotBowsTeam team = isOwnTeam ? BotBowsManager.getTeam(p) : BotBowsManager.getOppositeTeam(BotBowsManager.getTeam(p));
+        List<Player> alivePlayers = team.getPlayers().stream() // lager liste med alle de levende playersene
                 .filter(q -> q.getGameMode() == GameMode.ADVENTURE)
-                .collect(Collectors.toList());
+                .toList();
 
         if (alivePlayers.isEmpty()) {
-            p.sendMessage(ChatColor.GRAY + "Cant spectate, " + team_str + " has no alive players");
+            p.sendMessage(STR."\{ChatColor.GRAY}Cant spectate, \{team.NAME} has no alive players");
             return;
         }
 
         if (p.getSpectatorTarget() == null) {
-            p.setSpectatorTarget(alivePlayers.get(0));
+            p.setSpectatorTarget(alivePlayers.getFirst());
             //p.sendMessage(ChatColor.GRAY + "Currently spectating no players, spectating " + alive_players.get(0).getPlayerListName() + "(first player in " + team_str + ")");
             return;
         }
 
-        if (team.contains(p.getSpectatorTarget())) {
+        if (team.hasPlayer((Player) p.getSpectatorTarget())) {
             int i = alivePlayers.indexOf((Player) p.getSpectatorTarget());
             if (i == alivePlayers.size() - 1) {
                 i = -1;
@@ -41,7 +39,7 @@ public class SwitchSpectator implements Listener {
             p.setSpectatorTarget(alivePlayers.get(i + 1)); // spectater den neste playeren
             //p.sendMessage(ChatColor.GRAY + "Already spectating someone from " + team_str + " (" + alive_players.get(alive_players.indexOf((Player) p.getSpectatorTarget())).getPlayerListName() + "), spectating " + alive_players.get(i + 1).getPlayerListName() + "the next player if possible");
         } else {
-            p.setSpectatorTarget(alivePlayers.get(0)); // spectater den første player i enemy team
+            p.setSpectatorTarget(alivePlayers.getFirst()); // spectater den første player i enemy team
             //p.sendMessage(ChatColor.GRAY + "Switching to " + team_str + " and spectating " + alive_players.get(0).getPlayerListName() + " (the first player)");
         }
     }

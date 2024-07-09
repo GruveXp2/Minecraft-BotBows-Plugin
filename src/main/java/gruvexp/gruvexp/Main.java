@@ -21,7 +21,7 @@ public final class Main extends JavaPlugin {
     }
 
     @Override
-    public void onEnable() { // ADD FUNNEY SCRACHT SOUNDEFFECTS OG PIOM LYD reSOURCEPACC
+    public void onEnable() {
         PLUGIN = this;
         Bukkit.getLogger().info("BotBows plugin enabled!");
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
@@ -31,14 +31,13 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ShiftListener(), this);
         getServer().getPluginManager().registerEvents(new SwitchSpectator(), this);
 
-        getCommand("menu").setExecutor(new MenuCommand()); //når man skriver inn /menu så blir MenuCommand() runna
+        getCommand("menu").setExecutor(new MenuCommand());
         getCommand("settings").setExecutor(new SettingsCommand());
         getCommand("start").setExecutor(new StartCommand());
         getCommand("leave").setExecutor(new LeaveCommand());
-        getCommand("stopgame").setExecutor(new StopCommand());
+        getCommand("stopgame").setExecutor(new StopGameCommand());
         WORLD = Bukkit.getWorld("BotBows (S2E1)");
         BotBowsManager.armorInit();
-        BotBowsManager.spawnInit();
         MenuInit();
     }
 
@@ -49,9 +48,10 @@ public final class Main extends JavaPlugin {
 
     public static void MenuInit() {
         menus.put("game menu", new GameMenu());
-        menus.put("botbows settings 1", new SelectTeamsMenu());
-        menus.put("botbows settings 2", new HealthMenu());
-        menus.put("botbows settings 3", new WinThresholdMenu());
-        menus.put("botbows settings 4", new StormModeMenu());
+        menus.put("select map", new SelectMapMenu());
+        menus.put("select teams", new SelectTeamsMenu());
+        menus.put("health", new HealthMenu());
+        menus.put("win threshold", new WinThresholdMenu());
+        menus.put("storm mode", new StormModeMenu());
     }
 }

@@ -15,12 +15,12 @@ public class LeaveCommand implements CommandExecutor {
 
         Player p = (Player) sender;
         if (BotBowsManager.activeGame) {
-            p.sendMessage(ChatColor.RED + "Cant leave, the game has already started!");
+            p.sendMessage(STR."\{ChatColor.RED}Cant leave, the game has already started!");
             return true;
         }
         BotBowsManager.leaveGame(p);
-        SelectTeamsMenu chooseTeamsMenu = (SelectTeamsMenu) Main.menus.get("botbows settings 1");
-        chooseTeamsMenu.recalculateTeam(0); // recalculate
+        SelectTeamsMenu selectTeamsMenu = (SelectTeamsMenu) Main.menus.get("select teams");
+        selectTeamsMenu.recalculateTeam(); // recalculate
 
         return true;
     }

@@ -1,14 +1,18 @@
 package gruvexp.gruvexp.menu;
 
+import gruvexp.gruvexp.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
 
@@ -69,6 +73,19 @@ public abstract class Menu implements InventoryHolder {
         itemMeta.setDisplayName(displayName);
 
         itemMeta.setLore(Arrays.asList(lore));
+        item.setItemMeta(itemMeta);
+
+        return item;
+    }
+
+    public ItemStack makeHeadItem(Player p, ChatColor teamColor) {
+
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta itemMeta = (SkullMeta) item.getItemMeta();
+        itemMeta.setDisplayName(teamColor + p.getPlayerListName());
+        itemMeta.getPersistentDataContainer().set(new NamespacedKey(Main.getPlugin(), "uuid"), PersistentDataType.STRING, p.getUniqueId().toString());
+        itemMeta.setOwningPlayer(Bukkit.getPlayer(p.getName()));
+
         item.setItemMeta(itemMeta);
 
         return item;

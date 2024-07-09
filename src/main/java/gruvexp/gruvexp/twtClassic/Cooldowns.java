@@ -5,17 +5,18 @@ import gruvexp.gruvexp.tasks.StormCooldown;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Cooldowns { // Inneholder shifting og storm logic
 
-    public static HashMap<Player, BukkitTask> sneakRunnables = new HashMap<>();
-    public static HashMap<Player, BukkitTask> stormRunnables = new HashMap<>();
-    public static HashMap<Player, Integer> sneakCooldowns = new HashMap<>();
-    public static HashMap<Player, Integer> stormCooldowns = new HashMap<>();
+    public static Map<Player, BukkitTask> sneakRunnables = new HashMap<>();
+    public static Map<Player, BukkitTask> stormRunnables = new HashMap<>();
+    public static Map<Player, Integer> sneakCooldowns = new HashMap<>();
+    public static Map<Player, Integer> stormCooldowns = new HashMap<>();
 
-    public static void CoolDownInit(ArrayList<Player> players) {
+    public static void CoolDownInit(List<Player> players) {
         for (Player p : players) {
             sneakCooldowns.put(p, 0);
         }

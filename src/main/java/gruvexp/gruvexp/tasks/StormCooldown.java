@@ -4,7 +4,9 @@ import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.twtClassic.Bar;
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
 import gruvexp.gruvexp.twtClassic.Cooldowns;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -52,7 +54,7 @@ public class StormCooldown extends BukkitRunnable {
                 BotBowsManager.playerHP.put(p, 0);
                 p.damage(0.5);
                 p.setGameMode(GameMode.SPECTATOR);
-                BotBowsManager.messagePlayers(BotBowsManager.getTeamColor(p) + p.getPlayerListName() + ChatColor.AQUA + " was electrocuted to a crisp!");
+                BotBowsManager.messagePlayers(STR."\{BotBowsManager.getTeam(p).COLOR}\{p.getPlayerListName()}\{ChatColor.AQUA} was electrocuted to a crisp!");
                 BotBowsManager.check4Victory(p);
             }
         } else {
