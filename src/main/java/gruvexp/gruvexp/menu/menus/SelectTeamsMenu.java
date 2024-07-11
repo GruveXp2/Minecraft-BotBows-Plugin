@@ -52,13 +52,14 @@ public class SelectTeamsMenu extends Menu {
     public void setMenuItems() {
         setColoredGlassPanes();
         // page stuff
+        inventory.setItem(21, LEFT);
         inventory.setItem(22, CLOSE);
         inventory.setItem(23, RIGHT);
     }
 
     public void setColoredGlassPanes() {
-        ItemStack team1Pane = makeItem(BotBowsManager.team1.getglassPane(), STR."\{BotBowsManager.team1.COLOR}Team \{BotBowsManager.team1}");
-        ItemStack team2Pane = makeItem(BotBowsManager.team2.getglassPane(), STR."\{BotBowsManager.team2.COLOR}Team \{BotBowsManager.team2}");
+        ItemStack team1Pane = makeItem(BotBowsManager.team1.getGlassPane(), STR."\{BotBowsManager.team1.COLOR}Team \{BotBowsManager.team1}");
+        ItemStack team2Pane = makeItem(BotBowsManager.team2.getGlassPane(), STR."\{BotBowsManager.team2.COLOR}Team \{BotBowsManager.team2}");
         inventory.setItem(0, team1Pane);
         inventory.setItem(1, team1Pane);
         inventory.setItem(7, team1Pane);

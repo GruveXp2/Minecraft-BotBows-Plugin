@@ -16,8 +16,8 @@ public class SelectMapMenu extends Menu {
             "A flat arena with modern style",
             "Has a huge cave room underground");
     public static final ItemStack GRAUT_VS_WACKY = makeItem(Material.SPRUCE_SAPLING, STR."\{ChatColor.LIGHT_PURPLE}Graut\{ChatColor.WHITE} vs \{ChatColor.GREEN}Wacky",
-            "A flat arena with modern style",
-            "Has a huge cave room underground");
+            "A flat arena in a spruce forest with ice spikes and igloos",
+            "Has a huge ravine in the middle and many caves underground");
 
     @Override
     public String getMenuName() {
@@ -26,7 +26,7 @@ public class SelectMapMenu extends Menu {
 
     @Override
     public int getSlots() {
-        return 9;
+        return 18;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SelectMapMenu extends Menu {
             case SLIME_BALL -> BotBowsManager.setMap(BotBowsMap.BLAUD_VS_SAUCE);
             case SPRUCE_SAPLING -> BotBowsManager.setMap(BotBowsMap.GRAUT_VS_WACKY);
             case BARRIER -> clicker.closeInventory();
-            case LIGHT_BLUE_STAINED_GLASS_PANE -> Main.menus.get("teams").open(clicker);
+            case LIGHT_BLUE_STAINED_GLASS_PANE -> Main.menus.get("select teams").open(clicker);
         }
     }
 
@@ -46,8 +46,7 @@ public class SelectMapMenu extends Menu {
         inventory.setItem(3, BLAUD_VS_SAUCE);
         inventory.setItem(5, GRAUT_VS_WACKY);
         // page stuff
-        inventory.setItem(21, LEFT);
-        inventory.setItem(22, CLOSE);
-        inventory.setItem(23, RIGHT);
+        inventory.setItem(13, CLOSE);
+        inventory.setItem(14, RIGHT);
     }
 }

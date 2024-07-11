@@ -21,9 +21,9 @@ public class Board {
         BotBowsTeam team1 = BotBowsManager.team1;
         BotBowsTeam team2 = BotBowsManager.team2;
         // setter inn scores
-        setScore(STR."\{ChatColor.valueOf(STR."DARK_\{team2.COLOR.name()}")}TEAM \{team2.NAME.toUpperCase()}", BotBowsManager.team2.size());
+        setScore(STR."\{darkenColor(team2.COLOR)}TEAM \{team2.NAME.toUpperCase()}", BotBowsManager.team2.size());
 
-        setScore(STR."\{ChatColor.valueOf(STR."DARK_\{team1.COLOR.name()}")}TEAM \{team1.NAME.toUpperCase()}", BotBowsManager.getTotalPlayers() + 1);
+        setScore(STR."\{darkenColor(team1.COLOR)}TEAM \{team1.NAME.toUpperCase()}", BotBowsManager.getTotalPlayers() + 1);
         setScore(STR."\{ChatColor.GRAY}----------", BotBowsManager.getTotalPlayers() + 2);
         setScore("", BotBowsManager.getTotalPlayers() + 5);
 
@@ -144,5 +144,14 @@ public class Board {
     public static void resetTeams() {
         sbTeam1.unregister();
         sbTeam2.unregister();
+    }
+
+    private static ChatColor darkenColor(ChatColor color) {
+        String colorName = color.name();
+        if (colorName.startsWith("LIGHT_")) {
+            return ChatColor.valueOf(colorName.replace("LIGHT_", ""));
+        } else {
+            return ChatColor.valueOf(STR."DARK_\{colorName}");
+        }
     }
 }

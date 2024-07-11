@@ -72,8 +72,8 @@ public abstract class BotBowsTeam {
     public int getPoints() {return points;}
     public void addPoints(int score) {points += score;}
 
-    public Material getglassPane() {
-        return Material.getMaterial(STR."\{DYECOLOR.name()}_GLASS_PANE");
+    public Material getGlassPane() {
+        return Material.getMaterial(STR."\{DYECOLOR.name()}_STAINED_GLASS_PANE");
     }
 
     @Override

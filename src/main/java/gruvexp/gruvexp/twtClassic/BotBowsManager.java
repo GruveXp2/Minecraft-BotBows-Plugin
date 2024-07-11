@@ -26,8 +26,8 @@ public class BotBowsManager {
 
     private static final Main PLUGIN = Main.getPlugin();
     public static BotBowsMap currentMap = BotBowsMap.BLAUD_VS_SAUCE; // default map
-    public static BotBowsTeam team1;
-    public static BotBowsTeam team2;
+    public static BotBowsTeam team1 = new TeamBlaud();
+    public static BotBowsTeam team2 = new TeamSauce();
     private static final Map<Player, BotBowsTeam> PLAYER_TEAM = new HashMap<>();
     private static final List<Player> PLAYERS = new ArrayList<>(); // liste med alle players som er i gamet
     private static final List<List<List<Integer>>> PLAYER_HEALTH_ARMOR = new ArrayList<>(); // Når man tar damag så kan man gette em liste med hvilke armor pieces som skal fjernes
@@ -62,6 +62,7 @@ public class BotBowsManager {
 
     public static void setMap(BotBowsMap map) {
         if (map == currentMap) return;
+        currentMap = map;
         switch (map) {
             case BLAUD_VS_SAUCE -> {
                 team1 = new TeamBlaud(team1);
@@ -72,6 +73,8 @@ public class BotBowsManager {
                 team2 = new TeamWacky(team2);
             }
         }
+        ((SelectTeamsMenu) Main.menus.get("select teams")).setColoredGlassPanes(); // update the glass pane items that show the team colors and name
+        ((HealthMenu) Main.menus.get("health")).updateMenu(); // update so the name colors match the new team color
     }
 
     public static void setDynamicScoring(boolean dynamic_scoring) {

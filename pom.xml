@@ -6,14 +6,14 @@
 
     <groupId>gruvexp</groupId>
     <artifactId>gruvexp</artifactId>
-    <version>2024.07.09</version>
+    <version>2024.07.10</version>
     <packaging>jar</packaging>
 
     <name>BotBows</name>
 
     <description>Plugin for the BotBows server</description>
     <properties>
-        <java.version>16</java.version>
+        <java.version>22</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
