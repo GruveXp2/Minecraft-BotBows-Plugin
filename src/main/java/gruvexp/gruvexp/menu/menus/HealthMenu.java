@@ -115,8 +115,8 @@ public class HealthMenu extends Menu {
         inventory.setItem(23, RIGHT);
     }
 
-    public void updateMenu() { // The normal menu with a slider
-        if (advancedHp) {
+    public void updateMenu() {
+        if (advancedHp) { // each player can have their own health
             for (int i = 9; i < 18; i++) {
                 inventory.setItem(i, null);
             }
@@ -132,7 +132,7 @@ public class HealthMenu extends Menu {
                 item.setAmount(BotBowsManager.playerMaxHP.get(p));
                 inventory.setItem(17 - i, item);
             }
-        } else {
+        } else { // The normal menu with a slider
             int maxHP = BotBowsManager.maxHP;
 
             for (int i = 0; i < 5; i++) {
