@@ -38,9 +38,9 @@ public class Cooldowns { // Inneholder shifting og storm logic
             stormCooldowns.put(p, 0);
             if (stormRunnables.containsKey(p)) {
                 stormRunnables.get(p).cancel();
+                Bar.setStormBarProgress(p, 0d);
+                Bar.setStormBarVisibility(p, false);
             }
-            Bar.setStormBarProgress(p, 0d);
-            Bar.setStormBarVisibility(p, false);
         }
         stormRunnables.clear();
     }
