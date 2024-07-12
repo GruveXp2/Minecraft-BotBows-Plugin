@@ -4,6 +4,7 @@ import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.menu.menus.SelectTeamsMenu;
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,7 +22,7 @@ public class LeaveCommand implements CommandExecutor {
         BotBowsManager.leaveGame(p);
         SelectTeamsMenu selectTeamsMenu = (SelectTeamsMenu) Main.menus.get("select teams");
         selectTeamsMenu.recalculateTeam(); // recalculate
-
+        p.setGameMode(GameMode.SPECTATOR);
         return true;
     }
 }
