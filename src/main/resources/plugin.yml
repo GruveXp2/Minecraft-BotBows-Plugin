@@ -24,4 +24,7 @@ commands:
   stopgame:
     usage: /stopgame
     description: Stops the game
+  test:
+    usage: /test
+    description: Used for debugging
 

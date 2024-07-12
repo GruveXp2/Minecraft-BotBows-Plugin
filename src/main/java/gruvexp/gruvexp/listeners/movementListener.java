@@ -1,6 +1,7 @@
 package gruvexp.gruvexp.listeners;
 
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBowsMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -20,7 +21,7 @@ public class movementListener implements Listener {
         if (BotBowsManager.canMove) {
             Material material = p.getLocation().add(0, -0.05, 0).getBlock().getType(); // sjekker rett under, bare 0.05 itilfelle det er teppe
             if (material == Material.AIR) {
-                material = p.getLocation().add(0, -0.1, 0).getBlock().getType(); // hvis man står på kanten av et teppe kan det være en effektblokk under
+                material = p.getLocation().add(0, -0.9, 0).getBlock().getType(); // hvis man står på kanten av et teppe kan det være en effektblokk under
             }
             switch (material) { // add effekter basert på åssen blokk som er under
                 case YELLOW_CONCRETE, YELLOW_CONCRETE_POWDER -> p.addPotionEffect(new PotionEffect(org.bukkit.potion.PotionEffectType.JUMP_BOOST, 1200, 6, true, false));
@@ -34,6 +35,9 @@ public class movementListener implements Listener {
                     p.playSound(p.getLocation(), Sound.ITEM_FIRECHARGE_USE, 10, 2);
                 }
                 default -> p.removePotionEffect(PotionEffectType.JUMP_BOOST);
+            }
+            if (BotBowsManager.isPlayerJoined(p) && BotBowsManager.currentMap == BotBowsMap.GRAUT_VS_WACKY && BotBowsManager.activeGame && BotBowsManager.isInDungeon(p)) {
+                BotBowsManager.handleDungeonMovement(p);
             }
         } else {
             if (!BotBowsManager.isPlayerJoined(e.getPlayer())) {return;}

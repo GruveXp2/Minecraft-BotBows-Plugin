@@ -4,6 +4,7 @@ import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.menu.menus.HealthMenu;
 import gruvexp.gruvexp.menu.menus.SelectTeamsMenu;
 import gruvexp.gruvexp.tasks.BotBowsGiver;
+import gruvexp.gruvexp.tasks.GvwDungeonProximityScanner;
 import gruvexp.gruvexp.tasks.RoundCountdown;
 import gruvexp.gruvexp.tasks.StartStorm;
 import gruvexp.gruvexp.twtClassic.botbowsTeams.*;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.util.*;
@@ -32,9 +34,9 @@ public class BotBowsManager {
     private static final List<Player> PLAYERS = new ArrayList<>(); // liste med alle players som er i gamet
     private static final List<List<List<Integer>>> PLAYER_HEALTH_ARMOR = new ArrayList<>(); // Når man tar damag så kan man gette em liste med hvilke armor pieces som skal fjernes
     private static final List<Double> STORM_FREQUENCY = new ArrayList<>(List.of(0.05, 0.1, 0.25, 0.5, 1.0));
-    public static Map<Player, Integer> playerHP = new HashMap<>();
-    public static Map<Player, Integer> playerMaxHP = new HashMap<>();
-    public static Map<Player, Boolean> isDamaged = new HashMap<>();
+    public static final Map<Player, Integer> playerHP = new HashMap<>();
+    public static final Map<Player, Integer> playerMaxHP = new HashMap<>();
+    public static final Map<Player, Boolean> isDamaged = new HashMap<>();
     public static int maxHP = 3;
     public static  boolean stormMode = false;
     public static int stormFrequency = 2; // 5%, 10%, 25%, 50%, 100%
@@ -44,6 +46,9 @@ public class BotBowsManager {
     private static int round = 0; // hvilken runde man er på
     public static boolean activeGame = false; // hvis spillet har starta, så kan man ikke gjøre ting som /settings
     public static boolean canMove = true;
+    // only for graut vs wacky
+    private static final Map<Player, GvwDungeonProximityScanner> dungeonScanners = new HashMap<>();
+    private static final Map<Player, DungeonGhoster> dungeonGhosters = new HashMap<>();
 
 
     public static ItemStack getBotBow() {
@@ -74,6 +79,7 @@ public class BotBowsManager {
             }
         }
         ((SelectTeamsMenu) Main.menus.get("select teams")).setColoredGlassPanes(); // update the glass pane items that show the team colors and name
+        ((SelectTeamsMenu) Main.menus.get("select teams")).recalculateTeam(); // update the player heads so they have the correct color
         ((HealthMenu) Main.menus.get("health")).updateMenu(); // update so the name colors match the new team color
     }
 
@@ -123,6 +129,7 @@ public class BotBowsManager {
             for (Player q : PLAYERS) {
                 q.sendMessage(STR."\{p.getPlayerListName()} has joined BotBows Classic! (\{PLAYERS.size()})");
             }
+            p.setGameMode(GameMode.ADVENTURE);
         }
         else {
             p.sendMessage(STR."\{ChatColor.RED}You already joined!");
@@ -158,7 +165,10 @@ public class BotBowsManager {
             Board.updatePlayerScore(q);
         }
         Board.updateTeamScores();
-        new BotBowsGiver().runTaskTimer(Main.getPlugin(), 100L, 10L);
+        new BotBowsGiver().runTaskTimer(PLUGIN, 100L, 10L);
+        if (currentMap == BotBowsMap.GRAUT_VS_WACKY) {
+            initDungeon();
+        }
     }
 
     public static void startRound() {
@@ -188,6 +198,9 @@ public class BotBowsManager {
         if (stormMode && Math.random() < STORM_FREQUENCY.get(stormFrequency)) {
             activeStorm = true;
             new StartStorm().runTaskTimer(PLUGIN, 100L, 100L); // starter storm og timers
+        }
+        if (currentMap == BotBowsMap.GRAUT_VS_WACKY) { // starts the scanners for the dungeons after 7 seconds
+            startScanners();
         }
     }
 
@@ -291,10 +304,41 @@ public class BotBowsManager {
         startRound();
     }
 
+    private static void initDungeon() {
+        for (Player p : PLAYERS) {
+            dungeonGhosters.put(p, new DungeonGhoster(p));
+        }
+    }
+
+    private static void startScanners() {
+        for (Player p : PLAYERS) {
+            GvwDungeonProximityScanner scanner = new GvwDungeonProximityScanner(p);
+            dungeonScanners.put(p, scanner);
+            scanner.runTaskTimer(PLUGIN, 140L, 5L);
+        }
+        //debugMessage("starting scanners");
+    }
+
+    public static boolean isInDungeon(Player p) {
+        return dungeonScanners.get(p).isInDungeon();
+    }
+
+    public static String getSection(Player p) {
+        return dungeonGhosters.get(p).getSection();
+    }
+
+    public static void handleDungeonMovement(Player p) {
+        dungeonGhosters.get(p).handleMovement();
+    }
+
     public static void messagePlayers(String message) {
         for (Player p : PLAYERS) {
             p.sendMessage(message);
         }
+    }
+
+    public static void debugMessage(String message) {
+        messagePlayers(STR."\{ChatColor.GRAY}[DEBUG]: \{message}");
     }
 
     public static void titlePlayers(String title, int duration) {
@@ -341,6 +385,11 @@ public class BotBowsManager {
             Cooldowns.sneakRunnables.get(p).cancel();
             Cooldowns.sneakRunnables.remove(p);
         }
+        if (dungeonScanners.containsKey(p)) {
+            dungeonScanners.get(p).cancel();
+            dungeonScanners.remove(p);
+            dungeonGhosters.remove(p);
+        }
         isDamaged.remove(p);
         playerMaxHP.remove(p);
         playerHP.remove(p);
@@ -350,6 +399,7 @@ public class BotBowsManager {
         ((HealthMenu) Main.menus.get("health")).updateMenu();
         p.sendMessage(STR."\{ChatColor.YELLOW}You left BotBows Classic");
         messagePlayers(STR."\{ChatColor.YELLOW}\{p.getPlayerListName()} has left the game (\{PLAYERS.size()})");
+        p.setGameMode(GameMode.SPECTATOR);
     }
     public static boolean isPlayerJoined(Player p) {
         return PLAYERS.contains(p);
@@ -360,12 +410,12 @@ public class BotBowsManager {
         if (winningTeam == null) {
             messagePlayers(STR."""
                     \{ChatColor.LIGHT_PURPLE}================
-                    The game ended in a tie after \{round} rounds
+                    The game ended in a tie after \{round} round\{round == 1 ? "" : "s"}
                     ================""");
         } else {
             messagePlayers(STR."""
                     \{winningTeam.COLOR}================
-                    TEAM \{winningTeam.toString().toUpperCase()} won the game after \{round} rounds! GG
+                    TEAM \{winningTeam.toString().toUpperCase()} won the game after \{round} round\{round == 1 ? "" : "s"}! GG
                     ================""");
         }
 
@@ -403,6 +453,13 @@ public class BotBowsManager {
         Cooldowns.sneakCooldowns.clear();
         Cooldowns.sneakRunnables.clear();
         Main.MenuInit();
+        if (currentMap == BotBowsMap.GRAUT_VS_WACKY) {
+            for (BukkitRunnable scanner : dungeonScanners.values()) {
+                scanner.cancel();
+            }
+            dungeonScanners.clear();
+            dungeonGhosters.clear();
+        }
     }
 
     private static void postGameTitle(BotBowsTeam winningTeam) {
