@@ -12,10 +12,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class SelectMapMenu extends Menu {
 
-    public static final ItemStack BLAUD_VS_SAUCE = makeItem(Material.SLIME_BALL, STR."\{ChatColor.BLUE}Blaud\{ChatColor.WHITE} vs \{ChatColor.RED}Sauce",
-            "A flat arena with modern style",
+    public static final ItemStack ROYAL_ARENA = makeItem(Material.SLIME_BALL, STR."\{ChatColor.GRAY}Royal Arena",
+            STR."\{ChatColor.BLUE}Blaud\{ChatColor.WHITE} vs \{ChatColor.RED}Sauce",
+            "A flat arena with modern royal style",
             "Has a huge cave room underground");
-    public static final ItemStack GRAUT_VS_WACKY = makeItem(Material.SPRUCE_SAPLING, STR."\{ChatColor.LIGHT_PURPLE}Graut\{ChatColor.WHITE} vs \{ChatColor.GREEN}Wacky",
+    public static final ItemStack ICY_RAVINE = makeItem(Material.SPRUCE_SAPLING, STR."\{ChatColor.AQUA}Icy Ravine",
+            STR."\{ChatColor.LIGHT_PURPLE}Graut\{ChatColor.WHITE} vs \{ChatColor.GREEN}Wacky",
             "A flat arena in a spruce forest with ice spikes and igloos",
             "Has a huge ravine in the middle and many caves underground");
 
@@ -43,8 +45,8 @@ public class SelectMapMenu extends Menu {
     @Override
     public void setMenuItems() {
 
-        inventory.setItem(3, BLAUD_VS_SAUCE);
-        inventory.setItem(5, GRAUT_VS_WACKY);
+        inventory.setItem(3, ROYAL_ARENA);
+        inventory.setItem(5, ICY_RAVINE);
         // page stuff
         inventory.setItem(13, CLOSE);
         inventory.setItem(14, RIGHT);
