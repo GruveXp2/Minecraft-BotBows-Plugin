@@ -15,14 +15,16 @@ public abstract class BotBowsTeam {
     public final ChatColor COLOR;
     public final DyeColor DYECOLOR;
     public final Location[] SPAWNPOS;
+    public final Location TRIBUNE_POS;
     List<Player> players = new ArrayList<>(4);
-    int points;
+    private int points;
 
-    public BotBowsTeam(String name, ChatColor color, DyeColor dyeColor, Location[] spawnPos) {
+    public BotBowsTeam(String name, ChatColor color, DyeColor dyeColor, Location[] spawnPos, Location tribunePos) {
         NAME = name;
         COLOR = color;
         DYECOLOR = dyeColor;
         SPAWNPOS = spawnPos;
+        TRIBUNE_POS = tribunePos;
     }
 
     public void tpPlayersToSpawn() {
@@ -31,8 +33,16 @@ public abstract class BotBowsTeam {
         }
     }
 
+    public void postTeamSwap() { // when the map is changed and the teams are swapped out
+        for (Player p : players) {
+            BotBowsManager.registerPlayerTeam(p, this);
+            p.teleport(TRIBUNE_POS);
+        }
+    }
+
     public void join(Player p) {
         players.add(p);
+        p.teleport(TRIBUNE_POS);
         BotBowsManager.registerPlayerTeam(p, this);
     }
 
