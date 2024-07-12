@@ -37,7 +37,7 @@ public class Board {
         sbTeam2 = board.registerNewTeam(team2.NAME);
 
         sbTeam1.setColor(team1.COLOR);
-        sbTeam2.setColor(team1.COLOR);
+        sbTeam2.setColor(team2.COLOR);
 
         for (Player p: team1.getPlayers()) {
             sbTeam1.addPlayer(p);
@@ -110,7 +110,7 @@ public class Board {
             }
 
             setScore(STR."\{BotBowsManager.team1}: \{ChatColor.GREEN}\{healthSymbol.repeat(team1Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team1Points)}", 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
-            setScore(STR."\{BotBowsManager.team2}:  \{ChatColor.GREEN}\{healthSymbol.repeat(team2Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team2Points)}", 3 + BotBowsManager.getTotalPlayers());
+            setScore(STR."\{BotBowsManager.team2}: \{ChatColor.GREEN}\{healthSymbol.repeat(team2Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team2Points)}", 3 + BotBowsManager.getTotalPlayers());
         }
     }
 
@@ -148,7 +148,9 @@ public class Board {
 
     private static ChatColor darkenColor(ChatColor color) {
         String colorName = color.name();
-        if (colorName.startsWith("LIGHT_")) {
+        if (colorName.equals("LIGHT_PURPLE")) {
+            return ChatColor.DARK_PURPLE;
+        } else if (colorName.startsWith("LIGHT_")) {
             return ChatColor.valueOf(colorName.replace("LIGHT_", ""));
         } else {
             return ChatColor.valueOf(STR."DARK_\{colorName}");
