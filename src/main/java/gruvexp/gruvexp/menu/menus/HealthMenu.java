@@ -55,7 +55,6 @@ public class HealthMenu extends Menu {
                 } else {
                     inventory.setItem(6, CUSTOM_HP_ENABLED);
                     enableCustomHP();
-                    advancedHp = true;
                 }
                 break;
             case LIME_STAINED_GLASS_PANE:
@@ -64,8 +63,7 @@ public class HealthMenu extends Menu {
                     BotBowsManager.setDynamicScoring(false);
                 } else {
                     inventory.setItem(6, CUSTOM_HP_DISABLED);
-                    updateMenu();
-                    advancedHp = false;
+                    disableCustomHP();
                 }
                 break;
             case PLAYER_HEAD:
