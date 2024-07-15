@@ -41,7 +41,7 @@ public class movementListener implements Listener {
             }
         } else {
             if (!BotBowsManager.isPlayerJoined(e.getPlayer())) {return;}
-            Location spawnPos = BotBowsManager.getPlayerSpawn(p);
+            Location spawnPos = BotBowsManager.getTeam(p).getSpawnPos(p);
             if (p.getLocation().getX() == spawnPos.getX() && p.getLocation().getZ() == spawnPos.getZ()) {return;}
             // hvis det er countdown (!canMove), playeren er joina og playeren har gått vekk fra spawn blir han telportert tebake
             p.teleport(spawnPos);

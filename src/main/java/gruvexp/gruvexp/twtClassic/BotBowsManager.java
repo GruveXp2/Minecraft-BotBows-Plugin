@@ -351,14 +351,6 @@ public class BotBowsManager {
         return PLAYER_TEAM.get(p);
     }
 
-    public static Location getPlayerSpawn(Player p) {
-        if (team1.hasPlayer(p)) {
-            return team1.getSpawnPos(p);
-        } else {
-            return team2.getSpawnPos(p);
-        }
-    }
-
     public static int getTotalPlayers() {
         return PLAYERS.size();
     }
