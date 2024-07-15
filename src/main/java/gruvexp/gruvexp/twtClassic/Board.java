@@ -93,24 +93,20 @@ public class Board {
                 }
             }
         }
+        BotBowsTeam team1 = BotBowsManager.team1;
+        BotBowsTeam team2 = BotBowsManager.team2;
+        int totalPlayers = BotBowsManager.getTotalPlayers();
         if (winThreshold == -1) {
-            setScore(STR."\{BotBowsManager.team1}: \{ChatColor.RESET}\{BotBowsManager.team1.getPoints()}", 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
-            setScore(STR."\{BotBowsManager.team2}: \{ChatColor.RESET}\{BotBowsManager.team2.getPoints()}", 3 + BotBowsManager.getTotalPlayers());
+            setScore(STR."\{team1}: \{ChatColor.RESET}\{team1.getPoints()}", 4 + totalPlayers); // legger inn scoren til hvert team
+            setScore(STR."\{team2}: \{ChatColor.RESET}\{team2.getPoints()}", 3 + totalPlayers);
         } else if (winThreshold >= 35) {
-            setScore(STR."\{BotBowsManager.team1}: \{ChatColor.RESET}\{BotBowsManager.team1.getPoints()} / \{ChatColor.GRAY}\{winThreshold}", 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
-            setScore(STR."\{BotBowsManager.team2}: \{ChatColor.RESET}\{BotBowsManager.team2.getPoints()} / \{ChatColor.GRAY}\{winThreshold}", 3 + BotBowsManager.getTotalPlayers());
+            setScore(STR."\{team1}: \{ChatColor.RESET}\{team1.getPoints()} / \{ChatColor.GRAY}\{winThreshold}", 4 + totalPlayers); // legger inn scoren til hvert team
+            setScore(STR."\{team2}: \{ChatColor.RESET}\{team2.getPoints()} / \{ChatColor.GRAY}\{winThreshold}", 3 + totalPlayers);
         } else { // få plass til mest mulig streker
             String healthSymbol = getHealthSymbol(winThreshold);
-            int team1Points = BotBowsManager.team1.getPoints();
-            int team2Points = BotBowsManager.team2.getPoints();
-            if (team1Points > winThreshold) { // antall points cappes på win_threshold, så hvis noen hadde 3p og fikk 2p, men win thresholden er 4, så står det at de har 4p
-                team1Points = winThreshold;
-            } else if (team2Points > winThreshold) {
-                team2Points = winThreshold;
-            }
 
-            setScore(STR."\{BotBowsManager.team1}: \{ChatColor.GREEN}\{healthSymbol.repeat(team1Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team1Points)}", 4 + BotBowsManager.getTotalPlayers()); // legger inn scoren til hvert team
-            setScore(STR."\{BotBowsManager.team2}: \{ChatColor.GREEN}\{healthSymbol.repeat(team2Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team2Points)}", 3 + BotBowsManager.getTotalPlayers());
+            setScore(STR."\{team1}: \{ChatColor.GREEN}\{healthSymbol.repeat(team1.getPoints())}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team1.getPoints())}", 4 + totalPlayers); // legger inn scoren til hvert team
+            setScore(STR."\{team2}: \{ChatColor.GREEN}\{healthSymbol.repeat(team2.getPoints())}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team2.getPoints())}", 3 + totalPlayers);
         }
     }
 

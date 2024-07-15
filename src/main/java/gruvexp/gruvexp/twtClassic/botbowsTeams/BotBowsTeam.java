@@ -80,7 +80,12 @@ public abstract class BotBowsTeam {
     }
 
     public int getPoints() {return points;}
-    public void addPoints(int score) {points += score;}
+    public void addPoints(int score) {
+        points += score;
+        if (points > BotBowsManager.winThreshold) {
+            points = BotBowsManager.winThreshold;
+        }
+    }
 
     public Material getGlassPane() {
         return Material.getMaterial(STR."\{DYECOLOR.name()}_STAINED_GLASS_PANE");
