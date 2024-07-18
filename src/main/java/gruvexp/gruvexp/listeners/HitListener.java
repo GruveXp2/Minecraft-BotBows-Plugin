@@ -14,9 +14,16 @@ public class HitListener implements Listener {
     @EventHandler
     public void onHit(EntityDamageByEntityEvent e) {
         if (!BotBowsManager.activeGame) {return;}
-        if (!(e.getDamager() instanceof Arrow arrow)) {return;} // entitien som utførte damag
+        if (!(e.getDamager() instanceof Arrow arrow)) {
+            if (!(e.getEntity() instanceof Player defender)) {return;} // den som blei hitta
+            if (BotBowsManager.isPlayerJoined(defender)) {
+                e.setCancelled(true); // cant damage ingame players without bow
+            }
+            return;
+        } // entitien som utførte damag
         if (!(arrow.getShooter() instanceof Player attacker)) {return;} // den som skøyt
         if (!(e.getEntity() instanceof Player defender)) {return;} // den som blei hitta
+        if (!BotBowsManager.isPlayerJoined(attacker) || !BotBowsManager.isPlayerJoined(defender)) {return;} // hvis de ikke er i gamet
         arrow.setKnockbackStrength(8);
         if (BotBowsManager.getTeam(attacker) == BotBowsManager.getTeam(defender) || attacker.isGlowing()) {
             arrow.remove(); // if the player already was hit and has a cooldown, or if the hit player is of the same team as the attacker, the arrow won't do damage
