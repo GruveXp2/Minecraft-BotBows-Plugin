@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class HealthMenu extends Menu {
 
-    boolean advancedHp = true;
+    private boolean customHP;
     private static final ItemStack DYNAMIC_POINTS_DISABLED = makeItem(Material.RED_STAINED_GLASS_PANE, STR."\{ChatColor.RED}Dynamic points",
             STR."\{ChatColor.DARK_RED}Disabled", "If enabled, winning team gets 1", "point for each remaining hp.", "If disbabled, winning team only gets 1 point.");
     private static final ItemStack DYNAMIC_POINTS_ENABLED = makeItem(Material.LIME_STAINED_GLASS_PANE, STR."\{ChatColor.GREEN}Dynamic points",
@@ -42,27 +42,22 @@ public class HealthMenu extends Menu {
         // if you click on a player then they change teams
         Player clicker = (Player) e.getWhoClicked();
 
-        String name = ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName());
         switch (e.getCurrentItem().getType()) { // stuff som skal gjøres når man trykker på et item
             case WHITE_STAINED_GLASS_PANE, PINK_STAINED_GLASS_PANE:
                 BotBowsManager.maxHP = Integer.parseInt(ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()));
                 updateMenu();
                 break;
             case RED_STAINED_GLASS_PANE:
-                if (name.equals("Dynamic points")) {
-                    inventory.setItem(2, DYNAMIC_POINTS_ENABLED);
-                    BotBowsManager.setDynamicScoring(true);
-                } else {
-                    inventory.setItem(6, CUSTOM_HP_ENABLED);
+                if (e.getCurrentItem().equals(DYNAMIC_POINTS_DISABLED)) {
+                    enableDynamicPoints();
+                } else if (e.getCurrentItem().equals(CUSTOM_HP_DISABLED)) { // clicked on custom hp setting
                     enableCustomHP();
                 }
                 break;
             case LIME_STAINED_GLASS_PANE:
-                if (name.equals("Dynamic points")) {
-                    inventory.setItem(2, DYNAMIC_POINTS_DISABLED);
-                    BotBowsManager.setDynamicScoring(false);
-                } else {
-                    inventory.setItem(6, CUSTOM_HP_DISABLED);
+                if (e.getCurrentItem().equals(DYNAMIC_POINTS_ENABLED)) {
+                    disableDynamicPoints();
+                } else if (e.getCurrentItem().equals(CUSTOM_HP_ENABLED)) { // clicked on custom hp setting
                     disableCustomHP();
                 }
                 break;
@@ -72,7 +67,7 @@ public class HealthMenu extends Menu {
                 int slot = e.getSlot();
                 int hp = head.getAmount();
 
-                if (hp > 4) {
+                if (hp > 9) {
                     hp += 5;
                     if (hp > 20) {
                         hp = 1;
@@ -102,10 +97,8 @@ public class HealthMenu extends Menu {
     @Override
     public void setMenuItems() {
         disableCustomHP();
+        enableDynamicPoints();
         updateMenu();
-
-        inventory.setItem(2, DYNAMIC_POINTS_ENABLED);
-        inventory.setItem(6, CUSTOM_HP_DISABLED);
 
         // page stuff
         inventory.setItem(21, LEFT);
@@ -114,7 +107,7 @@ public class HealthMenu extends Menu {
     }
 
     public void updateMenu() {
-        if (advancedHp) { // each player can have their own health
+        if (customHP) { // each player can have their own health
             for (int i = 9; i < 18; i++) {
                 inventory.setItem(i, null);
             }
@@ -147,16 +140,29 @@ public class HealthMenu extends Menu {
     }
     
     public void enableCustomHP() {
-        advancedHp = true;
+        customHP = true;
+        inventory.setItem(6, CUSTOM_HP_ENABLED);
         inventory.setItem(13, FILLER_GLASS);
         updateMenu();
     }
+
     public void disableCustomHP() {
-        advancedHp = false;
+        customHP = false;
+        inventory.setItem(6, CUSTOM_HP_DISABLED);
         inventory.setItem(9, null);
         inventory.setItem(10, FILLER_GLASS);
         inventory.setItem(16, FILLER_GLASS);
         inventory.setItem(17, null);
         updateMenu();
+    }
+
+    public void enableDynamicPoints() {
+        inventory.setItem(2, DYNAMIC_POINTS_ENABLED);
+        BotBowsManager.setDynamicScoring(true);
+    }
+
+    public void disableDynamicPoints() {
+        inventory.setItem(2, DYNAMIC_POINTS_DISABLED);
+        BotBowsManager.setDynamicScoring(false);
     }
 }
