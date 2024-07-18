@@ -82,9 +82,6 @@ public abstract class BotBowsTeam {
     public int getPoints() {return points;}
     public void addPoints(int score) {
         points += score;
-        if (points > BotBowsManager.winThreshold) {
-            points = BotBowsManager.winThreshold;
-        }
     }
 
     public Material getGlassPane() {

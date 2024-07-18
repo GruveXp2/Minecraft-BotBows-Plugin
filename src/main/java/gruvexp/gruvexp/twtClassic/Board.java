@@ -104,9 +104,11 @@ public class Board {
             setScore(STR."\{team2}: \{ChatColor.RESET}\{team2.getPoints()} / \{ChatColor.GRAY}\{winThreshold}", 3 + totalPlayers);
         } else { // få plass til mest mulig streker
             String healthSymbol = getHealthSymbol(winThreshold);
+            int team1Points = Math.min(BotBowsManager.winThreshold, team1.getPoints());
+            int team2Points = Math.min(BotBowsManager.winThreshold, team2.getPoints());
 
-            setScore(STR."\{team1}: \{ChatColor.GREEN}\{healthSymbol.repeat(team1.getPoints())}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team1.getPoints())}", 4 + totalPlayers); // legger inn scoren til hvert team
-            setScore(STR."\{team2}: \{ChatColor.GREEN}\{healthSymbol.repeat(team2.getPoints())}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team2.getPoints())}", 3 + totalPlayers);
+            setScore(STR."\{team1}: \{ChatColor.GREEN}\{healthSymbol.repeat(team1Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team1Points)}", 4 + totalPlayers); // legger inn scoren til hvert team
+            setScore(STR."\{team2}: \{ChatColor.GREEN}\{healthSymbol.repeat(team2Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team2Points)}", 3 + totalPlayers);
         }
     }
 
