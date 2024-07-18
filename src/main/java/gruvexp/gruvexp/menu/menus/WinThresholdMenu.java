@@ -90,7 +90,7 @@ public class WinThresholdMenu extends Menu {
         inventory.setItem(8, FILLER_GLASS);
     }
 
-    private void updateMenu() {
+    public void updateMenu() { // SETT TIL PRIVATE! det er bare for testing at det er public
         ItemStack is;
         if (BotBowsManager.winThreshold > 0) {
             is = makeItem(Material.BLUE_TERRACOTTA, STR."\{ChatColor.BLUE}Win score threshold");

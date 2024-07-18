@@ -1,6 +1,7 @@
 package gruvexp.gruvexp.twtClassic;
 
 import gruvexp.gruvexp.Main;
+import gruvexp.gruvexp.commands.TestCommand;
 import gruvexp.gruvexp.tasks.GvwDungeonProximityScanner;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
@@ -60,6 +61,10 @@ public class DungeonGhoster {
             //BotBowsManager.debugMessage(STR."\{PLAYER.getName()}s armorstands moved Δ(\{movement.getX()}, \{movement.getY()}, \{movement.getZ()})");
             AS_1.teleport(AS_1.getLocation().add(movement));
             AS_2.teleport(AS_2.getLocation().add(movement));
+            if (TestCommand.rotation) {
+                AS_1.setRotation(currentLoc.getYaw(), currentLoc.getPitch());
+                AS_2.setRotation(currentLoc.getYaw(), currentLoc.getPitch());
+            }
         }
     }
 

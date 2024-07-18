@@ -177,8 +177,8 @@ public class BotBowsManager {
             Main.WORLD.setThundering(false);
             Main.WORLD.setStorm(false);
             Main.WORLD.setClearWeatherDuration(10000);
+            activeStorm = false;
         }
-        activeStorm = false;
 
         round += 1;
         // alle har fullt med liv
@@ -341,6 +341,10 @@ public class BotBowsManager {
         messagePlayers(STR."\{ChatColor.GRAY}[DEBUG]: \{message}");
     }
 
+    public static void debugMessage(String message, boolean bool) {
+        if (bool) debugMessage(message);
+    }
+
     public static void titlePlayers(String title, int duration) {
         for (Player p : PLAYERS) {
             p.sendTitle(title, null, 2, duration, 5);
@@ -392,6 +396,7 @@ public class BotBowsManager {
         p.sendMessage(STR."\{ChatColor.YELLOW}You left BotBows Classic");
         messagePlayers(STR."\{ChatColor.YELLOW}\{p.getPlayerListName()} has left the game (\{PLAYERS.size()})");
         p.setGameMode(GameMode.SPECTATOR);
+        p.getInventory().remove(getBotBow());
     }
     public static boolean isPlayerJoined(Player p) {
         return PLAYERS.contains(p);
@@ -444,7 +449,6 @@ public class BotBowsManager {
         Bar.sneakBars.clear();
         Cooldowns.sneakCooldowns.clear();
         Cooldowns.sneakRunnables.clear();
-        Main.MenuInit();
         if (currentMap == BotBowsMap.GRAUT_VS_WACKY) {
             for (BukkitRunnable scanner : dungeonScanners.values()) {
                 scanner.cancel();
