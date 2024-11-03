@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 
-import static gruvexp.gruvexp.twtClassic.BotBowsManager.debugMessage;
 import static gruvexp.gruvexp.twtClassic.BotBowsManager.makeArmor;
 
 public class DungeonGhoster {
@@ -53,7 +52,7 @@ public class DungeonGhoster {
         } else {
             String oldSection = section.toString();
             updateArmorStandsAndSection();
-            debugMessage(STR."\{PLAYER.getName()} moved: \{ChatColor.WHITE}\{oldSection} -> \{section.toString()}");
+            //debugMessage(STR."\{PLAYER.getName()} moved: \{ChatColor.WHITE}\{oldSection} -> \{section.toString()}");
         }
         prevLoc = currentLoc;
     }
