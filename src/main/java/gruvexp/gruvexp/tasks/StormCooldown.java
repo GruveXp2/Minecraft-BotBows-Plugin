@@ -35,6 +35,7 @@ public class StormCooldown extends BukkitRunnable {
 
     @Override
     public void run() {
+        if (p.getGameMode() == GameMode.SPECTATOR) return; // if the player is dead, dont do anything
         if (isPlayerExposed(p)) {
             if (time < 240) {
                 time += 4;
