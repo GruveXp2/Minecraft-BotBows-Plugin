@@ -1,7 +1,7 @@
 package gruvexp.gruvexp.listeners;
 
 import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.tasks.Glow;
+import gruvexp.gruvexp.tasks.Hit;
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -25,7 +25,7 @@ public class HitListener implements Listener {
             }
             e.setDamage(0.01); // de skal ikke daue men bli satt i spectator til runda er ferig
             BotBowsManager.handleHit(defender, attacker);
-            new Glow(defender).runTaskTimer(Main.getPlugin(), 0L, 40L); // 2s glowing
+            new Hit(defender).runTaskTimer(Main.getPlugin(), 0L, 40L); // 2s glowing
         } else {
             if (!(e.getEntity() instanceof Player defender)) {return;} // den som blei hitta
             if (BotBowsManager.isPlayerJoined(defender)) {
