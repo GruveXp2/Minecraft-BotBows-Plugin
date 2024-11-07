@@ -52,6 +52,10 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (BotBowsManager.activeGame) {
+            Bukkit.getLogger().info("Stopping active game...");
+            BotBowsManager.endGame();
+        }
         Bukkit.getLogger().info("Disabling BotBows plugin");
     }
 
