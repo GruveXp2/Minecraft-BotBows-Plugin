@@ -20,7 +20,7 @@ public class Cooldowns { // Inneholder shifting og storm logic
         for (Player p : players) {
             sneakCooldowns.put(p, 0);
         }
-        if (BotBowsManager.stormMode) {
+        if (BotBowsManager.settings.stormMode) {
             for (Player p : players) {
                 stormCooldowns.put(p, 0);
             }

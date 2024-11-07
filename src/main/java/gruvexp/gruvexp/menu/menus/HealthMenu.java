@@ -1,7 +1,7 @@
 package gruvexp.gruvexp.menu.menus;
 
 import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.Menu;
+import gruvexp.gruvexp.menu.SettingsMenu;
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,7 +15,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
-public class HealthMenu extends Menu {
+public class HealthMenu extends SettingsMenu {
 
     private boolean customHP;
     private static final ItemStack DYNAMIC_POINTS_DISABLED = makeItem(Material.RED_STAINED_GLASS_PANE, STR."\{ChatColor.RED}Dynamic points",
@@ -44,7 +44,7 @@ public class HealthMenu extends Menu {
 
         switch (e.getCurrentItem().getType()) { // stuff som skal gjøres når man trykker på et item
             case WHITE_STAINED_GLASS_PANE, PINK_STAINED_GLASS_PANE:
-                BotBowsManager.maxHP = Integer.parseInt(ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()));
+                BotBowsManager.settings.maxHP = Integer.parseInt(ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName()));
                 updateMenu();
                 break;
             case RED_STAINED_GLASS_PANE:
@@ -80,7 +80,7 @@ public class HealthMenu extends Menu {
                 inventory.setItem(slot, head);
                 p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(hp * 2);
                 p.setHealth(hp * 2);
-                BotBowsManager.playerMaxHP.put(p, hp);
+                BotBowsManager.settings.playerMaxHP.put(p, hp);
                 break;
             case BARRIER:
                 clicker.closeInventory();
@@ -114,17 +114,17 @@ public class HealthMenu extends Menu {
             for (int i = 0; i < BotBowsManager.team1.size(); i++) {
                 Player p = BotBowsManager.team1.getPlayer(i);
                 ItemStack item = makeHeadItem(p, BotBowsManager.team1.COLOR);
-                item.setAmount(BotBowsManager.playerMaxHP.get(p));
+                item.setAmount(BotBowsManager.settings.playerMaxHP.get(p));
                 inventory.setItem(i + 9, item);
             }
             for (int i = 0; i < BotBowsManager.team2.size(); i++) {
                 Player p = BotBowsManager.team2.getPlayer(i);
                 ItemStack item = makeHeadItem(p, BotBowsManager.team2.COLOR);
-                item.setAmount(BotBowsManager.playerMaxHP.get(p));
+                item.setAmount(BotBowsManager.settings.playerMaxHP.get(p));
                 inventory.setItem(17 - i, item);
             }
         } else { // The normal menu with a slider
-            int maxHP = BotBowsManager.maxHP;
+            int maxHP = BotBowsManager.settings.maxHP;
 
             for (int i = 0; i < 5; i++) {
                 ItemStack is = makeItem(Material.WHITE_STAINED_GLASS_PANE, STR."\{ChatColor.WHITE}\{i + 1}");
@@ -158,11 +158,11 @@ public class HealthMenu extends Menu {
 
     public void enableDynamicPoints() {
         inventory.setItem(2, DYNAMIC_POINTS_ENABLED);
-        BotBowsManager.setDynamicScoring(true);
+        settings.setDynamicScoring(true);
     }
 
     public void disableDynamicPoints() {
         inventory.setItem(2, DYNAMIC_POINTS_DISABLED);
-        BotBowsManager.setDynamicScoring(false);
+        settings.setDynamicScoring(false);
     }
 }

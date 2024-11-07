@@ -27,22 +27,16 @@ import static gruvexp.gruvexp.twtClassic.Bar.sneakBarInit;
 public class BotBowsManager {
 
     private static final Main PLUGIN = Main.getPlugin();
-    public static BotBowsMap currentMap = BotBowsMap.BLAUD_VS_SAUCE; // default map
     public static BotBowsTeam team1 = new TeamBlaud();
     public static BotBowsTeam team2 = new TeamSauce();
+    public static Settings settings = new Settings();
     private static final Map<Player, BotBowsTeam> PLAYER_TEAM = new HashMap<>();
-    private static final List<Player> PLAYERS = new ArrayList<>(); // liste med alle players som er i gamet
+    public static final List<Player> PLAYERS = new ArrayList<>(); // liste med alle players som er i gamet
     private static final List<List<List<Integer>>> PLAYER_HEALTH_ARMOR = new ArrayList<>(); // Når man tar damag så kan man gette em liste med hvilke armor pieces som skal fjernes
     private static final List<Double> STORM_FREQUENCY = new ArrayList<>(List.of(0.05, 0.1, 0.25, 0.5, 1.0));
     public static final Map<Player, Integer> playerHP = new HashMap<>();
-    public static final Map<Player, Integer> playerMaxHP = new HashMap<>();
     public static final Map<Player, Boolean> isDamaged = new HashMap<>();
-    public static int maxHP = 3;
-    public static  boolean stormMode = false;
-    public static int stormFrequency = 2; // 5%, 10%, 25%, 50%, 100%
     private static boolean activeStorm = false;
-    private static boolean dynamicScoring = true; // If true, når alle på et lag dør så gis et poeng for hvert liv som er igjen
-    public static int winThreshold = 5; // hvor mange poeng man skal spille til. Hvis den er satt til -1, så fortsetter det for alltid
     private static int round = 0; // hvilken runde man er på
     public static boolean activeGame = false; // hvis spillet har starta, så kan man ikke gjøre ting som /settings
     public static boolean canMove = true;
@@ -66,8 +60,8 @@ public class BotBowsManager {
     }
 
     public static void setMap(BotBowsMap map) {
-        if (map == currentMap) return;
-        currentMap = map;
+        if (map == settings.currentMap) return;
+        settings.currentMap = map;
         switch (map) {
             case BLAUD_VS_SAUCE -> {
                 team1 = new TeamBlaud(team1);
@@ -81,10 +75,6 @@ public class BotBowsManager {
         ((SelectTeamsMenu) Main.menus.get("select teams")).setColoredGlassPanes(); // update the glass pane items that show the team colors and name
         ((SelectTeamsMenu) Main.menus.get("select teams")).recalculateTeam(); // update the player heads so they have the correct color
         ((HealthMenu) Main.menus.get("health")).updateMenu(); // update so the name colors match the new team color
-    }
-
-    public static void setDynamicScoring(boolean dynamic_scoring) {
-        BotBowsManager.dynamicScoring = dynamic_scoring;
     }
 
     public static void armorInit() { // definerer hvilke armor som skal mistes når playeren har x antall liv. 0=boots, 1=leggings, 2=chestplate, 3=helmet
@@ -118,14 +108,14 @@ public class BotBowsManager {
             PLAYERS.add(p);
             team1.join(p);
             if (PLAYERS.size() > 1) {
-                playerMaxHP.put(p, maxHP);
+                settings.playerMaxHP.put(p, settings.maxHP);
                 ((SelectTeamsMenu) Main.menus.get("select teams")).recalculateTeam();
                 ((HealthMenu) Main.menus.get("health")).updateMenu();
             } else {
-                playerMaxHP.put(p, 3);
+                settings.playerMaxHP.put(p, 3);
             }
-            p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(playerMaxHP.get(p) * 2);
-            p.setHealth(playerMaxHP.get(p) * 2);
+            p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(settings.playerMaxHP.get(p) * 2);
+            p.setHealth(settings.playerMaxHP.get(p) * 2);
             for (Player q : PLAYERS) {
                 q.sendMessage(STR."\{p.getPlayerListName()} has joined BotBows Classic! (\{PLAYERS.size()})");
             }
@@ -155,7 +145,7 @@ public class BotBowsManager {
         Cooldowns.CoolDownInit(PLAYERS);
         Board.createBoard();
         startRound();
-        if (stormMode) {
+        if (settings.stormMode) {
             Bar.stormBarInit();
         }
 
@@ -166,7 +156,7 @@ public class BotBowsManager {
         }
         Board.updateTeamScores();
         new BotBowsGiver().runTaskTimer(PLUGIN, 100L, 10L);
-        if (currentMap == BotBowsMap.GRAUT_VS_WACKY) {
+        if (settings.currentMap == BotBowsMap.GRAUT_VS_WACKY) {
             initDungeon();
         }
     }
@@ -183,7 +173,7 @@ public class BotBowsManager {
         round += 1;
         // alle har fullt med liv
         for (Player p : PLAYERS) {
-            playerHP.put(p, playerMaxHP.get(p));
+            playerHP.put(p, settings.playerMaxHP.get(p));
             p.setHealth(playerHP.get(p) * 2);
             updateArmor(p);
             Board.updatePlayerScore(p);
@@ -195,24 +185,24 @@ public class BotBowsManager {
         canMove = false;
         new RoundCountdown().runTaskTimer(PLUGIN, 0L, 20L); // mens de er på spawn, kan de ikke bevege seg og det er nedtelling til det begynner
 
-        if (stormMode && Math.random() < STORM_FREQUENCY.get(stormFrequency)) {
+        if (settings.stormMode && Math.random() < STORM_FREQUENCY.get(settings.stormFrequency)) {
             activeStorm = true;
             new StartStorm().runTaskTimer(PLUGIN, 100L, 100L); // starter storm og timers
         }
-        if (currentMap == BotBowsMap.GRAUT_VS_WACKY) { // starts the scanners for the dungeons after 7 seconds
+        if (settings.currentMap == BotBowsMap.GRAUT_VS_WACKY) { // starts the scanners for the dungeons after 7 seconds
             startScanners();
         }
     }
 
     public static void updateArmor(Player p) { // updates the armor pieces of the player
-        int maxHP = BotBowsManager.playerMaxHP.get(p); // Maks hp til playeren
+        int maxHP = BotBowsManager.settings.playerMaxHP.get(p); // Maks hp til playeren
         if (playerHP.get(p) == maxHP) { // hvis playeren har maxa liv så skal de få fullt ut med armor
             Color color = BotBowsManager.getTeam(p).DYECOLOR.getColor();
             p.getInventory().setArmorContents(new ItemStack[] {makeArmor(Material.LEATHER_BOOTS, color), makeArmor(Material.LEATHER_LEGGINGS, color), makeArmor(Material.LEATHER_CHESTPLATE, color), makeArmor(Material.LEATHER_HELMET, color)});
             return;
         }
         List<Integer> slots;
-        if (BotBowsManager.playerMaxHP.get(p) > 5) {
+        if (BotBowsManager.settings.playerMaxHP.get(p) > 5) {
             float d = (float) maxHP / 5;
             int i = (int) Math.ceil((maxHP - playerHP.get(p)) / d);
             slots = PLAYER_HEALTH_ARMOR.get(3).get(i - 1);
@@ -232,7 +222,7 @@ public class BotBowsManager {
 
     public static void setPlayerMaxHP(int hp) {
         for (Player p : PLAYERS) {
-            playerMaxHP.put(p, hp);
+            settings.playerMaxHP.put(p, hp);
         }
     }
 
@@ -275,14 +265,14 @@ public class BotBowsManager {
 
         messagePlayers(STR."\{winningTeam}\{ChatColor.WHITE} won the round!");
         int winScore = 0;
-        if (dynamicScoring) {
+        if (settings.dynamicScoring) {
             for (Player p : winningTeam.getPlayers()) {
                 winScore += playerHP.get(p);
             }
             int enemyTeamMaxHP = 0;
             messagePlayers(STR."\{winningTeam.COLOR}+\{winScore}p for remaining hp");
             for (Player p : losingTeam.getPlayers()) {
-                enemyTeamMaxHP += playerMaxHP.get(p);
+                enemyTeamMaxHP += settings.playerMaxHP.get(p);
             }
             winScore += enemyTeamMaxHP;
             messagePlayers(STR."\{winningTeam.COLOR}+\{enemyTeamMaxHP}p for enemy hp lost");
@@ -297,7 +287,7 @@ public class BotBowsManager {
 
         titlePlayers(STR."\{winningTeam} +\{winScore}", 40);
         Board.updateTeamScores();
-        if (winningTeam.getPoints() >= BotBowsManager.winThreshold && BotBowsManager.winThreshold > 0) {
+        if (winningTeam.getPoints() >= BotBowsManager.settings.winThreshold && BotBowsManager.settings.winThreshold > 0) {
             postGame(winningTeam);
             return; // because the match is over, a new round won't start
         }
@@ -362,7 +352,7 @@ public class BotBowsManager {
     public static void updatePlayerMaxHP(int maxHP) { // updates the amount of hearts the player has
         for (Player p : PLAYERS) {
             p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2 * maxHP);
-            p.setHealth(BotBowsManager.playerMaxHP.get(p) * 2);
+            p.setHealth(BotBowsManager.settings.playerMaxHP.get(p) * 2);
         }
     }
 
@@ -387,7 +377,7 @@ public class BotBowsManager {
             dungeonGhosters.remove(p);
         }
         isDamaged.remove(p);
-        playerMaxHP.remove(p);
+        settings.playerMaxHP.remove(p);
         playerHP.remove(p);
         PLAYERS.remove(p);
         getTeam(p).leave(p);
@@ -449,7 +439,7 @@ public class BotBowsManager {
         Bar.sneakBars.clear();
         Cooldowns.sneakCooldowns.clear();
         Cooldowns.sneakRunnables.clear();
-        if (currentMap == BotBowsMap.GRAUT_VS_WACKY) {
+        if (settings.currentMap == BotBowsMap.GRAUT_VS_WACKY) {
             for (BukkitRunnable scanner : dungeonScanners.values()) {
                 scanner.cancel();
             }

@@ -31,7 +31,7 @@ public class TestCommand implements CommandExecutor {
                 BotBowsManager.joinGame(Bukkit.getPlayer("GruveXp"));
                 BotBowsManager.joinGame(Bukkit.getPlayer("Spionagent54"));
                 BotBowsManager.setMap(BotBowsMap.GRAUT_VS_WACKY);
-                BotBowsManager.winThreshold = -1;
+                BotBowsManager.settings.winThreshold = -1;
                 ((WinThresholdMenu) Main.menus.get("win threshold")).updateMenu();
                 ((SelectTeamsMenu) Main.menus.get("select teams")).judithBytterLag();
                 ((HealthMenu) Main.menus.get("health")).enableCustomHP();
@@ -39,7 +39,7 @@ public class TestCommand implements CommandExecutor {
 
                 judith.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
                 judith.setHealth(40);
-                BotBowsManager.playerMaxHP.put(judith, 20);
+                BotBowsManager.settings.playerMaxHP.put(judith, 20);
                 Bukkit.dispatchCommand(Bukkit.getPlayer("GruveXp"), "botbows:start");
             } else if (Objects.equals(args[0], "a")) {
                 rotation = !rotation;

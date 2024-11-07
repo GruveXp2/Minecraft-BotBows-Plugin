@@ -1,7 +1,7 @@
 package gruvexp.gruvexp.menu.menus;
 
 import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.Menu;
+import gruvexp.gruvexp.menu.SettingsMenu;
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class WinThresholdMenu extends Menu {
+public class WinThresholdMenu extends SettingsMenu {
     @Override
     public String getMenuName() {
         return "Select win threshold";
@@ -25,31 +25,31 @@ public class WinThresholdMenu extends Menu {
         Player clicker = (Player) e.getWhoClicked();
         switch (e.getCurrentItem().getType()) {
             case RED_STAINED_GLASS_PANE:
-                if (BotBowsManager.winThreshold > 10) {
-                    BotBowsManager.winThreshold -= 10;
+                if (BotBowsManager.settings.winThreshold > 10) {
+                    BotBowsManager.settings.winThreshold -= 10;
                 } else {
-                    BotBowsManager.winThreshold = -1;
+                    BotBowsManager.settings.winThreshold = -1;
                 }
                 updateMenu();
                 break;
             case PINK_STAINED_GLASS_PANE:
-                if (BotBowsManager.winThreshold > 1) {
-                    BotBowsManager.winThreshold -= 1;
+                if (BotBowsManager.settings.winThreshold > 1) {
+                    BotBowsManager.settings.winThreshold -= 1;
                 } else {
-                    BotBowsManager.winThreshold = -1;
+                    BotBowsManager.settings.winThreshold = -1;
                 }
                 updateMenu();
                 break;
             case LIME_STAINED_GLASS_PANE:
-                if (BotBowsManager.winThreshold == -1) {
-                    BotBowsManager.winThreshold = 1;
+                if (BotBowsManager.settings.winThreshold == -1) {
+                    BotBowsManager.settings.winThreshold = 1;
                 } else {
-                    BotBowsManager.winThreshold += 1;
+                    BotBowsManager.settings.winThreshold += 1;
                 }
                 updateMenu();
                 break;
             case GREEN_STAINED_GLASS_PANE:
-                BotBowsManager.winThreshold += 10;
+                BotBowsManager.settings.winThreshold += 10;
                 updateMenu();
                 break;
             case BARRIER:
@@ -71,7 +71,7 @@ public class WinThresholdMenu extends Menu {
         ItemStack add1 = makeItem(Material.LIME_STAINED_GLASS_PANE, "+1");
         ItemStack add10 = makeItem(Material.GREEN_STAINED_GLASS_PANE, "+10");
         ItemStack is = makeItem(Material.BLUE_TERRACOTTA, STR."\{ChatColor.BLUE}Win score threshold");
-        is.setAmount(BotBowsManager.winThreshold);
+        is.setAmount(BotBowsManager.settings.winThreshold);
 
         inventory.setItem(2, sub10);
         inventory.setItem(3, sub1);
@@ -92,9 +92,9 @@ public class WinThresholdMenu extends Menu {
 
     public void updateMenu() { // SETT TIL PRIVATE! det er bare for testing at det er public
         ItemStack is;
-        if (BotBowsManager.winThreshold > 0) {
+        if (BotBowsManager.settings.winThreshold > 0) {
             is = makeItem(Material.BLUE_TERRACOTTA, STR."\{ChatColor.BLUE}Win score threshold");
-            is.setAmount(BotBowsManager.winThreshold);
+            is.setAmount(BotBowsManager.settings.winThreshold);
         } else {
             is = makeItem(Material.YELLOW_TERRACOTTA, STR."\{ChatColor.YELLOW}Infinite rounds", "Run /stopgame to stop the game");
         }

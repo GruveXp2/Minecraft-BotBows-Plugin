@@ -1,7 +1,7 @@
 package gruvexp.gruvexp.menu.menus;
 
 import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.Menu;
+import gruvexp.gruvexp.menu.SettingsMenu;
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
 import gruvexp.gruvexp.twtClassic.botbowsTeams.BotBowsTeam;
 import org.bukkit.Bukkit;
@@ -14,7 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
-public class SelectTeamsMenu extends Menu {
+public class SelectTeamsMenu extends SettingsMenu {
     @Override
     public String getMenuName() {
         return "Select teams";

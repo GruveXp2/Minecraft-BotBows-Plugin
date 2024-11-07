@@ -1,7 +1,7 @@
 package gruvexp.gruvexp.menu.menus;
 
 import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.Menu;
+import gruvexp.gruvexp.menu.SettingsMenu;
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StormModeMenu extends Menu {
+public class StormModeMenu extends SettingsMenu {
 
     private static final ArrayList<String> PERCENT = new ArrayList<>(List.of("5%", "10%", "25%", "50%", "100%")); // liste over strings som viser hvor mange % sjanse for storm, tar inn int
 
@@ -39,18 +39,18 @@ public class StormModeMenu extends Menu {
         switch (e.getCurrentItem().getType()) {
             case WHITE_STAINED_GLASS_PANE, CYAN_STAINED_GLASS_PANE:
                 String s = ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName());
-                if (BotBowsManager.stormFrequency != PERCENT.indexOf(s)) {
-                    BotBowsManager.stormFrequency = PERCENT.indexOf(s);
+                if (BotBowsManager.settings.stormFrequency != PERCENT.indexOf(s)) {
+                    BotBowsManager.settings.stormFrequency = PERCENT.indexOf(s);
                     stormEnabled();
                 }
                 break;
             case RED_STAINED_GLASS_PANE:
                 stormEnabled();
-                BotBowsManager.stormMode = true;
+                BotBowsManager.settings.stormMode = true;
                 break;
             case LIME_STAINED_GLASS_PANE:
                 stormDisabled();
-                BotBowsManager.stormMode = false;
+                BotBowsManager.settings.stormMode = false;
                 break;
             case BARRIER:
                 clicker.closeInventory();
@@ -83,7 +83,7 @@ public class StormModeMenu extends Menu {
         inventory.setItem(0, STORM_MODE_ENABLED);
         for (int i = 0; i < 5; i++) {
             ItemStack is;
-            if (i > BotBowsManager.stormFrequency) {
+            if (i > BotBowsManager.settings.stormFrequency) {
                 is = makeItem(Material.WHITE_STAINED_GLASS_PANE, ChatColor.WHITE + PERCENT.get(i));
             } else {
                 is = makeItem(Material.CYAN_STAINED_GLASS_PANE, ChatColor.AQUA + PERCENT.get(i));

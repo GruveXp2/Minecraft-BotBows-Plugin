@@ -59,7 +59,7 @@ public class movementListener implements Listener {
                 }
                 default -> p.removePotionEffect(PotionEffectType.JUMP_BOOST);
             }
-            if (BotBowsManager.isPlayerJoined(p) && BotBowsManager.currentMap == BotBowsMap.GRAUT_VS_WACKY && BotBowsManager.activeGame && BotBowsManager.isInDungeon(p)) {
+            if (BotBowsManager.isPlayerJoined(p) && BotBowsManager.settings.currentMap == BotBowsMap.GRAUT_VS_WACKY && BotBowsManager.activeGame && BotBowsManager.isInDungeon(p)) {
                 BotBowsManager.handleDungeonMovement(p);
             }
         } else {

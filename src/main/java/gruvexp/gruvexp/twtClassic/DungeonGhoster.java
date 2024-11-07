@@ -50,7 +50,7 @@ public class DungeonGhoster {
         if (isInSameSection()) {
             updateArmorStandsPosition(currentLoc);
         } else {
-            String oldSection = section.toString();
+            //String oldSection = section.toString();
             updateArmorStandsAndSection();
             //debugMessage(STR."\{PLAYER.getName()} moved: \{ChatColor.WHITE}\{oldSection} -> \{section.toString()}");
         }
@@ -124,13 +124,13 @@ public class DungeonGhoster {
         return GvwDungeonProximityScanner.isInsideBoundingBox(PLAYER.getLocation(), PURPLE_BOUNDING_BOX_MIN, PURPLE_BOUNDING_BOX_MAX);
     }
 
-    private boolean enteredGreenArea() {
+    /*private boolean enteredGreenArea() {
         return GvwDungeonProximityScanner.isInsideBoundingBox(PLAYER.getLocation(), GREEN_ENTER_BB_MIN, GREEN_ENTER_BB_MAX);
     }
 
     private boolean enteredPurpleArea() {
         return GvwDungeonProximityScanner.isInsideBoundingBox(PLAYER.getLocation(), PURPLE_ENTER_BB_MIN, PURPLE_ENTER_BB_MAX);
-    }
+    }*/
 
     private boolean isInSameSection() {
         return switch (section) {

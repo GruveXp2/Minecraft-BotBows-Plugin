@@ -1,7 +1,7 @@
 package gruvexp.gruvexp.menu.menus;
 
 import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.Menu;
+import gruvexp.gruvexp.menu.SettingsMenu;
 import gruvexp.gruvexp.twtClassic.BotBowsManager;
 import gruvexp.gruvexp.twtClassic.BotBowsMap;
 import org.bukkit.ChatColor;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class SelectMapMenu extends Menu {
+public class SelectMapMenu extends SettingsMenu {
 
     public static final ItemStack ROYAL_ARENA = makeItem(Material.SLIME_BALL, STR."\{ChatColor.GRAY}Royal Arena",
             STR."\{ChatColor.BLUE}Blaud\{ChatColor.WHITE} vs \{ChatColor.RED}Sauce",
