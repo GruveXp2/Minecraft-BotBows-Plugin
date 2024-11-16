@@ -1,0 +1,39 @@
+package gruvexp.gruvexp.twtClassic.hazard;
+
+import gruvexp.gruvexp.twtClassic.BotBows;
+import gruvexp.gruvexp.twtClassic.Settings;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class Hazard {
+
+    private HazardChance hazardChance = HazardChance.TEN;
+    private boolean isActive = false;
+    protected final Settings settings = BotBows.settings;
+
+    public HazardChance getHazardChance() {return hazardChance;}
+
+    public void setHazardChance(HazardChance chance) {hazardChance = chance;}
+
+    public Map<Player, BukkitTask> hazardTimers = new HashMap<>();
+
+    public void triggerOnChance() {
+        if (hazardChance.occurs()) {
+            isActive = true;
+            trigger();
+        }
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    protected abstract void trigger(); // hazarden starter
+
+    public void end() {
+        isActive = false;
+    }; // stopper hazarden
+}

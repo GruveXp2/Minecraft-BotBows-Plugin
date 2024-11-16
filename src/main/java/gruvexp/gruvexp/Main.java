@@ -4,7 +4,8 @@ import gruvexp.gruvexp.commands.*;
 import gruvexp.gruvexp.listeners.*;
 import gruvexp.gruvexp.menu.Menu;
 import gruvexp.gruvexp.menu.menus.*;
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
+import gruvexp.gruvexp.twtClassic.BotBowsPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.ConsoleCommandSender;
@@ -45,7 +46,7 @@ public final class Main extends JavaPlugin {
         getCommand("stopgame").setExecutor(new StopGameCommand());
         getCommand("test").setExecutor(new TestCommand());
         WORLD = Bukkit.getWorld("BotBows (S2E1)");
-        BotBowsManager.armorInit();
+        BotBowsPlayer.armorInit();
         MenuInit();
         new Thread(this::startSocketServer).start(); // Start the server in a new thread to avoid blocking the main thread
     }
@@ -80,8 +81,8 @@ public final class Main extends JavaPlugin {
                     if (command == null || command.trim().isEmpty()) return;
                     if (command.startsWith("@")) {
                         if (command.equals("@ping")) {
-                            if (BotBowsManager.activeGame) {
-                                out.write(STR."BotBows \{BotBowsManager.team1.size()}v\{BotBowsManager.team2.size()} match ongoing");
+                            if (BotBows.activeGame) {
+                                out.write(STR."BotBows \{BotBows.team1.size()}v\{BotBows.team2.size()} match ongoing");
                             } else {
                                 out.write(STR."BotBows: \{Bukkit.getOnlinePlayers().size()} online");
                             }

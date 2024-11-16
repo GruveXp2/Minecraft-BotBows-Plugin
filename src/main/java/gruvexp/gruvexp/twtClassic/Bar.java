@@ -14,12 +14,12 @@ public class Bar {
     public static HashMap<Player, BossBar> sneakBars = new HashMap<>(2);
 
     public static void sneakBarInit() {
-        for (Player p : BotBowsManager.getPlayers()) {
+        for (BotBowsPlayer p : BotBows.getPlayers()) {
             BossBar bar = Bukkit.createBossBar(STR."\{ChatColor.YELLOW}Sneaking cooldown", BarColor.YELLOW, BarStyle.SEGMENTED_10);
-            bar.addPlayer(p);
+            bar.addPlayer(p.PLAYER);
             bar.setProgress(0d);
             bar.setVisible(false);
-            sneakBars.put(p, bar);
+            sneakBars.put(p.PLAYER, bar);
         }
     }
 

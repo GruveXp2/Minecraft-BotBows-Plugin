@@ -2,7 +2,7 @@ package gruvexp.gruvexp.menu.menus;
 
 import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.menu.SettingsMenu;
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import gruvexp.gruvexp.twtClassic.BotBowsMap;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -35,8 +35,8 @@ public class SelectMapMenu extends SettingsMenu {
     public void handleMenu(InventoryClickEvent e) {
         Player clicker = (Player) e.getWhoClicked();
         switch (e.getCurrentItem().getType()) {
-            case SLIME_BALL -> BotBowsManager.setMap(BotBowsMap.BLAUD_VS_SAUCE);
-            case SPRUCE_SAPLING -> BotBowsManager.setMap(BotBowsMap.GRAUT_VS_WACKY);
+            case SLIME_BALL -> BotBows.settings.setMap(BotBowsMap.BLAUD_VS_SAUCE);
+            case SPRUCE_SAPLING -> BotBows.settings.setMap(BotBowsMap.GRAUT_VS_WACKY);
             case BARRIER -> clicker.closeInventory();
             case LIGHT_BLUE_STAINED_GLASS_PANE -> Main.menus.get("select teams").open(clicker);
         }

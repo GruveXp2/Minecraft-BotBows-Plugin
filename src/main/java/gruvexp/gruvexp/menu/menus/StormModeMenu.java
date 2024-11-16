@@ -2,7 +2,7 @@ package gruvexp.gruvexp.menu.menus;
 
 import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.menu.SettingsMenu;
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -39,18 +39,18 @@ public class StormModeMenu extends SettingsMenu {
         switch (e.getCurrentItem().getType()) {
             case WHITE_STAINED_GLASS_PANE, CYAN_STAINED_GLASS_PANE:
                 String s = ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName());
-                if (BotBowsManager.settings.stormFrequency != PERCENT.indexOf(s)) {
-                    BotBowsManager.settings.stormFrequency = PERCENT.indexOf(s);
+                if (BotBows.settings.stormFrequency != PERCENT.indexOf(s)) {
+                    BotBows.settings.stormFrequency = PERCENT.indexOf(s);
                     stormEnabled();
                 }
                 break;
             case RED_STAINED_GLASS_PANE:
                 stormEnabled();
-                BotBowsManager.settings.stormMode = true;
+                BotBows.settings.stormMode = true;
                 break;
             case LIME_STAINED_GLASS_PANE:
                 stormDisabled();
-                BotBowsManager.settings.stormMode = false;
+                BotBows.settings.stormMode = false;
                 break;
             case BARRIER:
                 clicker.closeInventory();
@@ -83,7 +83,7 @@ public class StormModeMenu extends SettingsMenu {
         inventory.setItem(0, STORM_MODE_ENABLED);
         for (int i = 0; i < 5; i++) {
             ItemStack is;
-            if (i > BotBowsManager.settings.stormFrequency) {
+            if (i > BotBows.settings.stormFrequency) {
                 is = makeItem(Material.WHITE_STAINED_GLASS_PANE, ChatColor.WHITE + PERCENT.get(i));
             } else {
                 is = makeItem(Material.CYAN_STAINED_GLASS_PANE, ChatColor.AQUA + PERCENT.get(i));

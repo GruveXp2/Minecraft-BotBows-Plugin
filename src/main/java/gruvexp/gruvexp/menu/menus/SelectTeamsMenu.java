@@ -2,7 +2,7 @@ package gruvexp.gruvexp.menu.menus;
 
 import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.menu.SettingsMenu;
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import gruvexp.gruvexp.twtClassic.botbowsTeams.BotBowsTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -32,8 +32,8 @@ public class SelectTeamsMenu extends SettingsMenu {
         switch (e.getCurrentItem().getType()) {
             case PLAYER_HEAD -> {
                 Player p = Bukkit.getPlayer(UUID.fromString(e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Main.getPlugin(), "uuid"), PersistentDataType.STRING)));
-                BotBowsTeam team = BotBowsManager.getTeam(p);
-                team.moveToTeam(p, BotBowsManager.getOppositeTeam(team));
+                BotBowsTeam team = BotBows.getBotBowsPlayer(p).getTeam();
+                team.getOppositeTeam().join(BotBows.getBotBowsPlayer(p));
                 recalculateTeam();
                 ((HealthMenu) Main.menus.get("health")).updateMenu(); // pga teammembers endres må health settings oppdateres pga det er basert på farger
             }
@@ -51,8 +51,8 @@ public class SelectTeamsMenu extends SettingsMenu {
     @Deprecated
     public void judithBytterLag() {
         Player p = Bukkit.getPlayer("Spionagent54");
-        BotBowsTeam team = BotBowsManager.getTeam(p);
-        team.moveToTeam(p, BotBowsManager.getOppositeTeam(team));
+        BotBowsTeam team = BotBows.getBotBowsPlayer(p).getTeam();
+        team.moveToTeam(BotBows.getBotBowsPlayer(p), team.getOppositeTeam());
         recalculateTeam();
         ((HealthMenu) Main.menus.get("health")).updateMenu(); // pga teammembers endres må health settings oppdateres pga det er basert på farger
     }
@@ -67,8 +67,8 @@ public class SelectTeamsMenu extends SettingsMenu {
     }
 
     public void setColoredGlassPanes() {
-        ItemStack team1Pane = makeItem(BotBowsManager.team1.getGlassPane(), STR."\{BotBowsManager.team1.COLOR}Team \{BotBowsManager.team1}");
-        ItemStack team2Pane = makeItem(BotBowsManager.team2.getGlassPane(), STR."\{BotBowsManager.team2.COLOR}Team \{BotBowsManager.team2}");
+        ItemStack team1Pane = makeItem(BotBows.team1.getGlassPane(), STR."\{BotBows.team1.COLOR}Team \{BotBows.team1}");
+        ItemStack team2Pane = makeItem(BotBows.team2.getGlassPane(), STR."\{BotBows.team2.COLOR}Team \{BotBows.team2}");
         inventory.setItem(0, team1Pane);
         inventory.setItem(1, team1Pane);
         inventory.setItem(7, team1Pane);
@@ -82,12 +82,12 @@ public class SelectTeamsMenu extends SettingsMenu {
     public void recalculateTeam() {
         inventory.remove(Material.PLAYER_HEAD); // Fjerner player heads sånn at det kan kalkuleres pånytt
 
-        for (int i = 0; i < BotBowsManager.team1.size(); i++) { // team 1
-            ItemStack p = makeHeadItem(BotBowsManager.team1.getPlayer(i), BotBowsManager.team1.COLOR);
+        for (int i = 0; i < BotBows.team1.size(); i++) { // team 1
+            ItemStack p = makeHeadItem(BotBows.team1.getPlayer(i).PLAYER, BotBows.team1.COLOR);
             inventory.setItem(2 + i, p);
         }
-        for (int i = 0; i < BotBowsManager.team2.size(); i++) { // team 2
-            ItemStack p = makeHeadItem(BotBowsManager.team2.getPlayer(i), BotBowsManager.team2.COLOR);
+        for (int i = 0; i < BotBows.team2.size(); i++) { // team 2
+            ItemStack p = makeHeadItem(BotBows.team2.getPlayer(i).PLAYER, BotBows.team2.COLOR);
             inventory.setItem(11 + i, p);
         }
     }

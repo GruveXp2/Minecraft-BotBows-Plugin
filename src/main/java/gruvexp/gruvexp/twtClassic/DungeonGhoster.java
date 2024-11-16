@@ -4,15 +4,12 @@ import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.commands.TestCommand;
 import gruvexp.gruvexp.tasks.GvwDungeonProximityScanner;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
-
-import static gruvexp.gruvexp.twtClassic.BotBowsManager.makeArmor;
 
 public class DungeonGhoster {
 
@@ -32,11 +29,13 @@ public class DungeonGhoster {
     private ArmorStand AS_2;
 
     private final Player PLAYER;
+    private final BotBowsPlayer BOTBOWSPLAYER;
     private Location prevLoc;
 
-    public DungeonGhoster(Player player) {
-        PLAYER = player;
-        prevLoc = player.getLocation();
+    public DungeonGhoster(BotBowsPlayer p) {
+        BOTBOWSPLAYER = p;
+        PLAYER = p.PLAYER;
+        prevLoc = PLAYER.getLocation();
         updateArmorStandsAndSection();
     }
 
@@ -96,15 +95,18 @@ public class DungeonGhoster {
     private ArmorStand spawnArmorStand(Location location) {
         //debugMessage(STR."Armor stand was spawned: \{BotBowsManager.getTeam(PLAYER)}");
         ArmorStand AS = Main.WORLD.spawn(location, ArmorStand.class);
-        Color color = BotBowsManager.getTeam(PLAYER).DYECOLOR.getColor();
         AS.setArms(true);
         AS.setBasePlate(false);
         AS.setGravity(false);
         AS.setInvulnerable(true);
         AS.setRightArmPose(new EulerAngle(275f,346f,0f));
         AS.setLeftArmPose(new EulerAngle(275f,49f,0f));
-        AS.getEquipment().setItemInMainHand(BotBowsManager.getBotBow());
-        AS.getEquipment().setArmorContents(new ItemStack[] {makeArmor(Material.LEATHER_BOOTS, color), makeArmor(Material.LEATHER_LEGGINGS, color), makeArmor(Material.LEATHER_CHESTPLATE, color), makeArmor(Material.LEATHER_HELMET, color)});
+        AS.getEquipment().setItemInMainHand(BotBows.BOTBOW);
+        AS.getEquipment().setArmorContents(new ItemStack[] {
+                BOTBOWSPLAYER.getArmorPiece(Material.LEATHER_BOOTS),
+                BOTBOWSPLAYER.getArmorPiece(Material.LEATHER_LEGGINGS),
+                BOTBOWSPLAYER.getArmorPiece(Material.LEATHER_CHESTPLATE),
+                BOTBOWSPLAYER.getArmorPiece(Material.LEATHER_HELMET)});
         return AS;
     }
 

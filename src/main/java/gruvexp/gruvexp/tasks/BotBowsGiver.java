@@ -1,23 +1,20 @@
 package gruvexp.gruvexp.tasks;
 
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import gruvexp.gruvexp.twtClassic.BotBows;
+import gruvexp.gruvexp.twtClassic.BotBowsPlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class BotBowsGiver  extends BukkitRunnable {
 
-    ItemStack BOTBOW = BotBowsManager.getBotBow();
-
     @Override
     public void run() {
-        for (Player p : BotBowsManager.getPlayers()) {
-            if (!BotBowsManager.activeGame) {
+        for (BotBowsPlayer p : BotBows.getPlayers()) {
+            if (!BotBows.activeGame) {
                 cancel();
                 return;
             }
-            if (!BotBowsManager.isDamaged.get(p)) {
-                p.getInventory().setItem(0, BOTBOW);
+            if (!p.isDamaged()) {
+                p.PLAYER.getInventory().setItem(0, BotBows.BOTBOW);
             }
         }
     }

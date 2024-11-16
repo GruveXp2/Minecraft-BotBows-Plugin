@@ -2,7 +2,7 @@ package gruvexp.gruvexp.commands;
 
 import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.menu.menus.SelectTeamsMenu;
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -15,11 +15,11 @@ public class LeaveCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         Player p = (Player) sender;
-        if (BotBowsManager.activeGame) {
+        if (BotBows.activeGame) {
             p.sendMessage(STR."\{ChatColor.RED}Cant leave, the game has already started!");
             return true;
         }
-        BotBowsManager.leaveGame(p);
+        BotBows.leaveGame(p);
         SelectTeamsMenu selectTeamsMenu = (SelectTeamsMenu) Main.menus.get("select teams");
         selectTeamsMenu.recalculateTeam(); // recalculate
         p.setGameMode(GameMode.SPECTATOR);

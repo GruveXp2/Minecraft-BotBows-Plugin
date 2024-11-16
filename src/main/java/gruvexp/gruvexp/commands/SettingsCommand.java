@@ -1,7 +1,7 @@
 package gruvexp.gruvexp.commands;
 
 import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,9 +15,9 @@ public class SettingsCommand implements CommandExecutor {
             return false;
         }
         Player p = (Player) sender; // grabs which player did the command. endrer datatype til Player
-        if (BotBowsManager.activeGame) {
+        if (BotBows.activeGame) {
             p.sendMessage(STR."\{ChatColor.RED}Cant change settings, the game is already ongoing!");
-        } else if (!BotBowsManager.isPlayerJoined(p)) {
+        } else if (!BotBows.settings.isPlayerJoined(p)) {
             p.sendMessage(STR."\{ChatColor.RED}You have to join to access the settings");
         } else {
             Main.menus.get("select map").open(p);
