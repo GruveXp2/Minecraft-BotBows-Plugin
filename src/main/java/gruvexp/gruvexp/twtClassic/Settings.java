@@ -39,7 +39,8 @@ public class Settings {
     }
 
     public void setMaxHP(int maxHP) {
-        for (BotBowsPlayer p : PLAYERS) {
+        this.maxHP = maxHP;
+        for (BotBowsPlayer p : PLAYERS) { // oppdaterer livene til alle playersene
             p.setMaxHP(maxHP);
         }
     }
