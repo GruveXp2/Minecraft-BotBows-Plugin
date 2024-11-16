@@ -11,8 +11,7 @@ import java.util.HashMap;
 
 public class Bar {
 
-    static HashMap<Player, BossBar> sneakBars = new HashMap<>(2);
-    static HashMap<Player, BossBar> stormBars = new HashMap<>(2);
+    public static HashMap<Player, BossBar> sneakBars = new HashMap<>(2);
 
     public static void sneakBarInit() {
         for (Player p : BotBowsManager.getPlayers()) {
@@ -21,16 +20,6 @@ public class Bar {
             bar.setProgress(0d);
             bar.setVisible(false);
             sneakBars.put(p, bar);
-        }
-    }
-
-    public static void stormBarInit() {
-        for (Player p : BotBowsManager.getPlayers()) {
-            BossBar bar = Bukkit.createBossBar(STR."\{ChatColor.AQUA}Lightning timer", BarColor.BLUE, BarStyle.SEGMENTED_6);
-            bar.addPlayer(p);
-            bar.setProgress(0d);
-            bar.setVisible(false);
-            stormBars.put(p, bar);
         }
     }
 
@@ -43,19 +32,7 @@ public class Bar {
         sneakBars.get(p).setVisible(bool);
     }
 
-
-    public static void setStormBarVisibility(Player p, boolean bool) {
-        stormBars.get(p).setVisible(bool);
-    }
-
     public static void setSneakBarProgress(Player p, double progress) {
         sneakBars.get(p).setProgress(progress);
     }
-
-
-    public static void setStormBarProgress(Player p, double progress) {
-        stormBars.get(p).setProgress(progress);
-    }
-
-
 }
