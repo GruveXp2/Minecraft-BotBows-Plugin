@@ -34,8 +34,8 @@ public class Settings {
         team2.setOppositeTeam(team1);
     }
 
-    public void setDynamicScoring(boolean dynamic_scoring) {
-        dynamicScoring = dynamic_scoring;
+    public void setDynamicScoring(boolean dynamicScoring) {
+        this.dynamicScoring = dynamicScoring;
     }
 
     public void setMaxHP(int maxHP) {
