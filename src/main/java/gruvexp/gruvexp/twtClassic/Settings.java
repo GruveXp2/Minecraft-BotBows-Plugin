@@ -24,9 +24,6 @@ public class Settings {
     public BotBowsTeam team2 = new TeamSauce();
     public final Set<BotBowsPlayer> PLAYERS = new HashSet<>(); // liste med alle players som er i gamet
 
-    public final Map<Player, Integer> individualMaxHP = new HashMap<>();
-    public int maxHP = 3;
-
     public boolean stormMode = false;
     public int stormFrequency = 2; // 5%, 10%, 25%, 50%, 100%
     public boolean dynamicScoring = true; // If true, når alle på et lag dør så gis et poeng for hvert liv som er igjen
@@ -44,10 +41,12 @@ public class Settings {
     public void setMaxHP(int maxHP) {
         for (BotBowsPlayer p : PLAYERS) {
             p.setMaxHP(maxHP);
-            p.PLAYER.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2 * maxHP);
-            p.PLAYER.setHealth(BotBows.settings.individualMaxHP.get(p) * 2);
         }
-    } // legg til alle settingsne og methods, og brukes til å lage et BotBowsGame objekt
+    }
+
+    public int getMaxHP() {
+        return maxHP;
+    }
 
     public void setMap(BotBowsMap map) {
         if (map == currentMap) return;
@@ -77,11 +76,8 @@ public class Settings {
             PLAYERS.add(botBowsP);
             team1.join(botBowsP);
             if (PLAYERS.size() > 1) {
-                individualMaxHP.put(p, maxHP);
-                ((SelectTeamsMenu) Main.menus.get("select teams")).recalculateTeam();
-                ((HealthMenu) Main.menus.get("health")).updateMenu();
-            } else {
-                individualMaxHP.put(p, 3);
+                BotBows.teamsMenu.recalculateTeam();
+                BotBows.healthMenu.updateMenu();
             }
             for (Player q : Bukkit.getOnlinePlayers()) {
                 q.sendMessage(STR."\{p.getPlayerListName()} has joined BotBows Classic! (\{PLAYERS.size()})");

@@ -51,7 +51,7 @@ public class Board {
         removePlayerScore(p);
 
         int hp = p.getHP();
-        int maxHp = BotBows.settings.individualMaxHP.get(p);
+        int maxHp = p.getMaxHP();
         int playerLineIndex; // which line of the scoreboard the player stats will be shown
         if (BotBows.team1.hasPlayer(p)) { //
             playerLineIndex = BotBows.team1.getPlayerID(p) + BotBows.team2.size() + 1;

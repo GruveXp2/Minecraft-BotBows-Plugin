@@ -27,7 +27,7 @@ public class BotBowsPlayer {
 
     public BotBowsPlayer(Player player, Settings settings) {
         PLAYER = player;
-        maxHP = settings.maxHP;
+        maxHP = settings.getMaxHP();
         hp = maxHP;
     }
 
@@ -78,6 +78,8 @@ public class BotBowsPlayer {
 
     public void setMaxHP(int maxHP) {
         this.maxHP = maxHP;
+        PLAYER.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2 * maxHP);
+        PLAYER.setHealth(2 * maxHP);
     }
 
     public int getHP() {return hp;}

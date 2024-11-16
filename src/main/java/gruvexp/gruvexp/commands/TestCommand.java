@@ -37,9 +37,7 @@ public class TestCommand implements CommandExecutor {
                 ((HealthMenu) Main.menus.get("health")).enableCustomHP();
                 Player judith = Bukkit.getPlayer("Spionagent54");
 
-                judith.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
-                judith.setHealth(40);
-                BotBows.settings.individualMaxHP.put(judith, 20);
+                judith.setMaxHP(20);
                 Bukkit.dispatchCommand(Bukkit.getPlayer("GruveXp"), "botbows:start");
             } else if (Objects.equals(args[0], "a")) {
                 rotation = !rotation;
