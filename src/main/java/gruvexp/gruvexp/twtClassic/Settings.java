@@ -1,8 +1,5 @@
 package gruvexp.gruvexp.twtClassic;
 
-import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.menus.HealthMenu;
-import gruvexp.gruvexp.menu.menus.SelectTeamsMenu;
 import gruvexp.gruvexp.twtClassic.botbowsTeams.*;
 import gruvexp.gruvexp.twtClassic.hazard.EarthquakeHazard;
 import gruvexp.gruvexp.twtClassic.hazard.StormHazard;
