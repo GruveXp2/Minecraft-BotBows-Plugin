@@ -34,25 +34,16 @@ public class StormHazard extends Hazard{
 
     @Override
     protected void trigger() {
-        new BukkitRunnable() {
-            boolean b = true;
-            @Override
-            public void run() {
-                if (b) {
-                    BotBows.messagePlayers(STR."\{ChatColor.DARK_RED}STORM INCOMING!\{ChatColor.RED} Seek shelter immediately!");
-                    BotBows.titlePlayers(STR."\{ChatColor.RED}STORM INCOMING", 80);
-                    b = false;
-                } else {
-                    for (BotBowsPlayer p : settings.PLAYERS) {
-                        hazardTimers.put(p.PLAYER, new PlayerStormTimer(p.PLAYER, bars.get(p.PLAYER)).runTaskTimer(Main.getPlugin(), 0L, 2L));
-                    }
-                    Main.WORLD.setThundering(true);
-                    Main.WORLD.setStorm(true);
-                    Main.WORLD.setThunderDuration(12000); //10min
-                    cancel();
-                }
+        BotBows.messagePlayers(STR."\{ChatColor.DARK_RED}STORM INCOMING!\{ChatColor.RED} Seek shelter immediately!");
+        BotBows.titlePlayers(STR."\{ChatColor.RED}STORM INCOMING", 80);
+        Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
+            for (BotBowsPlayer p : settings.getPlayers()) {
+                hazardTimers.put(p.PLAYER, new PlayerStormTimer(p.PLAYER, bars.get(p)).runTaskTimer(Main.getPlugin(), 0L, 2L));
             }
-        }.runTaskTimer(Main.getPlugin(), 100L, 100L);
+            Main.WORLD.setThundering(true);
+            Main.WORLD.setStorm(true);
+            Main.WORLD.setThunderDuration(12000); //10min
+        }, 100L); // 5 sekunder
     }
 
     @Override
