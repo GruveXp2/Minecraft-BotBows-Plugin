@@ -1,10 +1,9 @@
 package gruvexp.gruvexp.twtClassic;
 
+import gruvexp.gruvexp.menu.menus.*;
 import gruvexp.gruvexp.twtClassic.botbowsGames.BotBowsGame;
 import gruvexp.gruvexp.twtClassic.botbowsGames.GrautWackyGame;
-import gruvexp.gruvexp.twtClassic.botbowsTeams.BotBowsTeam;
-import gruvexp.gruvexp.twtClassic.botbowsTeams.TeamBlaud;
-import gruvexp.gruvexp.twtClassic.botbowsTeams.TeamSauce;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -118,6 +117,7 @@ public class BotBows {
 
     public static void debugMessage(String message) {
         messagePlayers(STR."\{ChatColor.GRAY}[DEBUG]: \{message}");
+        Bukkit.getLogger().info(STR."\{ChatColor.GRAY}[DEBUG]: \{message}");
     }
 
     public static void debugMessage(String message, boolean bool) {
