@@ -50,6 +50,7 @@ public class WinThresholdMenu extends SettingsMenu {
 
     @Override
     public void setMenuItems() {
+        super.setMenuItems();
         ItemStack sub10 = makeItem(Material.RED_STAINED_GLASS_PANE, "-10");
         ItemStack sub1= makeItem(Material.PINK_STAINED_GLASS_PANE, "-1");
         ItemStack add1 = makeItem(Material.LIME_STAINED_GLASS_PANE, "+1");
