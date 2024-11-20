@@ -12,14 +12,14 @@ public class MovementListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) { // hvis det er nedtelling og playeren er i gamet så kan dikke bevege seg
+        if (!BotBows.activeGame) return;
         Player p = e.getPlayer();
-        if (BotBows.activeGame && BotBows.botBowsGame.canMove) {
+        if (!BotBows.settings.isPlayerJoined(e.getPlayer())) {return;}
+        if (BotBows.botBowsGame.canMove) {
             BotBows.botBowsGame.handleMovement(e);
         } else {
-            if (!BotBows.activeGame) return;
-            if (!BotBows.settings.isPlayerJoined(e.getPlayer())) {return;}
-            BotBowsPlayer botBowsPlayer = BotBows.getBotBowsPlayer(p);
-            Location spawnPos = botBowsPlayer.getTeam().getSpawnPos(p);
+            BotBowsPlayer bp = BotBows.getBotBowsPlayer(p);
+            Location spawnPos = bp.getTeam().getSpawnPos(bp);
             if (p.getLocation().getX() == spawnPos.getX() && p.getLocation().getZ() == spawnPos.getZ()) {return;}
             // hvis det er countdown (!canMove), playeren er joina og playeren har gått vekk fra spawn blir han telportert tebake
             p.teleport(spawnPos);
