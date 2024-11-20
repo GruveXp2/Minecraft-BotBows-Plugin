@@ -34,8 +34,8 @@ public class SelectMapMenu extends SettingsMenu {
     public void handleMenu(InventoryClickEvent e) {
         Player clicker = (Player) e.getWhoClicked();
         switch (e.getCurrentItem().getType()) {
-            case SLIME_BALL -> BotBows.settings.setMap(BotBowsMap.BLAUD_VS_SAUCE);
-            case SPRUCE_SAPLING -> BotBows.settings.setMap(BotBowsMap.GRAUT_VS_WACKY);
+            case SLIME_BALL -> settings.setMap(BotBowsMap.BLAUD_VS_SAUCE);
+            case SPRUCE_SAPLING -> settings.setMap(BotBowsMap.GRAUT_VS_WACKY);
             case BARRIER -> clicker.closeInventory();
             case LIGHT_BLUE_STAINED_GLASS_PANE -> Main.menus.get("select teams").open(clicker);
         }
@@ -43,7 +43,7 @@ public class SelectMapMenu extends SettingsMenu {
 
     @Override
     public void setMenuItems() {
-
+        super.setMenuItems();
         inventory.setItem(3, ROYAL_ARENA);
         inventory.setItem(5, ICY_RAVINE);
         // page stuff

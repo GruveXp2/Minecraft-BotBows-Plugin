@@ -5,5 +5,10 @@ import gruvexp.gruvexp.twtClassic.Settings;
 
 public abstract class SettingsMenu extends Menu {
 
-    protected final Settings settings = BotBows.settings;
+    protected Settings settings;
+
+    @Override
+    public void setMenuItems() {
+        this.settings = BotBows.settings;
+    }
 }

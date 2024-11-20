@@ -4,6 +4,7 @@ import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.tasks.PlayerStormTimer;
 import gruvexp.gruvexp.twtClassic.BotBows;
 import gruvexp.gruvexp.twtClassic.BotBowsPlayer;
+import gruvexp.gruvexp.twtClassic.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;

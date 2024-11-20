@@ -14,7 +14,11 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
-public class SelectTeamsMenu extends SettingsMenu {
+public class TeamsMenu extends SettingsMenu {
+
+    BotBowsTeam team1;
+    BotBowsTeam team2;
+
     @Override
     public String getMenuName() {
         return "Select teams";
@@ -82,12 +86,12 @@ public class SelectTeamsMenu extends SettingsMenu {
     public void recalculateTeam() {
         inventory.remove(Material.PLAYER_HEAD); // Fjerner player heads sånn at det kan kalkuleres pånytt
 
-        for (int i = 0; i < BotBows.team1.size(); i++) { // team 1
-            ItemStack p = makeHeadItem(BotBows.team1.getPlayer(i).PLAYER, BotBows.team1.COLOR);
+        for (int i = 0; i < team1.size(); i++) { // team 1
+            ItemStack p = makeHeadItem(team1.getPlayer(i).PLAYER, team1.COLOR);
             inventory.setItem(2 + i, p);
         }
-        for (int i = 0; i < BotBows.team2.size(); i++) { // team 2
-            ItemStack p = makeHeadItem(BotBows.team2.getPlayer(i).PLAYER, BotBows.team2.COLOR);
+        for (int i = 0; i < team2.size(); i++) { // team 2
+            ItemStack p = makeHeadItem(team2.getPlayer(i).PLAYER, team2.COLOR);
             inventory.setItem(11 + i, p);
         }
     }
