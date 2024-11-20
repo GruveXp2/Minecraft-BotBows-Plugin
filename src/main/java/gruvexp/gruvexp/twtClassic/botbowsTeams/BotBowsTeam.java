@@ -31,7 +31,7 @@ public abstract class BotBowsTeam {
     public BotBowsTeam getOppositeTeam() {return oppositeTeam;}
 
     public void setOppositeTeam(BotBowsTeam oppositeTeam) {
-        if (oppositeTeam != null) {
+        if (this.oppositeTeam != null) {
             throw new IllegalStateException("This team already has an assigned opposite team");
         }
         this.oppositeTeam = oppositeTeam;
