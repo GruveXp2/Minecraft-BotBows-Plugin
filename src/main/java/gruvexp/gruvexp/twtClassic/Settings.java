@@ -8,12 +8,12 @@ import gruvexp.gruvexp.twtClassic.hazard.EarthquakeHazard;
 import gruvexp.gruvexp.twtClassic.hazard.StormHazard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.attribute.Attribute;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class Settings {
@@ -24,15 +24,13 @@ public class Settings {
 
     public BotBowsTeam team1 = new TeamBlaud(); // dersom man endrer team, vil team1 og team2 feks byttes ut med TeamGraut og TeamWacky objekter, ettersom det er forskjell på dem
     public BotBowsTeam team2 = new TeamSauce();
-    public final Set<BotBowsPlayer> PLAYERS = new HashSet<>(); // liste med alle players som er i gamet
-
-    public boolean stormMode = false;
-    public int stormFrequency = 2; // 5%, 10%, 25%, 50%, 100%
-    public boolean dynamicScoring = true; // If true, når alle på et lag dør så gis et poeng for hvert liv som er igjen
-    public int winThreshold = 5; // hvor mange poeng man skal spille til. Hvis den er satt til -1, så fortsetter det for alltid
+    private final Set<BotBowsPlayer> players = new HashSet<>(); // liste med alle players som er i gamet
+    private int maxHP = 3; // hvor mye hp man har hvis custom hp er disabla
+    private boolean dynamicScoring = true; // If true, når alle på et lag dauer så gis et poeng for hvert liv som er igjen + totalt liv som er tatt ut
+    private int winThreshold = 5; // hvor mange poeng man skal spille til. Hvis den er satt til -1, så fortsetter det for alltid til man tar /stopgame (/botbows stop)
 
     public Settings() {
-        team1.setOppositeTeam(team2);
+        team1.setOppositeTeam(team2); // sånn at hvert team holder styr på hvilket team som er motstanderteamet
         team2.setOppositeTeam(team1);
     }
 
