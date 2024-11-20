@@ -17,7 +17,11 @@ import java.util.HashMap;
 
 public class StormHazard extends Hazard{
 
-    static HashMap<Player, BossBar> bars = new HashMap<>(2);
+    static HashMap<BotBowsPlayer, BossBar> bars = new HashMap<>(2);
+
+    public StormHazard(Settings settings) {
+        super(settings);
+    }
 
     public void init() { // calles når spillet begynner
         if (getHazardChance() == HazardChance.DISABLED) return;

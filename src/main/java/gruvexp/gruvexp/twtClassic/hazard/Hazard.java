@@ -1,6 +1,5 @@
 package gruvexp.gruvexp.twtClassic.hazard;
 
-import gruvexp.gruvexp.twtClassic.BotBows;
 import gruvexp.gruvexp.twtClassic.Settings;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -12,7 +11,11 @@ public abstract class Hazard {
 
     private HazardChance hazardChance = HazardChance.TEN;
     private boolean isActive = false;
-    protected final Settings settings = BotBows.settings;
+    protected final Settings settings;
+
+    protected Hazard(Settings settings) {
+        this.settings = settings;
+    }
 
     public HazardChance getHazardChance() {return hazardChance;}
 
