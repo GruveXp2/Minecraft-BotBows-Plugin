@@ -40,7 +40,7 @@ public class Settings {
 
     public void setMaxHP(int maxHP) {
         this.maxHP = maxHP;
-        for (BotBowsPlayer p : PLAYERS) { // oppdaterer livene til alle playersene
+        for (BotBowsPlayer p : players) { // oppdaterer livene til alle playersene
             p.setMaxHP(maxHP);
         }
     }
@@ -90,7 +90,7 @@ public class Settings {
     }
 
     public void leaveGame(BotBowsPlayer p) {
-        if (!PLAYERS.contains(p)) {
+        if (!players.contains(p)) {
             p.PLAYER.sendMessage(STR."\{ChatColor.RED}You cant leave when you're not in a game");
             return;
         }

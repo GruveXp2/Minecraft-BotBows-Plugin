@@ -83,7 +83,7 @@ public class Board {
 
     public static void updateTeamScores() {
         Scoreboard sb = objective.getScoreboard();
-        int winThreshold = BotBows.settings.winThreshold;
+        int winThreshold = BotBows.settings.getWinThreshold();
 
         for (Objective ignored : sb.getObjectives()) {
             for (String entries : sb.getEntries()) {
@@ -106,8 +106,8 @@ public class Board {
             setScore(STR."\{team2}: \{ChatColor.RESET}\{team2.getPoints()} / \{ChatColor.GRAY}\{winThreshold}", 3 + totalPlayers);
         } else { // få plass til mest mulig streker
             String healthSymbol = getHealthSymbol(winThreshold);
-            int team1Points = Math.min(BotBows.settings.winThreshold, team1.getPoints());
-            int team2Points = Math.min(BotBows.settings.winThreshold, team2.getPoints());
+            int team1Points = Math.min(BotBows.settings.getWinThreshold(), team1.getPoints());
+            int team2Points = Math.min(BotBows.settings.getWinThreshold(), team2.getPoints());
 
             setScore(STR."\{team1}: \{ChatColor.GREEN}\{healthSymbol.repeat(team1Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team1Points)}", 4 + totalPlayers); // legger inn scoren til hvert team
             setScore(STR."\{team2}: \{ChatColor.GREEN}\{healthSymbol.repeat(team2Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team2Points)}", 3 + totalPlayers);

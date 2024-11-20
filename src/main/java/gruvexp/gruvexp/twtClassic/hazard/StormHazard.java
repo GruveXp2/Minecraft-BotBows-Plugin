@@ -21,7 +21,7 @@ public class StormHazard extends Hazard{
 
     public void init() { // calles når spillet begynner
         if (getHazardChance() == HazardChance.DISABLED) return;
-        for (BotBowsPlayer p : settings.PLAYERS) {
+        for (BotBowsPlayer p : settings.getPlayers()) {
             BossBar bar = Bukkit.createBossBar(STR."\{ChatColor.AQUA}Lightning timer", BarColor.BLUE, BarStyle.SEGMENTED_6);
             bar.addPlayer(p.PLAYER);
             bar.setProgress(0d);

@@ -31,14 +31,18 @@ public class BotBowsGame {
     final BotBowsTeam team2;
     final Set<BotBowsPlayer> PLAYERS;
     final StormHazard stormHazard;
+    protected final BotBowsTeam team1;
+    protected final BotBowsTeam team2;
+    protected final Set<BotBowsPlayer> players;
+    protected final StormHazard stormHazard;
     public boolean canMove = true;
-    int round = 0; // hvilken runde man er på
+    protected int round = 0; // hvilken runde man er på
 
     public BotBowsGame(Settings settings) {
         this.settings = settings;
         this.team1 = settings.team1;
         this.team2 = settings.team2;
-        this.PLAYERS = settings.PLAYERS;
+        this.players = settings.getPlayers();
         this.stormHazard = settings.stormHazard;
     }
 
@@ -62,13 +66,13 @@ public class BotBowsGame {
         BotBows.activeGame = true;
         BotBows.messagePlayers(STR."\{ChatColor.GRAY}\{gameStarter.getName()}: \{ChatColor.GREEN}The game has started!");
         sneakBarInit();
-        Cooldowns.CoolDownInit(PLAYERS);
+        Cooldowns.CoolDownInit(players);
         Board.createBoard();
         startRound();
         settings.stormHazard.init();
 
         // legger til player liv osv
-        for (BotBowsPlayer q : PLAYERS) {
+        for (BotBowsPlayer q : players) {
             q.revive();
             Board.updatePlayerScore(q);
         }
@@ -79,7 +83,7 @@ public class BotBowsGame {
     public void startRound() {
         round ++;
         // alle har fullt med liv
-        for (BotBowsPlayer p : PLAYERS) {
+        for (BotBowsPlayer p : players) {
             p.revive();
         }
         // teleporterer til spawn
@@ -168,7 +172,8 @@ public class BotBowsGame {
 
         BotBows.titlePlayers(STR."\{winningTeam} +\{winScore}", 40);
         Board.updateTeamScores();
-        if (winningTeam.getPoints() >= BotBows.settings.winThreshold && BotBows.settings.winThreshold > 0) {
+
+        if (winningTeam.getPoints() >= settings.getWinThreshold() && settings.getWinThreshold() > 0) {
             postGame(winningTeam);
             return; // because the match is over, a new round won't start
         }
@@ -198,7 +203,7 @@ public class BotBowsGame {
 
         ScoreboardManager sm = Bukkit.getServer().getScoreboardManager();
         assert sm != null;
-        for (BotBowsPlayer p : PLAYERS) {
+        for (BotBowsPlayer p : players) {
             p.reset();
         }
         Board.resetTeams();

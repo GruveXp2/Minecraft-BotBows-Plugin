@@ -25,32 +25,17 @@ public class WinThresholdMenu extends SettingsMenu {
         Player clicker = (Player) e.getWhoClicked();
         switch (e.getCurrentItem().getType()) {
             case RED_STAINED_GLASS_PANE:
-                if (BotBows.settings.winThreshold > 10) {
-                    BotBows.settings.winThreshold -= 10;
-                } else {
-                    BotBows.settings.winThreshold = -1;
-                }
-                updateMenu();
+                settings.changeWinThreshold(-10);
                 break;
             case PINK_STAINED_GLASS_PANE:
-                if (BotBows.settings.winThreshold > 1) {
-                    BotBows.settings.winThreshold -= 1;
-                } else {
-                    BotBows.settings.winThreshold = -1;
-                }
-                updateMenu();
+                settings.changeWinThreshold(-1);
                 break;
             case LIME_STAINED_GLASS_PANE:
-                if (BotBows.settings.winThreshold == -1) {
-                    BotBows.settings.winThreshold = 1;
-                } else {
-                    BotBows.settings.winThreshold += 1;
-                }
+                settings.changeWinThreshold(1);
                 updateMenu();
                 break;
             case GREEN_STAINED_GLASS_PANE:
-                BotBows.settings.winThreshold += 10;
-                updateMenu();
+                settings.changeWinThreshold(10);
                 break;
             case BARRIER:
                 clicker.closeInventory();
@@ -71,7 +56,7 @@ public class WinThresholdMenu extends SettingsMenu {
         ItemStack add1 = makeItem(Material.LIME_STAINED_GLASS_PANE, "+1");
         ItemStack add10 = makeItem(Material.GREEN_STAINED_GLASS_PANE, "+10");
         ItemStack is = makeItem(Material.BLUE_TERRACOTTA, STR."\{ChatColor.BLUE}Win score threshold");
-        is.setAmount(BotBows.settings.winThreshold);
+        is.setAmount(settings.getWinThreshold());
 
         inventory.setItem(2, sub10);
         inventory.setItem(3, sub1);
@@ -90,11 +75,11 @@ public class WinThresholdMenu extends SettingsMenu {
         inventory.setItem(8, FILLER_GLASS);
     }
 
-    public void updateMenu() { // SETT TIL PRIVATE! det er bare for testing at det er public
+    public void updateMenu() {
         ItemStack is;
-        if (BotBows.settings.winThreshold > 0) {
+        if (settings.getWinThreshold() > 0) {
             is = makeItem(Material.BLUE_TERRACOTTA, STR."\{ChatColor.BLUE}Win score threshold");
-            is.setAmount(BotBows.settings.winThreshold);
+            is.setAmount(settings.getWinThreshold());
         } else {
             is = makeItem(Material.YELLOW_TERRACOTTA, STR."\{ChatColor.YELLOW}Infinite rounds", "Run /stopgame to stop the game");
         }

@@ -66,13 +66,13 @@ public class GrautWackyGame extends BotBowsGame {
     }
 
     private void initDungeon() {
-        for (BotBowsPlayer p : PLAYERS) {
+        for (BotBowsPlayer p : players) {
             dungeonGhosters.put(p, new DungeonGhoster(p));
         }
     }
 
     private void startScanners() {
-        for (BotBowsPlayer p : PLAYERS) {
+        for (BotBowsPlayer p : players) {
             GvwDungeonProximityScanner scanner = new GvwDungeonProximityScanner(p.PLAYER);
             dungeonScanners.put(p, scanner);
             scanner.runTaskTimer(Main.getPlugin(), 140L, 5L);

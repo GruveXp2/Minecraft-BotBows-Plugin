@@ -91,7 +91,7 @@ public class BotBows {
     }
 
     public static void messagePlayers(String message) {
-        for (BotBowsPlayer p : settings.PLAYERS) {
+        for (BotBowsPlayer p : settings.getPlayers()) {
             p.PLAYER.sendMessage(message);
         }
     }
@@ -105,13 +105,13 @@ public class BotBows {
     }
 
     public static void titlePlayers(String title, int duration) {
-        for (BotBowsPlayer p : settings.PLAYERS) {
+        for (BotBowsPlayer p : settings.getPlayers()) {
             p.PLAYER.sendTitle(title, null, 2, duration, 5);
         }
     }
 
     public static int getTotalPlayers() {
-        return settings.PLAYERS.size();
+        return settings.getPlayers().size();
     }
     public static Collection<BotBowsPlayer> getPlayers() {
         return PLAYERS.values();
