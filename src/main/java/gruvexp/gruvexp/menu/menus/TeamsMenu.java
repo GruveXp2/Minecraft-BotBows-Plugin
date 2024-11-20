@@ -52,15 +52,6 @@ public class TeamsMenu extends SettingsMenu {
         }
     }
 
-    @Deprecated
-    public void judithBytterLag() {
-        Player p = Bukkit.getPlayer("Spionagent54");
-        BotBowsTeam team = BotBows.getBotBowsPlayer(p).getTeam();
-        team.moveToTeam(BotBows.getBotBowsPlayer(p), team.getOppositeTeam());
-        recalculateTeam();
-        ((HealthMenu) Main.menus.get("health")).updateMenu(); // pga teammembers endres må health settings oppdateres pga det er basert på farger
-    }
-
     @Override
     public void setMenuItems() {
         super.setMenuItems(); // settings init
