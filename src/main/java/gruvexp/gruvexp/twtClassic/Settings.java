@@ -62,9 +62,9 @@ public class Settings {
                 team2 = new TeamWacky(team2);
             }
         }
-        ((SelectTeamsMenu) Main.menus.get("select teams")).setColoredGlassPanes(); // update the glass pane items that show the team colors and name
-        ((SelectTeamsMenu) Main.menus.get("select teams")).recalculateTeam(); // update the player heads so they have the correct color
-        ((HealthMenu) Main.menus.get("health")).updateMenu(); // update so the name colors match the new team color
+        BotBows.teamsMenu.setColoredGlassPanes(); // update the glass pane items that show the team colors and name
+        BotBows.teamsMenu.recalculateTeam(); // update the player heads so they have the correct color
+        BotBows.healthMenu.updateMenu(); // update so the name colors match the new team color
     }
 
     public void joinGame(Player p) {
@@ -94,11 +94,11 @@ public class Settings {
             p.PLAYER.sendMessage(STR."\{ChatColor.RED}You cant leave when you're not in a game");
             return;
         }
-        ((SelectTeamsMenu) Main.menus.get("select teams")).recalculateTeam();
-        ((HealthMenu) Main.menus.get("health")).updateMenu();
         p.leaveGame();
         BotBows.messagePlayers(STR."\{ChatColor.YELLOW}\{p.PLAYER.getPlayerListName()} has left the game (\{PLAYERS.size()})");
         PLAYERS.remove(p);
+        BotBows.teamsMenu.recalculateTeam();
+        BotBows.healthMenu.updateMenu();
     }
 
     public boolean isPlayerJoined(Player p) {

@@ -1,6 +1,5 @@
 package gruvexp.gruvexp.menu.menus;
 
-import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.menu.SettingsMenu;
 import gruvexp.gruvexp.twtClassic.BotBows;
 import org.bukkit.ChatColor;
@@ -42,9 +41,9 @@ public class WinThresholdMenu extends SettingsMenu {
                 break;
             case LIGHT_BLUE_STAINED_GLASS_PANE:
                 if (e.getSlot() == 12) {
-                    Main.menus.get("health").open(clicker);
+                    BotBows.teamsMenu.open(clicker);
                 } else {
-                    Main.menus.get("storm mode").open(clicker);
+                    BotBows.hazardMenu.open(clicker);
                 }
         }
     }

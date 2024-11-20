@@ -27,14 +27,11 @@ import static gruvexp.gruvexp.twtClassic.Bar.sneakBarInit;
 public class BotBowsGame {
 
     public final Settings settings;
-    final BotBowsTeam team1;
-    final BotBowsTeam team2;
-    final Set<BotBowsPlayer> PLAYERS;
-    final StormHazard stormHazard;
     protected final BotBowsTeam team1;
     protected final BotBowsTeam team2;
     protected final Set<BotBowsPlayer> players;
     protected final StormHazard stormHazard;
+    protected final EarthquakeHazard earthquakeHazard;
     public boolean canMove = true;
     protected int round = 0; // hvilken runde man er på
 

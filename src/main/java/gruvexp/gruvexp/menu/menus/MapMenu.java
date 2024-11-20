@@ -1,6 +1,5 @@
 package gruvexp.gruvexp.menu.menus;
 
-import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.menu.SettingsMenu;
 import gruvexp.gruvexp.twtClassic.BotBows;
 import gruvexp.gruvexp.twtClassic.BotBowsMap;

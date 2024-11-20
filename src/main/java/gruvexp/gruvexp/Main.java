@@ -14,13 +14,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public final class Main extends JavaPlugin {
 
-    public static HashMap<String, Menu> menus = new HashMap<>();
     private static Main PLUGIN;
     public static World WORLD;
     private static final int PORT = 25566; // Port used to communicate with the discord bot
@@ -47,7 +45,6 @@ public final class Main extends JavaPlugin {
         getCommand("test").setExecutor(new TestCommand());
         WORLD = Bukkit.getWorld("BotBows (S2E1)");
         BotBowsPlayer.armorInit();
-        MenuInit();
         new Thread(this::startSocketServer).start(); // Start the server in a new thread to avoid blocking the main thread
     }
 
@@ -55,17 +52,6 @@ public final class Main extends JavaPlugin {
     public void onDisable() {
         Bukkit.getLogger().info("Disabling BotBows plugin");
     }
-
-    public static void MenuInit() {
-        menus.put("game menu", new GameMenu());
-        menus.put("select map", new SelectMapMenu());
-        menus.put("select teams", new SelectTeamsMenu());
-        menus.put("health", new HealthMenu());
-        menus.put("win threshold", new WinThresholdMenu());
-        menus.put("storm mode", new StormModeMenu());
-    }
-
-
 
     private void startSocketServer() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {

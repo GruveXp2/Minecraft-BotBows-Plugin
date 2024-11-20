@@ -1,6 +1,6 @@
 package gruvexp.gruvexp.commands;
 
-import gruvexp.gruvexp.Main;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,15 +9,10 @@ import org.bukkit.entity.Player;
 public class MenuCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player p)) {
             return false;
         }
-
-        Player p = (Player) sender; // grabs which player did the command. endrer datatype til Player
-
-        Main.menus.get("game menu").open(p);
-
+        BotBows.gameMenu.open(p);
         return true;
     }
 }

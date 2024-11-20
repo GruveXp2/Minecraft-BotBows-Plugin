@@ -24,7 +24,27 @@ public class BotBows {
     public static BotBowsGame botBowsGame;
     private static final HashMap<Player, BotBowsPlayer> PLAYERS = new HashMap<>(); // liste med alle players som er i gamet
     public static boolean activeGame = false; // hvis spillet har starta, så kan man ikke gjøre ting som /settings
-    public static boolean canMove = true;
+
+    public static GameMenu gameMenu;
+    public static MapMenu mapMenu;
+    public static HealthMenu healthMenu;
+    public static TeamsMenu teamsMenu;
+    public static WinThresholdMenu winThresholdMenu;
+    public static HazardMenu hazardMenu;
+
+    public static void init() { // a
+        settings = new Settings();
+        BotBows.debugMessage("settings is not null,i fosmeone says its null their lyign");
+        gameMenu = new GameMenu();
+        mapMenu = new MapMenu();
+        BotBows.debugMessage("healthmenu init");
+        healthMenu = new HealthMenu();
+        BotBows.debugMessage("teamsmenu init");
+        teamsMenu = new TeamsMenu();
+        BotBows.debugMessage("yee ig");
+        winThresholdMenu = new WinThresholdMenu();
+        hazardMenu = new HazardMenu();
+    }
 
     public static void joinGame(Player p) {
         if (activeGame) {

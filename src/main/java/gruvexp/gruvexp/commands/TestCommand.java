@@ -1,9 +1,5 @@
 package gruvexp.gruvexp.commands;
 
-import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.menus.HealthMenu;
-import gruvexp.gruvexp.menu.menus.SelectTeamsMenu;
-import gruvexp.gruvexp.menu.menus.WinThresholdMenu;
 import gruvexp.gruvexp.twtClassic.BotBows;
 import gruvexp.gruvexp.twtClassic.BotBowsMap;
 import org.bukkit.Bukkit;
@@ -25,17 +21,16 @@ public class TestCommand implements CommandExecutor {
 
         Player p = (Player) sender;
         if (args.length == 1) {
-            if (Objects.equals(args[0], "t")) {
-                BotBows.debugMessage(STR."The team of \{p.getName()} is \{BotBows.getBotBowsPlayer(p).getTeam()}");
-            } else if (Objects.equals(args[0], "w")) { // tester om dungeonen funker
-                BotBows.joinGame(Bukkit.getPlayer("GruveXp"));
-                BotBows.joinGame(Bukkit.getPlayer("Spionagent54"));
-                BotBows.settings.setMap(BotBowsMap.GRAUT_VS_WACKY);
-                BotBows.settings.winThreshold = -1;
-                ((WinThresholdMenu) Main.menus.get("win threshold")).updateMenu();
-                ((SelectTeamsMenu) Main.menus.get("select teams")).judithBytterLag();
-                ((HealthMenu) Main.menus.get("health")).enableCustomHP();
-                Player judith = Bukkit.getPlayer("Spionagent54");
+            switch (args[0]) {
+                case "t" ->
+                        BotBows.debugMessage(STR."The team of \{p.getName()} is \{BotBows.getBotBowsPlayer(p).getTeam()}");
+                case "w" -> {
+                    BotBows.joinGame(Bukkit.getPlayer("GruveXp"));
+                    BotBows.joinGame(Bukkit.getPlayer("Spionagent54"));
+                    BotBows.settings.setMap(BotBowsMap.GRAUT_VS_WACKY);
+                    BotBows.settings.setWinThreshold(-1);
+                    BotBows.healthMenu.enableCustomHP();
+                    BotBowsPlayer judith = BotBows.getBotBowsPlayer(Bukkit.getPlayer("Spionagent54"));
 
                 judith.setMaxHP(20);
                 Bukkit.dispatchCommand(Bukkit.getPlayer("GruveXp"), "botbows:start");

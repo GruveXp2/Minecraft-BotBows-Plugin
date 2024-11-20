@@ -86,9 +86,9 @@ public class HealthMenu extends SettingsMenu {
                 break;
             case LIGHT_BLUE_STAINED_GLASS_PANE:
                 if (e.getSlot() == 21) {
-                    Main.menus.get("select teams").open(clicker);
+                    BotBows.teamsMenu.open(clicker);
                 } else if (e.getSlot() == 23) {
-                    Main.menus.get("win threshold").open(clicker);
+                    BotBows.winThresholdMenu.open(clicker);
                 }
         }
     }

@@ -35,14 +35,14 @@ public class SelectTeamsMenu extends SettingsMenu {
                 BotBowsTeam team = BotBows.getBotBowsPlayer(p).getTeam();
                 team.getOppositeTeam().join(BotBows.getBotBowsPlayer(p));
                 recalculateTeam();
-                ((HealthMenu) Main.menus.get("health")).updateMenu(); // pga teammembers endres må health settings oppdateres pga det er basert på farger
+                BotBows.healthMenu.updateMenu(); // pga teammembers endres må health settings oppdateres pga det er basert på farger
             }
             case BARRIER -> clicker.closeInventory();
             case LIGHT_BLUE_STAINED_GLASS_PANE -> {
                 if (e.getSlot() == 21) {
-                    Main.menus.get("select map").open(clicker);
+                    BotBows.mapMenu.open(clicker);
                 } else if (e.getSlot() == 23) {
-                    Main.menus.get("health").open(clicker);
+                    BotBows.healthMenu.open(clicker);
                 }
             }
         }
