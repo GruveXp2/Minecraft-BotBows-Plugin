@@ -35,6 +35,10 @@ public class Settings {
         this.dynamicScoring = dynamicScoring;
     }
 
+    public boolean dynamicScoringEnabled() {
+        return dynamicScoring;
+    }
+
     public void setMaxHP(int maxHP) {
         this.maxHP = maxHP;
         for (BotBowsPlayer p : players) { // oppdaterer livene til alle playersene
@@ -94,9 +98,31 @@ public class Settings {
         players.remove(p);
         BotBows.teamsMenu.recalculateTeam();
         BotBows.healthMenu.updateMenu();
+
+        p.PLAYER.setGameMode(GameMode.SPECTATOR);
+        BotBows.messagePlayers(STR."\{ChatColor.YELLOW}\{p.PLAYER.getPlayerListName()} has left the game (\{players.size()})");
+    }
+
+    public Set<BotBowsPlayer> getPlayers() {
+        return Collections.unmodifiableSet(players);
     }
 
     public boolean isPlayerJoined(Player p) {
-        return PLAYERS.contains(p);
+        return Optional.ofNullable(BotBows.getBotBowsPlayer(p))
+                .map(players::contains)
+                .orElse(false);
+    }
+
+    public int getWinThreshold() {
+        return winThreshold;
+    }
+
+    public void changeWinThreshold(int ΔthresholdChange) {
+        setWinThreshold(winThreshold + ΔthresholdChange);
+    }
+
+    public void setWinThreshold(int threshold) {
+        winThreshold = Math.max(threshold, -1);
+        BotBows.winThresholdMenu.updateMenu();
     }
 }
