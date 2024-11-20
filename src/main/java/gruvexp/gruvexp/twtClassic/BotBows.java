@@ -20,9 +20,7 @@ import java.util.HashMap;
 public class BotBows {
 
     public static final ItemStack BOTBOW = getBotBow();
-    public static BotBowsTeam team1 = new TeamBlaud();
-    public static BotBowsTeam team2 = new TeamSauce();
-    public static Settings settings = new Settings();
+    public static Settings settings;
     public static BotBowsGame botBowsGame;
     private static final HashMap<Player, BotBowsPlayer> PLAYERS = new HashMap<>(); // liste med alle players som er i gamet
     public static boolean activeGame = false; // hvis spillet har starta, så kan man ikke gjøre ting som /settings

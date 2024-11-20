@@ -18,10 +18,10 @@ public class Board {
         objective = board.registerNewObjective("botbows", Criteria.DUMMY,
                 ChatColor.translateAlternateColorCodes('&', "&l&6BotBows &r&bClassic"));
 
-        BotBowsTeam team1 = BotBows.team1;
-        BotBowsTeam team2 = BotBows.team2;
+        BotBowsTeam team1 = BotBows.settings.team1;
+        BotBowsTeam team2 = BotBows.settings.team2;
         // setter inn scores
-        setScore(STR."\{darkenColor(team2.COLOR)}TEAM \{team2.NAME.toUpperCase()}", BotBows.team2.size());
+        setScore(STR."\{darkenColor(team2.COLOR)}TEAM \{team2.NAME.toUpperCase()}", BotBows.settings.team2.size());
 
         setScore(STR."\{darkenColor(team1.COLOR)}TEAM \{team1.NAME.toUpperCase()}", BotBows.getTotalPlayers() + 1);
         setScore(STR."\{ChatColor.GRAY}----------", BotBows.getTotalPlayers() + 2);
@@ -53,10 +53,10 @@ public class Board {
         int hp = p.getHP();
         int maxHp = p.getMaxHP();
         int playerLineIndex; // which line of the scoreboard the player stats will be shown
-        if (BotBows.team1.hasPlayer(p)) { //
-            playerLineIndex = BotBows.team1.getPlayerID(p) + BotBows.team2.size() + 1;
+        if (BotBows.settings.team1.hasPlayer(p)) { //
+            playerLineIndex = BotBows.settings.team1.getPlayerID(p) + BotBows.settings.team2.size() + 1;
         } else {
-            playerLineIndex = BotBows.team2.getPlayerID(p);
+            playerLineIndex = BotBows.settings.team2.getPlayerID(p);
         }
 
         String healthBar;
@@ -87,16 +87,16 @@ public class Board {
 
         for (Objective ignored : sb.getObjectives()) {
             for (String entries : sb.getEntries()) {
-                if (entries.contains(STR."\{BotBows.team1.NAME}: ")) {
+                if (entries.contains(STR."\{BotBows.settings.team1.NAME}: ")) {
                     sb.resetScores(entries);
                 }
-                if (entries.contains(STR."\{BotBows.team2.NAME}: ")) {
+                if (entries.contains(STR."\{BotBows.settings.team2.NAME}: ")) {
                     sb.resetScores(entries);
                 }
             }
         }
-        BotBowsTeam team1 = BotBows.team1;
-        BotBowsTeam team2 = BotBows.team2;
+        BotBowsTeam team1 = BotBows.settings.team1;
+        BotBowsTeam team2 = BotBows.settings.team2;
         int totalPlayers = BotBows.getTotalPlayers();
         if (winThreshold == -1) {
             setScore(STR."\{team1}: \{ChatColor.RESET}\{team1.getPoints()}", 4 + totalPlayers); // legger inn scoren til hvert team
