@@ -1,12 +1,18 @@
 package gruvexp.gruvexp.tasks;
 
 import gruvexp.gruvexp.twtClassic.BotBows;
+import gruvexp.gruvexp.twtClassic.botbowsGames.BotBowsGame;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class RoundCountdown extends BukkitRunnable { // LANGUAGE LEVEL = 14
 
+    final BotBowsGame botBowsGame;
     int time = 0;
+
+    public RoundCountdown(BotBowsGame botBowsGame) {
+        this.botBowsGame = botBowsGame;
+    }
 
     @Override
     public void run() {
@@ -15,7 +21,8 @@ public class RoundCountdown extends BukkitRunnable { // LANGUAGE LEVEL = 14
                     BotBows.messagePlayers(STR."\{ChatColor.BOLD}\{ChatColor.GREEN}BotBows Classic \{ChatColor.RESET}is starting in \{ChatColor.GOLD}\{5 - time}");
             case 5 -> {
                 BotBows.messagePlayers(STR."\{ChatColor.BOLD}\{ChatColor.GREEN}BotBows Classic \{ChatColor.RESET}has started!");
-                BotBows.canMove = true;
+                botBowsGame.canMove = true;
+                botBowsGame.triggerHazards();
                 cancel(); // stopper loopen
             }
         }

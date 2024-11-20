@@ -4,6 +4,7 @@ import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.menu.menus.HealthMenu;
 import gruvexp.gruvexp.menu.menus.SelectTeamsMenu;
 import gruvexp.gruvexp.twtClassic.botbowsTeams.*;
+import gruvexp.gruvexp.twtClassic.hazard.EarthquakeHazard;
 import gruvexp.gruvexp.twtClassic.hazard.StormHazard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,10 +18,11 @@ import java.util.Set;
 
 public class Settings {
     public BotBowsMap currentMap = BotBowsMap.BLAUD_VS_SAUCE; // default map
+    // hazards
+    public StormHazard stormHazard = new StormHazard(this); // holder styr på innstillinger og utførelse av storm logikk
+    public EarthquakeHazard earthquakeHazard = new EarthquakeHazard(this); // holder styr på innstillinger og utførelse av storm logikk
 
-    public StormHazard stormHazard = new StormHazard();
-
-    public BotBowsTeam team1 = new TeamBlaud();
+    public BotBowsTeam team1 = new TeamBlaud(); // dersom man endrer team, vil team1 og team2 feks byttes ut med TeamGraut og TeamWacky objekter, ettersom det er forskjell på dem
     public BotBowsTeam team2 = new TeamSauce();
     public final Set<BotBowsPlayer> PLAYERS = new HashSet<>(); // liste med alle players som er i gamet
 

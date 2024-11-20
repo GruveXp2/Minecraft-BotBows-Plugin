@@ -6,6 +6,7 @@ import gruvexp.gruvexp.tasks.BotBowsGiver;
 import gruvexp.gruvexp.tasks.RoundCountdown;
 import gruvexp.gruvexp.twtClassic.*;
 import gruvexp.gruvexp.twtClassic.botbowsTeams.BotBowsTeam;
+import gruvexp.gruvexp.twtClassic.hazard.EarthquakeHazard;
 import gruvexp.gruvexp.twtClassic.hazard.StormHazard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,6 +42,7 @@ public class BotBowsGame {
         this.team2 = settings.team2;
         this.players = settings.getPlayers();
         this.stormHazard = settings.stormHazard;
+        this.earthquakeHazard = settings.earthquakeHazard;
     }
 
     public void leaveGame(BotBowsPlayer p) {
@@ -66,7 +68,8 @@ public class BotBowsGame {
         Cooldowns.CoolDownInit(players);
         Board.createBoard();
         startRound();
-        settings.stormHazard.init();
+        stormHazard.init();
+        earthquakeHazard.init();
 
         // legger til player liv osv
         for (BotBowsPlayer q : players) {
@@ -83,13 +86,18 @@ public class BotBowsGame {
         for (BotBowsPlayer p : players) {
             p.revive();
         }
+        stormHazard.end();
+        earthquakeHazard.end();
         // teleporterer til spawn
         team1.tpPlayersToSpawn();
         team2.tpPlayersToSpawn();
         canMove = false;
-        new RoundCountdown().runTaskTimer(Main.getPlugin(), 0L, 20L); // mens de er på spawn, kan de ikke bevege seg og det er nedtelling til det begynner
+        new RoundCountdown(this).runTaskTimer(Main.getPlugin(), 0L, 20L); // mens de er på spawn, kan de ikke bevege seg og det er nedtelling til det begynner
+    }
 
+    public void triggerHazards() {
         stormHazard.triggerOnChance();
+        earthquakeHazard.triggerOnChance();
     }
 
     public void handleMovement(PlayerMoveEvent e) {
@@ -209,6 +217,8 @@ public class BotBowsGame {
         Bar.sneakBars.clear();
         Cooldowns.sneakCooldowns.clear();
         Cooldowns.sneakRunnables.clear();
+        stormHazard.end();
+        earthquakeHazard.end();
     }
 
     private void postGameTitle(BotBowsTeam winningTeam) {
@@ -225,7 +235,6 @@ public class BotBowsGame {
     }
 
     public void endGame() { // the game has ended, check who won
-        stormHazard.end(); // stopper storm hvis det pågår en
         if (team1.getPoints() == team2.getPoints()) {
             postGame(null);
         } else if (team1.getPoints() > team2.getPoints()) {
