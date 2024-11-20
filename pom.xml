@@ -6,7 +6,7 @@
 
     <groupId>gruvexp</groupId>
     <artifactId>gruvexp</artifactId>
-    <version>1.0.0-$\{buildNumber}</version> <!--husk å oppdatere buildnumber.txt-->
+    <version>1.0.0-${buildNumber}</version> <!--husk å oppdatere buildnumber.txt-->
     <packaging>jar</packaging>
 
     <name>BotBows</name>
@@ -46,39 +46,27 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>${project.basedir}/build-number.txt</file>
-                            </files>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
                 <version>3.3.0</version>
                 <executions>
                     <execution>
-                        <phase>initialize</phase>
+                        <id>generate-properties</id>
+                        <phase>process-resources</phase>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>resources</goal>
                         </goals>
                         <configuration>
-                            <executable>powershell.exe</executable>
-                            <arguments>
-                                <argument>-File</argument>
-                                <argument>${project.basedir}/increment-build-number.ps1</argument>
-                            </arguments>
+                            <outputDirectory>${project.build.outputDirectory}/config</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>build-number.txt</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
