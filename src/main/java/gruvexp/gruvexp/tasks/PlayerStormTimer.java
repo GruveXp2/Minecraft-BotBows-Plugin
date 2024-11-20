@@ -52,22 +52,22 @@ public class PlayerStormTimer extends BukkitRunnable {
                 } else {
                     bar.setProgress(time/(SECONDS*40d));
                 }
-                if (time == 1) { // baren vises bare når det er nødvendig, hvis den er 0 så er man i sikkerhet, men om den er over 0 betyr det enten at man er i fare eller så kan man se hvor lenge er igjen av timeren
-                    bar.setVisible(false);
+                if (time >= 4) { // baren vises bare når det er nødvendig, hvis den er 0 så er man i sikkerhet, men om den er over 0 betyr det enten at man er i fare eller så kan man se hvor lenge er igjen av timeren
+                    bar.setVisible(true);
                 }
             } else {
                 Main.WORLD.strikeLightningEffect(p.getLocation());
                 time = 0; // resetter
                 bar.setProgress(0);
                 p.damage(0.5);
-                bp.die(STR."\{BotBows.getBotBowsPlayer(p).getTeam().COLOR}\{p.getPlayerListName()}\{ChatColor.AQUA} was electrocuted to a crisp!");
+                bp.die(STR."\{bp.getTeam().COLOR}\{p.getPlayerListName()}\{ChatColor.AQUA} was electrocuted to a crisp!");
             }
         } else {
             if (time > 0) {
                 time--; // cooldownen går ned 0.25s/s
                 bar.setProgress(time/(SECONDS*40d));
                 if (time == 0) {
-                    bar.setVisible(true);
+                    bar.setVisible(false);
                 }
             }
         }
