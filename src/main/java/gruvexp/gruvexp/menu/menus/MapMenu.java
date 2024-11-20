@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class SelectMapMenu extends SettingsMenu {
+public class  MapMenu extends SettingsMenu {
 
     public static final ItemStack ROYAL_ARENA = makeItem(Material.SLIME_BALL, STR."\{ChatColor.GRAY}Royal Arena",
             STR."\{ChatColor.BLUE}Blaud\{ChatColor.WHITE} vs \{ChatColor.RED}Sauce",
