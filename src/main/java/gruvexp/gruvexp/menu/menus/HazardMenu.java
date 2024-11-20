@@ -59,7 +59,7 @@ public class HazardMenu extends SettingsMenu {
                     "If enabled, x% of rounds will have earthquakes.", loreDesc[0], loreDesc[1], loreDesc[2]);
         } else {
             item = makeItem(Material.LIME_STAINED_GLASS_PANE, STR."\{ChatColor.GREEN}Earthquakes", STR."\{ChatColor.DARK_GREEN}\{ChatColor.BOLD}Enabled",
-                    STR."\{stormHazard.getHazardChance().getPercent()}% of rounds will have earthquakes.", loreDesc[0], loreDesc[1], loreDesc[2]);
+                    STR."\{earthquakeHazard.getHazardChance().getPercent()}% of rounds will have earthquakes.", loreDesc[0], loreDesc[1], loreDesc[2]);
         }
         return item;
     }
