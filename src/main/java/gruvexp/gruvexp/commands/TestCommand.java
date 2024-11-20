@@ -4,13 +4,10 @@ import gruvexp.gruvexp.twtClassic.BotBows;
 import gruvexp.gruvexp.twtClassic.BotBowsMap;
 import gruvexp.gruvexp.twtClassic.BotBowsPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Objects;
 
 public class TestCommand implements CommandExecutor {
 
@@ -33,16 +30,18 @@ public class TestCommand implements CommandExecutor {
                     BotBows.healthMenu.enableCustomHP();
                     BotBowsPlayer judith = BotBows.getBotBowsPlayer(Bukkit.getPlayer("Spionagent54"));
 
-                judith.setMaxHP(20);
-                Bukkit.dispatchCommand(Bukkit.getPlayer("GruveXp"), "botbows:start");
-            } else if (Objects.equals(args[0], "a")) {
-                rotation = !rotation;
-                BotBows.debugMessage(STR."New location logic set to: \{rotation}");
-            } else if (Objects.equals(args[0], "b")) {
-                log = !log;
-                BotBows.debugMessage(STR."Logging set to: \{log}");
-            } else {
-                BotBows.debugMessage(STR."Wrong arg");
+                    judith.setMaxHP(20);
+                    Bukkit.dispatchCommand(Bukkit.getPlayer("GruveXp"), "botbows:start");  // tester om dungeonen funker
+                }
+                case "a" -> {
+                    rotation = !rotation;
+                    BotBows.debugMessage(STR."New location logic set to: \{rotation}");
+                }
+                case "b" -> {
+                    log = !log;
+                    BotBows.debugMessage(STR."Logging set to: \{log}");
+                }
+                case null, default -> BotBows.debugMessage(STR."Wrong arg");
             }
             return true;
         }
