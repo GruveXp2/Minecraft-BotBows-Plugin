@@ -36,6 +36,10 @@ public class BotBows {
 
     public static void leaveGame(Player p) {
         BotBowsPlayer bp = getBotBowsPlayer(p);
+        if (!settings.isPlayerJoined(p)) {
+            p.sendMessage("Nothing happened, you werent in the game in the first place");
+            return;
+        }
         if (activeGame) {
             botBowsGame.leaveGame(bp);
         } else {
@@ -44,6 +48,13 @@ public class BotBows {
     }
 
     public static void startGame(Player gameStarter) {
+        if (activeGame) {
+            gameStarter.sendMessage(STR."\{ChatColor.RED}The game has already started!");
+            return;
+        } else if (settings.team1.isEmpty() || settings.team2.isEmpty()) {
+            gameStarter.sendMessage(STR."\{ChatColor.RED}Cant start game, both teams must have at least 1 player each");
+            return;
+        }
         if (settings.currentMap == BotBowsMap.GRAUT_VS_WACKY) {
             botBowsGame = new GrautWackyGame(settings);
         } else {

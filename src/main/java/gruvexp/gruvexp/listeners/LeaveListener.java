@@ -11,9 +11,7 @@ public class LeaveListener implements Listener {
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
         Player p = e.getPlayer();
-        if (BotBows.settings.isPlayerJoined(p)) {
-            BotBows.leaveGame(p);
-        }
+        BotBows.leaveGame(p);
     }
 
 }
