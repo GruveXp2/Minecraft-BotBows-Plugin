@@ -37,6 +37,9 @@ public abstract class Hazard {
     protected abstract void trigger(); // hazarden starter
 
     public void end() {
+        for (BukkitTask timer : hazardTimers.values()) { // stopp timerene
+            timer.cancel();
+        }
         isActive = false;
     }; // stopper hazarden
 }

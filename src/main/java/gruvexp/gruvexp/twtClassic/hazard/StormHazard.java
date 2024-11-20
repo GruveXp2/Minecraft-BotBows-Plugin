@@ -9,9 +9,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 
@@ -60,9 +57,6 @@ public class StormHazard extends Hazard{
     @Override
     public void end() {
         super.end();
-        for (BukkitTask timer : hazardTimers.values()) { // stopp timerene
-            timer.cancel();
-        }
         for (BossBar bossBar : bars.values()) { // resett storm baren og skjul den
             bossBar.setVisible(false);
             bossBar.setProgress(0d);
