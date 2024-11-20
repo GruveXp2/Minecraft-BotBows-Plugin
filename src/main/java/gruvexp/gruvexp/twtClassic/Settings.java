@@ -53,39 +53,38 @@ public class Settings {
         if (map == currentMap) return;
         currentMap = map;
         switch (map) {
-            case BLAUD_VS_SAUCE -> {
-                team1 = new TeamBlaud(team1);
-                team2 = new TeamSauce(team2);
-            }
-            case GRAUT_VS_WACKY -> {
-                team1 = new TeamGraut(team1);
-                team2 = new TeamWacky(team2);
-            }
+            case BLAUD_VS_SAUCE -> setNewTeams(new TeamBlaud(team1), new TeamSauce(team2));
+            case GRAUT_VS_WACKY -> setNewTeams(new TeamGraut(team1), new TeamWacky(team2));
         }
+    }
+
+    private void setNewTeams(BotBowsTeam newTeam1, BotBowsTeam newTeam2) {
+        team1 = newTeam1;
+        team2 = newTeam2;
         BotBows.teamsMenu.setColoredGlassPanes(); // update the glass pane items that show the team colors and name
         BotBows.teamsMenu.recalculateTeam(); // update the player heads so they have the correct color
         BotBows.healthMenu.updateMenu(); // update so the name colors match the new team color
     }
 
     public void joinGame(Player p) {
-        if (!PLAYERS.contains(p)) {
-            BotBowsPlayer botBowsP = BotBows.getBotBowsPlayer(p);
-            if (botBowsP == null) {
-                botBowsP = new BotBowsPlayer(p, this);
-                BotBows.registerBotBowsPlayer(botBowsP);
-            }
-            PLAYERS.add(botBowsP);
-            team1.join(botBowsP);
-            if (PLAYERS.size() > 1) {
-                BotBows.teamsMenu.recalculateTeam();
-                BotBows.healthMenu.updateMenu();
-            }
-            for (Player q : Bukkit.getOnlinePlayers()) {
-                q.sendMessage(STR."\{p.getPlayerListName()} has joined BotBows Classic! (\{PLAYERS.size()})");
-            }
-        }
-        else {
+        BotBowsPlayer bp = BotBows.getBotBowsPlayer(p);
+        if (bp == null) {
+            bp = new BotBowsPlayer(p, this);
+            BotBows.registerBotBowsPlayer(bp);
+        } else if (players.contains(bp)) {
             p.sendMessage(STR."\{ChatColor.RED}You already joined!");
+            return;
+        }
+        players.add(bp);
+        if (team1.size() <= team2.size()) { // players fordeles jevnt i lagene
+            team1.join(bp);
+        } else {
+            team2.join(bp);
+        }
+        BotBows.teamsMenu.recalculateTeam();
+        BotBows.healthMenu.updateMenu();
+        for (Player q : Bukkit.getOnlinePlayers()) {
+            q.sendMessage(STR."\{p.getPlayerListName()} has joined BotBows Classic! (\{players.size()})");
         }
     }
 
@@ -95,8 +94,7 @@ public class Settings {
             return;
         }
         p.leaveGame();
-        BotBows.messagePlayers(STR."\{ChatColor.YELLOW}\{p.PLAYER.getPlayerListName()} has left the game (\{PLAYERS.size()})");
-        PLAYERS.remove(p);
+        players.remove(p);
         BotBows.teamsMenu.recalculateTeam();
         BotBows.healthMenu.updateMenu();
     }
