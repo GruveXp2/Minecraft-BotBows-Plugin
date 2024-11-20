@@ -61,10 +61,10 @@ public class PlayerEarthQuakeTimer extends BukkitRunnable {
                 fallingAnvil.setDropItem(false);
                 time = 0; // resetter
                 bar.setProgress(0);
-                p.damage(1);
                 Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
+                    p.damage(1); // sånn
                     bp.die(STR."\{bp.getTeam().COLOR}\{p.getPlayerListName()}\{ChatColor.GOLD} was squashed by a stone the size of a large boulder!");
-                }, 20L); // 2 sekunder
+                }, 20L);
             }
         } else {
             if (time > 0) {
