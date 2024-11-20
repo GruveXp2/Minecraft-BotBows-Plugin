@@ -142,47 +142,53 @@ public class BotBowsGame {
     }
 
     public void check4Victory(BotBowsPlayer dedPlayer) {
-        BotBowsTeam dedPlayerTeam = dedPlayer.getTeam();
-        checkTeam4Victory(dedPlayerTeam.getOppositeTeam(), dedPlayerTeam);
-    }
+        BotBowsTeam losingTeam = dedPlayer.getTeam();
+        BotBowsTeam winningTeam = losingTeam.getOppositeTeam();
 
-    public void checkTeam4Victory(BotBowsTeam winningTeam, BotBowsTeam losingTeam) {
-        for (BotBowsPlayer p: losingTeam.getPlayers()) { // hvis teamet fortsatt lever
-            if (p.getHP() > 0) {
-                return;
-            }
-        }
+        if (!isTeamEliminated(losingTeam)) return;
 
         BotBows.messagePlayers(STR."\{winningTeam}\{ChatColor.WHITE} won the round!");
-        int winScore = 0;
-        if (settings.dynamicScoring) {
-            for (BotBowsPlayer p : winningTeam.getPlayers()) {
-                winScore += p.getHP();
-            }
-            int enemyTeamMaxHP = 0;
-            BotBows.messagePlayers(STR."\{winningTeam.COLOR}+\{winScore}p for remaining hp");
-            for (BotBowsPlayer p : losingTeam.getPlayers()) {
-                enemyTeamMaxHP += p.getMaxHP();
-            }
-            winScore += enemyTeamMaxHP;
-            BotBows.messagePlayers(STR."\{winningTeam.COLOR}+\{enemyTeamMaxHP}p for enemy hp lost");
-        } else {
-            winScore = 1;
-        }
 
+        int winScore = settings.dynamicScoringEnabled() ? calculateDynamicScore(winningTeam, losingTeam) : 1;
         winningTeam.addPoints(winScore);
+
         BotBows.messagePlayers(STR."""
-        \{team1}: \{ChatColor.WHITE}\{team1.getPoints()}
-        \{team2}: \{ChatColor.WHITE}\{team2.getPoints()}""");
+                \{team1}: \{ChatColor.WHITE}\{team1.getPoints()}
+                \{team2}: \{ChatColor.WHITE}\{team2.getPoints()}""");
 
         BotBows.titlePlayers(STR."\{winningTeam} +\{winScore}", 40);
         Board.updateTeamScores();
 
         if (winningTeam.getPoints() >= settings.getWinThreshold() && settings.getWinThreshold() > 0) {
             postGame(winningTeam);
-            return; // because the match is over, a new round won't start
+        } else {
+            startRound();
         }
-        startRound();
+    }
+
+    private boolean isTeamEliminated(BotBowsTeam team) {
+        for (BotBowsPlayer p : team.getPlayers()) {
+            if (p.getHP() > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private int calculateDynamicScore(BotBowsTeam winningTeam, BotBowsTeam losingTeam) {
+        int HPLeft = 0;
+        for (BotBowsPlayer p : winningTeam.getPlayers()) {
+            HPLeft += p.getHP();
+        }
+        BotBows.messagePlayers(STR."\{winningTeam.COLOR}+\{HPLeft}p for remaining hp");
+
+        int enemyHPTaken = 0;
+        for (BotBowsPlayer p : losingTeam.getPlayers()) {
+            enemyHPTaken += p.getMaxHP();
+        }
+        BotBows.messagePlayers(STR."\{winningTeam.COLOR}+\{enemyHPTaken}p for enemy hp lost");
+
+        return HPLeft + enemyHPTaken;
     }
 
     public void postGame(BotBowsTeam winningTeam) {
