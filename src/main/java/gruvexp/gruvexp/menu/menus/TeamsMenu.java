@@ -63,6 +63,8 @@ public class TeamsMenu extends SettingsMenu {
 
     @Override
     public void setMenuItems() {
+        super.setMenuItems(); // settings init
+        init();
         setColoredGlassPanes();
         // page stuff
         inventory.setItem(21, LEFT);
@@ -70,9 +72,14 @@ public class TeamsMenu extends SettingsMenu {
         inventory.setItem(23, RIGHT);
     }
 
+    public void init() {
+        team1 = settings.team1;
+        team2 = settings.team2;
+    }
+
     public void setColoredGlassPanes() {
-        ItemStack team1Pane = makeItem(BotBows.team1.getGlassPane(), STR."\{BotBows.team1.COLOR}Team \{BotBows.team1}");
-        ItemStack team2Pane = makeItem(BotBows.team2.getGlassPane(), STR."\{BotBows.team2.COLOR}Team \{BotBows.team2}");
+        ItemStack team1Pane = makeItem(team1.getGlassPane(), STR."\{team1.COLOR}Team \{team1}");
+        ItemStack team2Pane = makeItem(team2.getGlassPane(), STR."\{team2.COLOR}Team \{team2}");
         inventory.setItem(0, team1Pane);
         inventory.setItem(1, team1Pane);
         inventory.setItem(7, team1Pane);
