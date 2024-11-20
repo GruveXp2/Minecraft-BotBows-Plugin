@@ -28,7 +28,7 @@ public class StormHazard extends Hazard{
             bar.addPlayer(p.PLAYER);
             bar.setProgress(0d);
             bar.setVisible(false);
-            bars.put(p.PLAYER, bar);
+            bars.put(p, bar);
         }
     }
 
