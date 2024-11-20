@@ -38,7 +38,7 @@ public class PlayerEarthQuakeTimer extends BukkitRunnable {
             //p.sendMessage(ChatColor.GRAY + "" + x + ", " + y + ", " + z + " : " + world.getBlockAt(x, y, z).getType());
             if (Main.WORLD.getBlockAt(x, i, z).getType() != Material.AIR) {return true;}
         }
-        return true;
+        return false;
     }
 
     @Override
