@@ -83,7 +83,7 @@ public abstract class BotBowsTeam {
 
     public boolean isEmpty() {return players.isEmpty();}
 
-    public Location getSpawnPos(Player p) {
+    public Location getSpawnPos(BotBowsPlayer p) {
         return SPAWNPOS[players.indexOf(p)];
     }
 
