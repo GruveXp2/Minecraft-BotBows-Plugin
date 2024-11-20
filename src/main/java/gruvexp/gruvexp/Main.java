@@ -67,7 +67,7 @@ public final class Main extends JavaPlugin {
                     if (command.startsWith("@")) {
                         if (command.equals("@ping")) {
                             if (BotBows.activeGame) {
-                                out.write(STR."BotBows \{BotBows.team1.size()}v\{BotBows.team2.size()} match ongoing");
+                                out.write(STR."BotBows \{BotBows.settings.team1.size()}v\{BotBows.settings.team2.size()} match ongoing");
                             } else {
                                 out.write(STR."BotBows: \{Bukkit.getOnlinePlayers().size()} online");
                             }
