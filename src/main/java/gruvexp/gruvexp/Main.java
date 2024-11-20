@@ -42,6 +42,7 @@ public final class Main extends JavaPlugin {
         getCommand("stopgame").setExecutor(new StopGameCommand());
         getCommand("test").setExecutor(new TestCommand());
         WORLD = Bukkit.getWorld("BotBows (S2E1)");
+        BotBows.init();
         BotBowsPlayer.armorInit();
         new Thread(this::startSocketServer).start(); // Start the server in a new thread to avoid blocking the main thread
     }
