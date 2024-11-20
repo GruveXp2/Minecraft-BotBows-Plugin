@@ -24,7 +24,7 @@ public class EarthquakeHazard extends Hazard{
     public void init() { // calles når spillet begynner
         if (getHazardChance() == HazardChance.DISABLED) return;
         for (BotBowsPlayer p : settings.getPlayers()) {
-            BossBar bar = Bukkit.createBossBar(STR."\{ChatColor.AQUA}Anvil timer", BarColor.YELLOW, BarStyle.SEGMENTED_6);
+            BossBar bar = Bukkit.createBossBar(STR."\{ChatColor.GOLD}Anvil timer", BarColor.YELLOW, BarStyle.SEGMENTED_6);
             bar.addPlayer(p.PLAYER);
             bar.setProgress(0d);
             bar.setVisible(false);
