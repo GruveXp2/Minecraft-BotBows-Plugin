@@ -33,14 +33,10 @@ public class BotBows {
 
     public static void init() { // a
         settings = new Settings();
-        BotBows.debugMessage("settings is not null,i fosmeone says its null their lyign");
         gameMenu = new GameMenu();
         mapMenu = new MapMenu();
-        BotBows.debugMessage("healthmenu init");
         healthMenu = new HealthMenu();
-        BotBows.debugMessage("teamsmenu init");
         teamsMenu = new TeamsMenu();
-        BotBows.debugMessage("yee ig");
         winThresholdMenu = new WinThresholdMenu();
         hazardMenu = new HazardMenu();
     }
