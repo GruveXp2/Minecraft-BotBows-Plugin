@@ -10,13 +10,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class  MapMenu extends SettingsMenu {
-
-    public static final ItemStack ROYAL_ARENA = makeItem(Material.SLIME_BALL, STR."\{ChatColor.GRAY}Royal Arena",
-            STR."\{ChatColor.BLUE}Blaud\{ChatColor.WHITE} vs \{ChatColor.RED}Sauce",
+    public static final ItemStack ROYAL_ARENA = makeItem(Material.SLIME_BALL, ChatColor.GRAY + "Royal Arena",
+            ChatColor.BLUE + "Blaud" + ChatColor.WHITE + " vs " + ChatColor.RED + "Sauce",
             "A flat arena with modern royal style",
             "Has a huge cave room underground");
-    public static final ItemStack ICY_RAVINE = makeItem(Material.SPRUCE_SAPLING, STR."\{ChatColor.AQUA}Icy Ravine",
-            STR."\{ChatColor.LIGHT_PURPLE}Graut\{ChatColor.WHITE} vs \{ChatColor.GREEN}Wacky",
+    public static final ItemStack ICY_RAVINE = makeItem(Material.SPRUCE_SAPLING, ChatColor.AQUA + "Icy Ravine",
+            ChatColor.LIGHT_PURPLE + "Graut" + ChatColor.WHITE + " vs " + ChatColor.GREEN + "Wacky",
             "A flat arena in a spruce forest with ice spikes and igloos",
             "Has a huge ravine in the middle and many caves underground");
 

@@ -105,20 +105,20 @@ public class BotBowsGame {
         boolean b = TestCommand.log;
         Block block = p.getLocation().add(0, -0.05, 0).getBlock(); // sjekker rett under, bare 0.05 itilfelle det er teppe
 
-        BotBows.debugMessage(STR."1: Material: \{block.getType().name()}", b);
+        BotBows.debugMessage("1: Material: " + block.getType().name(), b);
         if (block.getType() == Material.AIR) {
             block = p.getLocation().add(0, -0.9, 0).getBlock(); // hvis man står på kanten av et teppe kan det være en effektblokk under
-            BotBows.debugMessage(STR."2: Material: \{block.getType().name()}", b);
+            BotBows.debugMessage("2: Material: " + block.getType().name(), b);
         }
         if (block.getType() == Material.AIR) {
             block = p.getLocation().add(0, 0, 0).getBlock();
-            BotBows.debugMessage(STR."3: Material: \{block.getType().name()}", b);
+            BotBows.debugMessage("3: Material: " + block.getType().name(), b);
         } else {
-            BotBows.debugMessage(STR."Material: \{block.getType().name()}", b);
+            BotBows.debugMessage("Material: " + block.getType().name(), b);
         }
         Material material = block.getType();
         if (block.getType() == Material.LIGHT) {
-            BotBows.debugMessage(STR."Light level: \{((Light) block.getBlockData()).getLevel()}", b);
+            BotBows.debugMessage("Light level: " + ((Light) block.getBlockData()).getLevel(), b);
             if (((Light) block.getBlockData()).getLevel() == 0) { // sida det ikke går an å sjekke når players står uttafor kanten, så workarounder jeg det ved å sette light bloccs ved sida cyan yeetpads
                 material = Material.CYAN_CARPET;
                 BotBows.debugMessage("yee it works", b);
@@ -147,16 +147,16 @@ public class BotBowsGame {
 
         if (!isTeamEliminated(losingTeam)) return;
 
-        BotBows.messagePlayers(STR."\{winningTeam}\{ChatColor.WHITE} won the round!");
+        BotBows.messagePlayers(winningTeam.toString() + ChatColor.WHITE + " won the round!");
 
         int winScore = settings.dynamicScoringEnabled() ? calculateDynamicScore(winningTeam, losingTeam) : 1;
         winningTeam.addPoints(winScore);
 
-        BotBows.messagePlayers(STR."""
-                \{team1}: \{ChatColor.WHITE}\{team1.getPoints()}
-                \{team2}: \{ChatColor.WHITE}\{team2.getPoints()}""");
+        BotBows.messagePlayers(
+                team1.toString() + ": " + ChatColor.WHITE + team1.getPoints() + "\n" +
+                team2.toString() + ": " + ChatColor.WHITE + team2.getPoints());
 
-        BotBows.titlePlayers(STR."\{winningTeam} +\{winScore}", 40);
+        BotBows.titlePlayers(winningTeam.toString() + " +" + winScore, 40);
         Board.updateTeamScores();
 
         if (winningTeam.getPoints() >= settings.getWinThreshold() && settings.getWinThreshold() > 0) {
@@ -180,13 +180,13 @@ public class BotBowsGame {
         for (BotBowsPlayer p : winningTeam.getPlayers()) {
             HPLeft += p.getHP();
         }
-        BotBows.messagePlayers(STR."\{winningTeam.COLOR}+\{HPLeft}p for remaining hp");
+        BotBows.messagePlayers(winningTeam.COLOR + "+" + HPLeft + "p for remaining hp");
 
         int enemyHPTaken = 0;
         for (BotBowsPlayer p : losingTeam.getPlayers()) {
             enemyHPTaken += p.getMaxHP();
         }
-        BotBows.messagePlayers(STR."\{winningTeam.COLOR}+\{enemyHPTaken}p for enemy hp lost");
+        BotBows.messagePlayers(winningTeam.COLOR + "+" + enemyHPTaken + "p for enemy hp lost");
 
         return HPLeft + enemyHPTaken;
     }
@@ -195,15 +195,13 @@ public class BotBowsGame {
         BotBows.activeGame = false;
         canMove = true;
         if (winningTeam == null) {
-            BotBows.messagePlayers(STR."""
-                    \{ChatColor.LIGHT_PURPLE}================
-                    The game ended in a tie after \{round} round\{round == 1 ? "" : "s"}
-                    ================""");
+            BotBows.messagePlayers(ChatColor.LIGHT_PURPLE + "================\n" +
+                    "The game ended in a tie after " + round + " round" + (round == 1 ? "" : "s") + "\n" +
+                    "================");
         } else {
-            BotBows.messagePlayers(STR."""
-                    \{winningTeam.COLOR}================
-                    TEAM \{winningTeam.toString().toUpperCase()} won the game after \{round} round\{round == 1 ? "" : "s"}! GG
-                    ================""");
+            BotBows.messagePlayers(winningTeam.COLOR + "================\n" +
+                    "TEAM " + winningTeam.toString().toUpperCase() + " won the game after " + round + " round" + (round == 1 ? "" : "s") + "! GG\n" +
+                    "================");
         }
 
         postGameTitle(winningTeam);
@@ -232,11 +230,11 @@ public class BotBowsGame {
             return;
         }
         BotBowsTeam losingTeam = winningTeam.getOppositeTeam();
-        for (BotBowsPlayer p :winningTeam.getPlayers()) {
-            p.PLAYER.sendTitle(STR."\{winningTeam.COLOR}Victory", null, 10, 60, 20);
+        for (BotBowsPlayer p : winningTeam.getPlayers()) {
+            p.PLAYER.sendTitle(winningTeam.COLOR + "Victory", null, 10, 60, 20);
         }
         for (BotBowsPlayer p : losingTeam.getPlayers()) {
-            p.PLAYER.sendTitle(STR."\{losingTeam.COLOR}Defeat", null, 10, 60, 20);
+            p.PLAYER.sendTitle(losingTeam.COLOR + "Defeat", null, 10, 60, 20);
         }
     }
 

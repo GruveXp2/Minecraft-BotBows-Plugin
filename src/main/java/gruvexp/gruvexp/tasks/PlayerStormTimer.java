@@ -60,7 +60,7 @@ public class PlayerStormTimer extends BukkitRunnable {
                 time = 0; // resetter
                 bar.setProgress(0);
                 p.damage(0.5);
-                bp.die(STR."\{bp.getTeam().COLOR}\{p.getPlayerListName()}\{ChatColor.AQUA} was electrocuted to a crisp!");
+                bp.die(bp.getTeam().COLOR + p.getPlayerListName() + ChatColor.AQUA + " was electrocuted to a crisp!");
             }
         } else {
             if (time > 0) {

@@ -55,7 +55,7 @@ public class WinThresholdMenu extends SettingsMenu {
         ItemStack sub1= makeItem(Material.PINK_STAINED_GLASS_PANE, "-1");
         ItemStack add1 = makeItem(Material.LIME_STAINED_GLASS_PANE, "+1");
         ItemStack add10 = makeItem(Material.GREEN_STAINED_GLASS_PANE, "+10");
-        ItemStack is = makeItem(Material.BLUE_TERRACOTTA, STR."\{ChatColor.BLUE}Win score threshold");
+        ItemStack is = makeItem(Material.BLUE_TERRACOTTA, ChatColor.BLUE + "Win score threshold");
         is.setAmount(settings.getWinThreshold());
 
         inventory.setItem(2, sub10);
@@ -74,14 +74,13 @@ public class WinThresholdMenu extends SettingsMenu {
         inventory.setItem(7, FILLER_GLASS);
         inventory.setItem(8, FILLER_GLASS);
     }
-
     public void updateMenu() {
         ItemStack is;
         if (settings.getWinThreshold() > 0) {
-            is = makeItem(Material.BLUE_TERRACOTTA, STR."\{ChatColor.BLUE}Win score threshold");
+            is = makeItem(Material.BLUE_TERRACOTTA, ChatColor.BLUE + "Win score threshold");
             is.setAmount(settings.getWinThreshold());
         } else {
-            is = makeItem(Material.YELLOW_TERRACOTTA, STR."\{ChatColor.YELLOW}Infinite rounds", "Run /stopgame to stop the game");
+            is = makeItem(Material.YELLOW_TERRACOTTA, ChatColor.YELLOW + "Infinite rounds", "Run /stopgame to stop the game");
         }
         inventory.setItem(4, is);
     }

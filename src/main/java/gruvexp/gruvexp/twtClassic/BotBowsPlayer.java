@@ -50,7 +50,7 @@ public class BotBowsPlayer {
 
     public void leaveGame() {
         team.leave(this);
-        PLAYER.sendMessage(STR."\{ChatColor.YELLOW}You left BotBows Classic");
+        PLAYER.sendMessage(ChatColor.YELLOW + "You left BotBows Classic");
         PLAYER.setGameMode(GameMode.SPECTATOR);
         PLAYER.getInventory().remove(BotBows.BOTBOW);
     }
@@ -102,14 +102,14 @@ public class BotBowsPlayer {
 
     public void handleHit(BotBowsPlayer attacker) {
         if (hp == 1) { // spilleren kommer til å daue
-            die(STR."\{team.COLOR + PLAYER.getPlayerListName()} was sniped by \{attacker.team.COLOR + attacker.PLAYER.getPlayerListName()} and got \{ChatColor.DARK_RED}eliminated");
+            die(team.COLOR + PLAYER.getPlayerListName() + " was sniped by " + attacker.team.COLOR + attacker.PLAYER.getPlayerListName() + " and got " + ChatColor.DARK_RED + "eliminated");
             PLAYER.setSpectatorTarget(attacker.PLAYER);
-            PLAYER.sendMessage(STR."\{ChatColor.GRAY}Now spectating \{attacker.PLAYER.getPlayerListName()}");
+            PLAYER.sendMessage(ChatColor.GRAY + "Now spectating " + attacker.PLAYER.getPlayerListName());
             return;
         }
         setHP(hp - 1);
 
-        BotBows.messagePlayers(STR."\{team.COLOR + PLAYER.getPlayerListName()} was sniped by \{attacker.team.COLOR + attacker.PLAYER.getPlayerListName()}; \{team.COLOR}\{hp} hp left.");
+        BotBows.messagePlayers(team.COLOR + PLAYER.getPlayerListName() + " was sniped by " + attacker.team.COLOR + attacker.PLAYER.getPlayerListName() + "; " + team.COLOR + hp + " hp left.");
         // defender effects
         PLAYER.setGlowing(true);
         PLAYER.setInvulnerable(true);

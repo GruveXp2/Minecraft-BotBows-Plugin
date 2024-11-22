@@ -69,8 +69,8 @@ public class TeamsMenu extends SettingsMenu {
     }
 
     public void setColoredGlassPanes() {
-        ItemStack team1Pane = makeItem(team1.getGlassPane(), STR."\{team1.COLOR}Team \{team1}");
-        ItemStack team2Pane = makeItem(team2.getGlassPane(), STR."\{team2.COLOR}Team \{team2}");
+        ItemStack team1Pane = makeItem(team1.getGlassPane(), team1.COLOR + "Team " + team1);
+        ItemStack team2Pane = makeItem(team2.getGlassPane(), team2.COLOR + "Team " + team2);
         inventory.setItem(0, team1Pane);
         inventory.setItem(1, team1Pane);
         inventory.setItem(7, team1Pane);

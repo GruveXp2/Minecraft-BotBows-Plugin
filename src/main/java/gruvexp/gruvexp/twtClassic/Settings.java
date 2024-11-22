@@ -73,7 +73,7 @@ public class Settings {
             bp = new BotBowsPlayer(p, this);
             BotBows.registerBotBowsPlayer(bp);
         } else if (players.contains(bp)) {
-            p.sendMessage(STR."\{ChatColor.RED}You already joined!");
+            p.sendMessage(ChatColor.RED + "You already joined!");
             return;
         }
         players.add(bp);
@@ -85,13 +85,13 @@ public class Settings {
         BotBows.teamsMenu.recalculateTeam();
         BotBows.healthMenu.updateMenu();
         for (Player q : Bukkit.getOnlinePlayers()) {
-            q.sendMessage(STR."\{p.getPlayerListName()} has joined BotBows Classic! (\{players.size()})");
+            q.sendMessage(p.getPlayerListName() + " has joined BotBows Classic! (" + players.size() + ")");
         }
     }
 
     public void leaveGame(BotBowsPlayer p) {
         if (!players.contains(p)) {
-            p.PLAYER.sendMessage(STR."\{ChatColor.RED}You cant leave when you're not in a game");
+            p.PLAYER.sendMessage(ChatColor.RED + "You can't leave when you're not in a game");
             return;
         }
         p.leaveGame();
@@ -100,7 +100,7 @@ public class Settings {
         BotBows.healthMenu.updateMenu();
 
         p.PLAYER.setGameMode(GameMode.SPECTATOR);
-        BotBows.messagePlayers(STR."\{ChatColor.YELLOW}\{p.PLAYER.getPlayerListName()} has left the game (\{players.size()})");
+        BotBows.messagePlayers(ChatColor.YELLOW + p.PLAYER.getPlayerListName() + " has left the game (" + players.size() + ")");
     }
 
     public Set<BotBowsPlayer> getPlayers() {

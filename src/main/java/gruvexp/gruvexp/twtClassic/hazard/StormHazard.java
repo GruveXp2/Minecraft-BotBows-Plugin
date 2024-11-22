@@ -24,7 +24,7 @@ public class StormHazard extends Hazard{
     public void init() { // calles når spillet begynner
         if (getHazardChance() == HazardChance.DISABLED) return;
         for (BotBowsPlayer p : settings.getPlayers()) {
-            BossBar bar = Bukkit.createBossBar(STR."\{ChatColor.AQUA}Lightning timer", BarColor.BLUE, BarStyle.SEGMENTED_6);
+            BossBar bar = Bukkit.createBossBar(ChatColor.AQUA + "Lightning timer", BarColor.BLUE, BarStyle.SEGMENTED_6);
             bar.addPlayer(p.PLAYER);
             bar.setProgress(0d);
             bar.setVisible(false);
@@ -34,8 +34,8 @@ public class StormHazard extends Hazard{
 
     @Override
     protected void trigger() {
-        BotBows.messagePlayers(STR."\{ChatColor.DARK_RED}STORM INCOMING!\{ChatColor.RED} Seek shelter immediately!");
-        BotBows.titlePlayers(STR."\{ChatColor.RED}STORM INCOMING", 80);
+        BotBows.messagePlayers(ChatColor.DARK_RED + "STORM INCOMING!" + ChatColor.RED + " Seek shelter immediately!");
+        BotBows.titlePlayers(ChatColor.RED + "STORM INCOMING", 80);
         Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
             for (BotBowsPlayer p : settings.getPlayers()) {
                 hazardTimers.put(p.PLAYER, new PlayerStormTimer(p.PLAYER, bars.get(p)).runTaskTimer(Main.getPlugin(), 0L, 2L));

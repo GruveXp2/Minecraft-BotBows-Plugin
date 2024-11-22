@@ -92,7 +92,7 @@ public abstract class BotBowsTeam {
     }
 
     public Material getGlassPane() {
-        return Material.getMaterial(STR."\{DYECOLOR.name()}_STAINED_GLASS_PANE");
+        return Material.getMaterial(DYECOLOR.name() + "_STAINED_GLASS_PANE");
     }
 
     @Override

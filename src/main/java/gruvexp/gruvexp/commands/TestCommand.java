@@ -21,7 +21,7 @@ public class TestCommand implements CommandExecutor {
         if (args.length == 1) {
             switch (args[0]) {
                 case "t" ->
-                        BotBows.debugMessage(STR."The team of \{p.getName()} is \{BotBows.getBotBowsPlayer(p).getTeam()}");
+                        BotBows.debugMessage("The team of " + p.getName() + " is " + BotBows.getBotBowsPlayer(p).getTeam());
                 case "w" -> {
                     BotBows.joinGame(Bukkit.getPlayer("GruveXp"));
                     BotBows.joinGame(Bukkit.getPlayer("Spionagent54"));
@@ -35,13 +35,13 @@ public class TestCommand implements CommandExecutor {
                 }
                 case "a" -> {
                     rotation = !rotation;
-                    BotBows.debugMessage(STR."New location logic set to: \{rotation}");
+                    BotBows.debugMessage("New location logic set to: " + rotation);
                 }
                 case "b" -> {
                     log = !log;
-                    BotBows.debugMessage(STR."Logging set to: \{log}");
+                    BotBows.debugMessage("Logging set to: " + log);
                 }
-                case null, default -> BotBows.debugMessage(STR."Wrong arg");
+                case null, default -> BotBows.debugMessage("Wrong arg");
             }
             return true;
         }

@@ -18,17 +18,15 @@ import java.util.UUID;
 public class HealthMenu extends SettingsMenu {
 
     private boolean customHP;
-    private static final ItemStack DYNAMIC_POINTS_DISABLED = makeItem(Material.RED_STAINED_GLASS_PANE, STR."\{ChatColor.RED}Dynamic points",
-            STR."\{ChatColor.DARK_RED}Disabled", "If enabled, winning team gets 1", "point for each remaining hp.", "If disbabled, winning team only gets 1 point.");
-    private static final ItemStack DYNAMIC_POINTS_ENABLED = makeItem(Material.LIME_STAINED_GLASS_PANE, STR."\{ChatColor.GREEN}Dynamic points",
-            STR."\{ChatColor.DARK_GREEN}Enabled", "If enabled, winning team gets 1", "point for each remaining hp.", "If disbabled, winning team only gets 1 point.");
-    private static final ItemStack CUSTOM_HP_DISABLED = makeItem(Material.RED_STAINED_GLASS_PANE, STR."\{ChatColor.RED}Custom player HP",
-            STR."\{ChatColor.DARK_RED}\{ChatColor.BOLD}Disabled", "By enabling this, each player", "can have a different amount of hp");
-    private static final ItemStack CUSTOM_HP_ENABLED = makeItem(Material.LIME_STAINED_GLASS_PANE, STR."\{ChatColor.GREEN}Custom player HP",
-            STR."\{ChatColor.DARK_GREEN}\{ChatColor.BOLD}Enabled", "By enabling this, each player", "can have a different amount of hp");
+    private static final ItemStack DYNAMIC_POINTS_DISABLED = makeItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Dynamic points",
+            ChatColor.DARK_RED + "Disabled", "If enabled, winning team gets 1", "point for each remaining hp.", "If disbabled, winning team only gets 1 point.");
+    private static final ItemStack DYNAMIC_POINTS_ENABLED = makeItem(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "Dynamic points",
+            ChatColor.DARK_GREEN + "Enabled", "If enabled, winning team gets 1", "point for each remaining hp.", "If disbabled, winning team only gets 1 point.");
+    private static final ItemStack CUSTOM_HP_DISABLED = makeItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Custom player HP",
+            ChatColor.DARK_RED + "" + ChatColor.BOLD + "Disabled", "By enabling this, each player", "can have a different amount of hp");
+    private static final ItemStack CUSTOM_HP_ENABLED = makeItem(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "Custom player HP",            ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Enabled", "By enabling this, each player", "can have a different amount of hp");
 
-    @Override
-    public String getMenuName() {
+    @Override    public String getMenuName() {
         return "Select player health";
     }
 
@@ -126,9 +124,9 @@ public class HealthMenu extends SettingsMenu {
             int maxHP = settings.getMaxHP();
 
             for (int i = 0; i < 5; i++) {
-                ItemStack is = makeItem(Material.WHITE_STAINED_GLASS_PANE, STR."\{ChatColor.WHITE}\{i + 1}");
+                ItemStack is = makeItem(Material.WHITE_STAINED_GLASS_PANE, ChatColor.WHITE + String.valueOf(i + 1));
                 if (i < maxHP) {
-                    is = makeItem(Material.PINK_STAINED_GLASS_PANE, STR."\{ChatColor.RED}\{i + 1}");
+                    is = makeItem(Material.PINK_STAINED_GLASS_PANE, ChatColor.RED + String.valueOf(i + 1));
                 }
                 inventory.setItem(i + 11, is);
             }

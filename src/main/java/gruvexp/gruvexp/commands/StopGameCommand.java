@@ -13,10 +13,10 @@ public class StopGameCommand implements CommandExecutor {
         Player p = (Player) sender;
 
         if (BotBows.activeGame) {
-            BotBows.messagePlayers(STR."The game was ended by \{p.getPlayerListName()}");
+            BotBows.messagePlayers("The game was ended by " + p.getPlayerListName());
             BotBows.botBowsGame.endGame();
         } else {
-            p.sendMessage(STR."\{ChatColor.RED}The game hast even started!");
+            p.sendMessage(ChatColor.RED + "The game hasn't even started!");
         }
         return true;
     }

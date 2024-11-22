@@ -25,7 +25,7 @@ public class SwitchSpectator implements Listener {
                 .toList();
 
         if (alivePlayers.isEmpty()) {
-            p.sendMessage(STR."\{ChatColor.GRAY}Cant spectate, \{team.NAME} has no alive players");
+            p.sendMessage(ChatColor.GRAY + "Cant spectate, " + team.NAME + " has no alive players");
             return;
         }
 

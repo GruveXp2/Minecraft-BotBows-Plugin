@@ -43,7 +43,7 @@ public class BotBows {
 
     public static void joinGame(Player p) {
         if (activeGame) {
-            p.sendMessage(STR."\{ChatColor.RED}A game is already ongoing, wait until it ends before you join");
+            p.sendMessage(ChatColor.RED + "A game is already ongoing, wait until it ends before you join");
             return;
         }
         settings.joinGame(p);
@@ -64,10 +64,10 @@ public class BotBows {
 
     public static void startGame(Player gameStarter) {
         if (activeGame) {
-            gameStarter.sendMessage(STR."\{ChatColor.RED}The game has already started!");
+            gameStarter.sendMessage(ChatColor.RED + "The game has already started!");
             return;
         } else if (settings.team1.isEmpty() || settings.team2.isEmpty()) {
-            gameStarter.sendMessage(STR."\{ChatColor.RED}Cant start game, both teams must have at least 1 player each");
+            gameStarter.sendMessage(ChatColor.RED + "Cant start game, both teams must have at least 1 player each");
             return;
         }
         if (settings.currentMap == BotBowsMap.GRAUT_VS_WACKY) {
@@ -81,7 +81,7 @@ public class BotBows {
     private static ItemStack getBotBow() {
         ItemStack BOTBOW = new ItemStack(Material.CROSSBOW);
         CrossbowMeta meta = (CrossbowMeta) BOTBOW.getItemMeta();
-        meta.setDisplayName(STR."\{ChatColor.BOLD}\{ChatColor.GREEN}BotBow");
+        meta.setDisplayName(ChatColor.BOLD + "" + ChatColor.GREEN + "BotBow");
         meta.setLore(Arrays.asList("The strongest bow", "ever known to man"));
         meta.addEnchant(Enchantment.POWER, 10, true);
         meta.addEnchant(Enchantment.PUNCH, 10, true);
@@ -112,8 +112,8 @@ public class BotBows {
     }
 
     public static void debugMessage(String message) {
-        messagePlayers(STR."\{ChatColor.GRAY}[DEBUG]: \{message}");
-        Bukkit.getLogger().info(STR."\{ChatColor.GRAY}[DEBUG]: \{message}");
+        messagePlayers(ChatColor.GRAY + "[DEBUG]: " + message);
+        Bukkit.getLogger().info(ChatColor.GRAY + "[DEBUG]: " + message);
     }
 
     public static void debugMessage(String message, boolean bool) {

@@ -35,11 +35,11 @@ public class HazardMenu extends SettingsMenu {
         ItemStack item;
         String[] loreDesc = new String[] {"When there is a storm, you will get hit by", "lightning if you stand in dirext exposure", "to the sky for more than 5 seconds"};
         if (stormHazard.getHazardChance() == HazardChance.DISABLED) {
-            item = makeItem(Material.RED_STAINED_GLASS_PANE, STR."\{ChatColor.RED}Storms", STR."\{ChatColor.DARK_RED}\{ChatColor.BOLD}Disabled",
+            item = makeItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Storms", ChatColor.DARK_RED + "" + ChatColor.BOLD + "Disabled",
                     "If enabled, x% of rounds will have storms.", loreDesc[0], loreDesc[1], loreDesc[2]);
         } else {
-            item = makeItem(Material.LIME_STAINED_GLASS_PANE, STR."\{ChatColor.GREEN}Storms", STR."\{ChatColor.DARK_GREEN}\{ChatColor.BOLD}Enabled",
-                    STR."\{stormHazard.getHazardChance().getPercent()}% of rounds will have storms.", loreDesc[0], loreDesc[1], loreDesc[2]);
+            item = makeItem(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "Storms", ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Enabled",
+                    stormHazard.getHazardChance().getPercent() + "% of rounds will have storms.", loreDesc[0], loreDesc[1], loreDesc[2]);
         }
         return item;
     }
@@ -48,11 +48,11 @@ public class HazardMenu extends SettingsMenu {
         ItemStack item;
         String[] loreDesc = new String[] {"When there is an earthwuake, you will get hit by", "stones if you go underground", "for more than 5 seconds"};
         if (earthquakeHazard.getHazardChance() == HazardChance.DISABLED) {
-            item = makeItem(Material.RED_STAINED_GLASS_PANE, STR."\{ChatColor.RED}Earthquakes", STR."\{ChatColor.DARK_RED}\{ChatColor.BOLD}Disabled",
+            item = makeItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Earthquakes", ChatColor.DARK_RED + "" + ChatColor.BOLD + "Disabled",
                     "If enabled, x% of rounds will have earthquakes.", loreDesc[0], loreDesc[1], loreDesc[2]);
         } else {
-            item = makeItem(Material.LIME_STAINED_GLASS_PANE, STR."\{ChatColor.GREEN}Earthquakes", STR."\{ChatColor.DARK_GREEN}\{ChatColor.BOLD}Enabled",
-                    STR."\{earthquakeHazard.getHazardChance().getPercent()}% of rounds will have earthquakes.", loreDesc[0], loreDesc[1], loreDesc[2]);
+            item = makeItem(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "Earthquakes", ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Enabled",
+                    earthquakeHazard.getHazardChance().getPercent() + "% of rounds will have earthquakes.", loreDesc[0], loreDesc[1], loreDesc[2]);
         }
         return item;
     }

@@ -15,9 +15,9 @@ public class SettingsCommand implements CommandExecutor {
         }
         // grabs which player did the command. endrer datatype til Player
         if (BotBows.activeGame) {
-            p.sendMessage(STR."\{ChatColor.RED}Cant change settings, the game is already ongoing!");
+            p.sendMessage(ChatColor.RED + "Cant change settings, the game is already ongoing!");
         } else if (!BotBows.settings.isPlayerJoined(p)) {
-            p.sendMessage(STR."\{ChatColor.RED}You have to join to access the settings");
+            p.sendMessage(ChatColor.RED + "You have to join to access the settings");
         } else {
             BotBows.mapMenu.open(p);
         }

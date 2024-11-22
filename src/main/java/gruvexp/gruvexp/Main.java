@@ -54,7 +54,7 @@ public final class Main extends JavaPlugin {
 
     private void startSocketServer() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            getLogger().info(STR."Server listening on port \{PORT}");
+            getLogger().info("Server listening on port " + PORT);
 
             while (true) {
                 try (Socket clientSocket = serverSocket.accept();
@@ -67,9 +67,9 @@ public final class Main extends JavaPlugin {
                     if (command.startsWith("@")) {
                         if (command.equals("@ping")) {
                             if (BotBows.activeGame) {
-                                out.write(STR."BotBows \{BotBows.settings.team1.size()}v\{BotBows.settings.team2.size()} match ongoing");
+                                out.write("BotBows " + BotBows.settings.team1.size() + "v" + BotBows.settings.team2.size() + " match ongoing");
                             } else {
-                                out.write(STR."BotBows: \{Bukkit.getOnlinePlayers().size()} online");
+                                out.write("BotBows: " + Bukkit.getOnlinePlayers().size() + " online");
                             }
                             out.newLine();
                             out.flush();
@@ -92,7 +92,7 @@ public final class Main extends JavaPlugin {
                                         out.flush();
                                         //getLogger().info("The result of the command is: \n" + result + "\n======");
                                     } catch (IOException e) {
-                                        getLogger().severe(STR."Error sending result to client: \{e.getMessage()}");
+                                        getLogger().severe("Error sending result to client: " + e.getMessage());
                                     }
                                 }
                             } finally {
@@ -104,16 +104,16 @@ public final class Main extends JavaPlugin {
                         try {
                             latch.await(1, TimeUnit.SECONDS); // if the server lags so much it takes over a second to run the command, then it will quit waiting
                         } catch (InterruptedException e) {
-                            getLogger().severe(STR."Waiting for task completion interrupted: \{e.getMessage()}");
+                            getLogger().severe("Waiting for task completion interrupted: " + e.getMessage());
                         }
                     }
                     //getLogger().warning("The socket will close now");
                 } catch (IOException e) {
-                    getLogger().severe(STR."Error handling client: \{e.getMessage()}");
+                    getLogger().severe("Error handling client: " + e.getMessage());
                 }
             }
         } catch (IOException e) {
-            getLogger().severe(STR."Could not listen on port \{PORT}");
+            getLogger().severe("Could not listen on port " + PORT);
             e.printStackTrace();
         }
     }
@@ -136,7 +136,7 @@ public final class Main extends JavaPlugin {
             return baos.toString().trim();
         } catch (Exception e) {
             e.printStackTrace();
-            return STR."Error capturing command output: \{e.getMessage()}";
+            return "Error capturing command output: " + e.getMessage();
         }
     }
 }
