@@ -31,13 +31,6 @@ public class HazardMenu extends SettingsMenu {
     private StormHazard stormHazard;
     private EarthquakeHazard earthquakeHazard = BotBows.settings.earthquakeHazard;
 
-    private static final ItemStack STORMS_DISABLED = makeItem(Material.RED_STAINED_GLASS_PANE, STR."\{ChatColor.RED}Storm mode",
-            STR."\{ChatColor.DARK_RED}\{ChatColor.BOLD}Disabled", "If enabled, x% of rounds will have storms.",
-            "When there is a storm, you will get hit by", "lightning if you stand in dirext exposure", "to the sky for more than 5 seconds");
-    private static final ItemStack STORMS_ENABLED = makeItem(Material.LIME_STAINED_GLASS_PANE, STR."\{ChatColor.GREEN}Storm mode",
-            STR."\{ChatColor.DARK_GREEN}\{ChatColor.BOLD}Enabled", "If enabled, 10% of rounds will have storms.",
-            "When there is a storm, you will get hit by", "lightning if you stand in dirext exposure", "to the sky for more than 5 seconds");
-
     private ItemStack getStormItem() {
         ItemStack item;
         String[] loreDesc = new String[] {"When there is a storm, you will get hit by", "lightning if you stand in dirext exposure", "to the sky for more than 5 seconds"};
