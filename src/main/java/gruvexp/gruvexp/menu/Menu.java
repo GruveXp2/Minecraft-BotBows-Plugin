@@ -71,10 +71,9 @@ public abstract class Menu implements InventoryHolder {
         ItemStack item = new ItemStack(material);
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.setDisplayName(displayName);
-
         itemMeta.setLore(Arrays.asList(lore));
-        item.setItemMeta(itemMeta);
 
+        item.setItemMeta(itemMeta);
         return item;
     }
 
@@ -87,7 +86,6 @@ public abstract class Menu implements InventoryHolder {
         itemMeta.setOwningPlayer(Bukkit.getPlayer(p.getName()));
 
         item.setItemMeta(itemMeta);
-
         return item;
     }
 

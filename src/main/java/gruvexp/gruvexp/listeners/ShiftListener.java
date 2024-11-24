@@ -3,7 +3,7 @@ package gruvexp.gruvexp.listeners;
 import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.tasks.SneakCoolDown;
 import gruvexp.gruvexp.twtClassic.Bar;
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import gruvexp.gruvexp.twtClassic.Cooldowns;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -18,9 +18,9 @@ public class ShiftListener implements Listener {
     @EventHandler
     public void onShiftToggle(PlayerToggleSneakEvent e) {
 
-        if (!BotBowsManager.activeGame) {return;}
+        if (!BotBows.activeGame) {return;}
         Player p = e.getPlayer();
-        if (!BotBowsManager.isPlayerJoined(p)) {return;}
+        if (!BotBows.settings.isPlayerJoined(p)) {return;}
         if (p.getGameMode() != GameMode.ADVENTURE) {return;}
         if (p.isSneaking()) {
             Bar.setSneakBarColor(p, ChatColor.RED, BarColor.RED);

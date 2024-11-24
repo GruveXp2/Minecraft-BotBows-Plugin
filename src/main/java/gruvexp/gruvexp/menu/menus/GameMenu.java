@@ -1,8 +1,7 @@
 package gruvexp.gruvexp.menu.menus;
 
-import gruvexp.gruvexp.Main;
 import gruvexp.gruvexp.menu.Menu;
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -24,9 +23,7 @@ public class GameMenu extends Menu {
         Player p = (Player) e.getWhoClicked();
 
         if (e.getCurrentItem().getType() == Material.BOW) {
-            BotBowsManager.joinGame(p);
-            SelectTeamsMenu selectTeamsMenu = (SelectTeamsMenu) Main.menus.get("select teams");
-            selectTeamsMenu.recalculateTeam();
+            BotBows.joinGame(p);
         }
     }
 
@@ -34,7 +31,6 @@ public class GameMenu extends Menu {
     public void setMenuItems() {
         ItemStack botbows = makeItem(Material.BOW, "BotBows Classic", "The classic game of BotBows");
         inventory.setItem(1, botbows);
-
         setFillerGlass();
     }
 }

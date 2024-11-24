@@ -1,11 +1,10 @@
 package gruvexp.gruvexp.twtClassic.botbowsTeams;
 
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBowsPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,8 @@ public abstract class BotBowsTeam {
     public final DyeColor DYECOLOR;
     public final Location[] SPAWNPOS;
     public final Location TRIBUNE_POS;
-    List<Player> players = new ArrayList<>(4);
+    private BotBowsTeam oppositeTeam;
+    List<BotBowsPlayer> players = new ArrayList<>(4);
     private int points;
 
     public BotBowsTeam(String name, ChatColor color, DyeColor dyeColor, Location[] spawnPos, Location tribunePos) {
@@ -27,55 +27,62 @@ public abstract class BotBowsTeam {
         TRIBUNE_POS = tribunePos;
     }
 
+    public BotBowsTeam getOppositeTeam() {return oppositeTeam;}
+
+    public void setOppositeTeam(BotBowsTeam oppositeTeam) {
+        if (this.oppositeTeam != null) {
+            throw new IllegalStateException("This team already has an assigned opposite team");
+        }
+        this.oppositeTeam = oppositeTeam;
+    }
+
     public void tpPlayersToSpawn() {
         for (int i = 0; i < players.size(); i++) {
-            players.get(i).teleport(SPAWNPOS[i]);
+            players.get(i).PLAYER.teleport(SPAWNPOS[i]);
         }
     }
 
     public void postTeamSwap() { // when the map is changed and the teams are swapped out
-        for (Player p : players) {
-            BotBowsManager.registerPlayerTeam(p, this);
-            p.teleport(TRIBUNE_POS);
+        for (BotBowsPlayer p : players) {
+            p.PLAYER.teleport(TRIBUNE_POS);
         }
     }
 
-    public void join(Player p) {
+    public void join(BotBowsPlayer p) {
         players.add(p);
-        p.teleport(TRIBUNE_POS);
-        BotBowsManager.registerPlayerTeam(p, this);
+        p.PLAYER.teleport(TRIBUNE_POS);
+        p.joinTeam(this);
     }
 
-    public void moveToTeam(Player p, BotBowsTeam newTeam) {
+    public void moveToTeam(BotBowsPlayer p, BotBowsTeam newTeam) {
         players.remove(p);
         newTeam.join(p);
     }
 
-    public void leave(Player p) {
+    public void leave(BotBowsPlayer p) {
         players.remove(p);
-        BotBowsManager.unRegisterPlayerTeam(p);
+        p.leaveTeam();
     }
 
     public void reset() {
-        players.clear();
         points = 0;
     }
 
     public int size() {return players.size();}
 
-    public boolean hasPlayer(Player p) {
+    public boolean hasPlayer(BotBowsPlayer p) {
         return players.contains(p);
     }
 
-    public Player getPlayer(int id) {return players.get(id);}
+    public BotBowsPlayer getPlayer(int id) {return players.get(id);}
 
-    public int getPlayerID(Player p) {return players.indexOf(p);}
+    public int getPlayerID(BotBowsPlayer p) {return players.indexOf(p);}
 
-    public List<Player> getPlayers() {return players;}
+    public List<BotBowsPlayer> getPlayers() {return players;}
 
     public boolean isEmpty() {return players.isEmpty();}
 
-    public Location getSpawnPos(Player p) {
+    public Location getSpawnPos(BotBowsPlayer p) {
         return SPAWNPOS[players.indexOf(p)];
     }
 
@@ -85,7 +92,7 @@ public abstract class BotBowsTeam {
     }
 
     public Material getGlassPane() {
-        return Material.getMaterial(STR."\{DYECOLOR.name()}_STAINED_GLASS_PANE");
+        return Material.getMaterial(DYECOLOR.name() + "_STAINED_GLASS_PANE");
     }
 
     @Override

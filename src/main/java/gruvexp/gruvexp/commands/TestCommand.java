@@ -1,19 +1,13 @@
 package gruvexp.gruvexp.commands;
 
-import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.menus.HealthMenu;
-import gruvexp.gruvexp.menu.menus.SelectTeamsMenu;
-import gruvexp.gruvexp.menu.menus.WinThresholdMenu;
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import gruvexp.gruvexp.twtClassic.BotBowsMap;
+import gruvexp.gruvexp.twtClassic.BotBowsPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Objects;
 
 public class TestCommand implements CommandExecutor {
 
@@ -25,34 +19,33 @@ public class TestCommand implements CommandExecutor {
 
         Player p = (Player) sender;
         if (args.length == 1) {
-            if (Objects.equals(args[0], "t")) {
-                BotBowsManager.debugMessage(STR."The team of \{p.getName()} is \{BotBowsManager.getTeam(p)}");
-            } else if (Objects.equals(args[0], "w")) { // tester om dungeonen funker
-                BotBowsManager.joinGame(Bukkit.getPlayer("GruveXp"));
-                BotBowsManager.joinGame(Bukkit.getPlayer("Spionagent54"));
-                BotBowsManager.setMap(BotBowsMap.GRAUT_VS_WACKY);
-                BotBowsManager.winThreshold = -1;
-                ((WinThresholdMenu) Main.menus.get("win threshold")).updateMenu();
-                ((SelectTeamsMenu) Main.menus.get("select teams")).judithBytterLag();
-                ((HealthMenu) Main.menus.get("health")).enableCustomHP();
-                Player judith = Bukkit.getPlayer("Spionagent54");
+            switch (args[0]) {
+                case "t" ->
+                        BotBows.debugMessage("The team of " + p.getName() + " is " + BotBows.getBotBowsPlayer(p).getTeam());
+                case "w" -> {
+                    BotBows.joinGame(Bukkit.getPlayer("GruveXp"));
+                    BotBows.joinGame(Bukkit.getPlayer("Spionagent54"));
+                    BotBows.settings.setMap(BotBowsMap.GRAUT_VS_WACKY);
+                    BotBows.settings.setWinThreshold(-1);
+                    BotBows.healthMenu.enableCustomHP();
+                    BotBowsPlayer judith = BotBows.getBotBowsPlayer(Bukkit.getPlayer("Spionagent54"));
 
-                judith.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(40);
-                judith.setHealth(40);
-                BotBowsManager.playerMaxHP.put(judith, 20);
-                Bukkit.dispatchCommand(Bukkit.getPlayer("GruveXp"), "botbows:start");
-            } else if (Objects.equals(args[0], "a")) {
-                rotation = !rotation;
-                BotBowsManager.debugMessage(STR."New location logic set to: \{rotation}");
-            } else if (Objects.equals(args[0], "b")) {
-                log = !log;
-                BotBowsManager.debugMessage(STR."Logging set to: \{log}");
-            } else {
-                BotBowsManager.debugMessage(STR."Wrong arg");
+                    judith.setMaxHP(20);
+                    Bukkit.dispatchCommand(Bukkit.getPlayer("GruveXp"), "botbows:start");  // tester om dungeonen funker
+                }
+                case "a" -> {
+                    rotation = !rotation;
+                    BotBows.debugMessage("New location logic set to: " + rotation);
+                }
+                case "b" -> {
+                    log = !log;
+                    BotBows.debugMessage("Logging set to: " + log);
+                }
+                case null, default -> BotBows.debugMessage("Wrong arg");
             }
             return true;
         }
-        BotBowsManager.debugMessage(STR."\{p.getName()}is \{BotBowsManager.isInDungeon(p) ? "" : "not"} in a dungeon\{BotBowsManager.isInDungeon(p) ? STR.", section\{BotBowsManager.getSection(p)}" : ""}");
+        //BotBowsManager.debugMessage(STR."\{p.getName()}is \{isInDungeon(p) ? "" : "not"} in a dungeon\{BotBowsManager.isInDungeon(p) ? STR.", section\{BotBowsManager.getSection(p)}" : ""}");
         return true;
     }
 }

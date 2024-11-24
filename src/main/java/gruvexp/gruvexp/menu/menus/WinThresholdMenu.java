@@ -1,15 +1,14 @@
 package gruvexp.gruvexp.menu.menus;
 
-import gruvexp.gruvexp.Main;
-import gruvexp.gruvexp.menu.Menu;
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.menu.SettingsMenu;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class WinThresholdMenu extends Menu {
+public class WinThresholdMenu extends SettingsMenu {
     @Override
     public String getMenuName() {
         return "Select win threshold";
@@ -25,53 +24,39 @@ public class WinThresholdMenu extends Menu {
         Player clicker = (Player) e.getWhoClicked();
         switch (e.getCurrentItem().getType()) {
             case RED_STAINED_GLASS_PANE:
-                if (BotBowsManager.winThreshold > 10) {
-                    BotBowsManager.winThreshold -= 10;
-                } else {
-                    BotBowsManager.winThreshold = -1;
-                }
-                updateMenu();
+                settings.changeWinThreshold(-10);
                 break;
             case PINK_STAINED_GLASS_PANE:
-                if (BotBowsManager.winThreshold > 1) {
-                    BotBowsManager.winThreshold -= 1;
-                } else {
-                    BotBowsManager.winThreshold = -1;
-                }
-                updateMenu();
+                settings.changeWinThreshold(-1);
                 break;
             case LIME_STAINED_GLASS_PANE:
-                if (BotBowsManager.winThreshold == -1) {
-                    BotBowsManager.winThreshold = 1;
-                } else {
-                    BotBowsManager.winThreshold += 1;
-                }
+                settings.changeWinThreshold(1);
                 updateMenu();
                 break;
             case GREEN_STAINED_GLASS_PANE:
-                BotBowsManager.winThreshold += 10;
-                updateMenu();
+                settings.changeWinThreshold(10);
                 break;
             case BARRIER:
                 clicker.closeInventory();
                 break;
             case LIGHT_BLUE_STAINED_GLASS_PANE:
                 if (e.getSlot() == 12) {
-                    Main.menus.get("health").open(clicker);
+                    BotBows.teamsMenu.open(clicker);
                 } else {
-                    Main.menus.get("storm mode").open(clicker);
+                    BotBows.hazardMenu.open(clicker);
                 }
         }
     }
 
     @Override
     public void setMenuItems() {
+        super.setMenuItems();
         ItemStack sub10 = makeItem(Material.RED_STAINED_GLASS_PANE, "-10");
         ItemStack sub1= makeItem(Material.PINK_STAINED_GLASS_PANE, "-1");
         ItemStack add1 = makeItem(Material.LIME_STAINED_GLASS_PANE, "+1");
         ItemStack add10 = makeItem(Material.GREEN_STAINED_GLASS_PANE, "+10");
-        ItemStack is = makeItem(Material.BLUE_TERRACOTTA, STR."\{ChatColor.BLUE}Win score threshold");
-        is.setAmount(BotBowsManager.winThreshold);
+        ItemStack is = makeItem(Material.BLUE_TERRACOTTA, ChatColor.BLUE + "Win score threshold");
+        is.setAmount(settings.getWinThreshold());
 
         inventory.setItem(2, sub10);
         inventory.setItem(3, sub1);
@@ -89,14 +74,13 @@ public class WinThresholdMenu extends Menu {
         inventory.setItem(7, FILLER_GLASS);
         inventory.setItem(8, FILLER_GLASS);
     }
-
-    public void updateMenu() { // SETT TIL PRIVATE! det er bare for testing at det er public
+    public void updateMenu() {
         ItemStack is;
-        if (BotBowsManager.winThreshold > 0) {
-            is = makeItem(Material.BLUE_TERRACOTTA, STR."\{ChatColor.BLUE}Win score threshold");
-            is.setAmount(BotBowsManager.winThreshold);
+        if (settings.getWinThreshold() > 0) {
+            is = makeItem(Material.BLUE_TERRACOTTA, ChatColor.BLUE + "Win score threshold");
+            is.setAmount(settings.getWinThreshold());
         } else {
-            is = makeItem(Material.YELLOW_TERRACOTTA, STR."\{ChatColor.YELLOW}Infinite rounds", "Run /stopgame to stop the game");
+            is = makeItem(Material.YELLOW_TERRACOTTA, ChatColor.YELLOW + "Infinite rounds", "Run /stopgame to stop the game");
         }
         inventory.setItem(4, is);
     }

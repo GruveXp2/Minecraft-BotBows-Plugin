@@ -2,9 +2,8 @@ package gruvexp.gruvexp;
 
 import gruvexp.gruvexp.commands.*;
 import gruvexp.gruvexp.listeners.*;
-import gruvexp.gruvexp.menu.Menu;
-import gruvexp.gruvexp.menu.menus.*;
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
+import gruvexp.gruvexp.twtClassic.BotBowsPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.ConsoleCommandSender;
@@ -13,13 +12,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public final class Main extends JavaPlugin {
 
-    public static HashMap<String, Menu> menus = new HashMap<>();
     private static Main PLUGIN;
     public static World WORLD;
     private static final int PORT = 25566; // Port used to communicate with the discord bot
@@ -33,7 +30,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getLogger().info("BotBows plugin enabled!");
         getServer().getPluginManager().registerEvents(new MenuListener(), this);
         getServer().getPluginManager().registerEvents(new HitListener(), this);
-        getServer().getPluginManager().registerEvents(new movementListener(), this);
+        getServer().getPluginManager().registerEvents(new MovementListener(), this);
         getServer().getPluginManager().registerEvents(new LeaveListener(), this);
         getServer().getPluginManager().registerEvents(new ShiftListener(), this);
         getServer().getPluginManager().registerEvents(new SwitchSpectator(), this);
@@ -45,8 +42,8 @@ public final class Main extends JavaPlugin {
         getCommand("stopgame").setExecutor(new StopGameCommand());
         getCommand("test").setExecutor(new TestCommand());
         WORLD = Bukkit.getWorld("BotBows (S2E1)");
-        BotBowsManager.armorInit();
-        MenuInit();
+        BotBows.init();
+        BotBowsPlayer.armorInit();
         new Thread(this::startSocketServer).start(); // Start the server in a new thread to avoid blocking the main thread
     }
 
@@ -59,20 +56,9 @@ public final class Main extends JavaPlugin {
         Bukkit.getLogger().info("Disabling BotBows plugin");
     }
 
-    public static void MenuInit() {
-        menus.put("game menu", new GameMenu());
-        menus.put("select map", new SelectMapMenu());
-        menus.put("select teams", new SelectTeamsMenu());
-        menus.put("health", new HealthMenu());
-        menus.put("win threshold", new WinThresholdMenu());
-        menus.put("storm mode", new StormModeMenu());
-    }
-
-
-
     private void startSocketServer() {
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            getLogger().info(STR."Server listening on port \{PORT}");
+            getLogger().info("Server listening on port " + PORT);
 
             while (true) {
                 try (Socket clientSocket = serverSocket.accept();
@@ -84,10 +70,10 @@ public final class Main extends JavaPlugin {
                     if (command == null || command.trim().isEmpty()) return;
                     if (command.startsWith("@")) {
                         if (command.equals("@ping")) {
-                            if (BotBowsManager.activeGame) {
-                                out.write(STR."BotBows \{BotBowsManager.team1.size()}v\{BotBowsManager.team2.size()} match ongoing");
+                            if (BotBows.activeGame) {
+                                out.write("BotBows " + BotBows.settings.team1.size() + "v" + BotBows.settings.team2.size() + " match ongoing");
                             } else {
-                                out.write(STR."BotBows: \{Bukkit.getOnlinePlayers().size()} online");
+                                out.write("BotBows: " + Bukkit.getOnlinePlayers().size() + " online");
                             }
                             out.newLine();
                             out.flush();
@@ -110,7 +96,7 @@ public final class Main extends JavaPlugin {
                                         out.flush();
                                         //getLogger().info("The result of the command is: \n" + result + "\n======");
                                     } catch (IOException e) {
-                                        getLogger().severe(STR."Error sending result to client: \{e.getMessage()}");
+                                        getLogger().severe("Error sending result to client: " + e.getMessage());
                                     }
                                 }
                             } finally {
@@ -122,16 +108,16 @@ public final class Main extends JavaPlugin {
                         try {
                             latch.await(1, TimeUnit.SECONDS); // if the server lags so much it takes over a second to run the command, then it will quit waiting
                         } catch (InterruptedException e) {
-                            getLogger().severe(STR."Waiting for task completion interrupted: \{e.getMessage()}");
+                            getLogger().severe("Waiting for task completion interrupted: " + e.getMessage());
                         }
                     }
                     //getLogger().warning("The socket will close now");
                 } catch (IOException e) {
-                    getLogger().severe(STR."Error handling client: \{e.getMessage()}");
+                    getLogger().severe("Error handling client: " + e.getMessage());
                 }
             }
         } catch (IOException e) {
-            getLogger().severe(STR."Could not listen on port \{PORT}");
+            getLogger().severe("Could not listen on port " + PORT);
             e.printStackTrace();
         }
     }
@@ -154,7 +140,7 @@ public final class Main extends JavaPlugin {
             return baos.toString().trim();
         } catch (Exception e) {
             e.printStackTrace();
-            return STR."Error capturing command output: \{e.getMessage()}";
+            return "Error capturing command output: " + e.getMessage();
         }
     }
 }

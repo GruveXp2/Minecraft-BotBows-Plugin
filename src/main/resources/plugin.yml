@@ -1,7 +1,7 @@
 name: BotBows
-version: '${project.version}'
+version: '${version}'
 main: gruvexp.gruvexp.Main
-api-version: 1.20
+api-version: 1.21
 authors: [ GruveXp ]
 description: Plugin for the BotBows server
 
@@ -9,6 +9,7 @@ commands:
   menu:
     usage: /menu
     description: Used to access the game menu
+
     aliases:
       - /join
       - /play

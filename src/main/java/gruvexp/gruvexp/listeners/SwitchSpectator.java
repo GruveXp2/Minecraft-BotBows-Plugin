@@ -1,6 +1,6 @@
 package gruvexp.gruvexp.listeners;
 
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import gruvexp.gruvexp.twtClassic.botbowsTeams.BotBowsTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -15,13 +15,17 @@ import java.util.List;
 public class SwitchSpectator implements Listener {
 
     private static void spectateNext(Player p, boolean isOwnTeam) {
-        BotBowsTeam team = isOwnTeam ? BotBowsManager.getTeam(p) : BotBowsManager.getOppositeTeam(BotBowsManager.getTeam(p));
+        BotBowsTeam team = BotBows.getBotBowsPlayer(p).getTeam();
+        if (!isOwnTeam) {
+            team = team.getOppositeTeam();
+        }
         List<Player> alivePlayers = team.getPlayers().stream() // lager liste med alle de levende playersene
+                .map(q -> q.PLAYER)
                 .filter(q -> q.getGameMode() == GameMode.ADVENTURE)
                 .toList();
 
         if (alivePlayers.isEmpty()) {
-            p.sendMessage(STR."\{ChatColor.GRAY}Cant spectate, \{team.NAME} has no alive players");
+            p.sendMessage(ChatColor.GRAY + "Cant spectate, " + team.NAME + " has no alive players");
             return;
         }
 
@@ -30,8 +34,7 @@ public class SwitchSpectator implements Listener {
             //p.sendMessage(ChatColor.GRAY + "Currently spectating no players, spectating " + alive_players.get(0).getPlayerListName() + "(first player in " + team_str + ")");
             return;
         }
-
-        if (team.hasPlayer((Player) p.getSpectatorTarget())) {
+        if (team.hasPlayer(BotBows.getBotBowsPlayer((Player) p.getSpectatorTarget()))) {
             int i = alivePlayers.indexOf((Player) p.getSpectatorTarget());
             if (i == alivePlayers.size() - 1) {
                 i = -1;
@@ -46,9 +49,9 @@ public class SwitchSpectator implements Listener {
 
     @EventHandler()
     public void onMouseClick(PlayerInteractEvent e) {
-        if (!BotBowsManager.activeGame) return;
+        if (!BotBows.activeGame) return;
         Player p = e.getPlayer();
-        if (!BotBowsManager.isPlayerJoined(p)) return;
+        if (!BotBows.settings.isPlayerJoined(p)) return;
         if (p.getGameMode() != GameMode.SPECTATOR) return;
         Action a = e.getAction();
 

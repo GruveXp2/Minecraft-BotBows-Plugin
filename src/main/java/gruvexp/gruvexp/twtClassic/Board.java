@@ -11,23 +11,23 @@ public class Board {
     private static Objective objective;
     private static Team sbTeam1;
     private static Team sbTeam2;
+    public static ScoreboardManager manager = Bukkit.getScoreboardManager();
 
     public static void createBoard() {
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard board = manager.getNewScoreboard();
         objective = board.registerNewObjective("botbows", Criteria.DUMMY,
                 ChatColor.translateAlternateColorCodes('&', "&l&6BotBows &r&bClassic"));
 
-        BotBowsTeam team1 = BotBowsManager.team1;
-        BotBowsTeam team2 = BotBowsManager.team2;
+        BotBowsTeam team1 = BotBows.settings.team1;
+        BotBowsTeam team2 = BotBows.settings.team2;
         // setter inn scores
-        setScore(STR."\{darkenColor(team2.COLOR)}TEAM \{team2.NAME.toUpperCase()}", BotBowsManager.team2.size());
+        setScore(darkenColor(team2.COLOR) + "TEAM " + team2.NAME.toUpperCase(), BotBows.settings.team2.size());
 
-        setScore(STR."\{darkenColor(team1.COLOR)}TEAM \{team1.NAME.toUpperCase()}", BotBowsManager.getTotalPlayers() + 1);
-        setScore(STR."\{ChatColor.GRAY}----------", BotBowsManager.getTotalPlayers() + 2);
-        setScore("", BotBowsManager.getTotalPlayers() + 5);
+        setScore(darkenColor(team1.COLOR) + "TEAM " + team1.NAME.toUpperCase(), BotBows.getTotalPlayers() + 1);
+        setScore(ChatColor.GRAY + "----------", BotBows.getTotalPlayers() + 2);
+        setScore("", BotBows.getTotalPlayers() + 5);
 
-        for (Player p:Bukkit.getOnlinePlayers()) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
             p.setScoreboard(board);
         }
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -39,76 +39,77 @@ public class Board {
         sbTeam1.setColor(team1.COLOR);
         sbTeam2.setColor(team2.COLOR);
 
-        for (Player p: team1.getPlayers()) {
-            sbTeam1.addPlayer(p);
+        for (BotBowsPlayer p : team1.getPlayers()) {
+            sbTeam1.addEntry(p.PLAYER.getName());
         }
-        for (Player p: team2.getPlayers()) {
-            sbTeam2.addPlayer(p);
+        for (BotBowsPlayer p : team2.getPlayers()) {
+            sbTeam2.addEntry(p.PLAYER.getName());
         }
     }
 
-    public static void updatePlayerScore(Player p) {
-        Scoreboard sb = objective.getScoreboard();
+    public static void updatePlayerScore(BotBowsPlayer p) {
+        removePlayerScore(p);
 
-        //fjerner scoren hvis den allerede er der, siden man skal bytte den ut med den oppdaterte versjonen
-        for (Objective ignored : sb.getObjectives()) {
-            for (String entries : sb.getEntries()) {
-                if (entries.contains(p.getPlayerListName())) {
-                    sb.resetScores(entries);
-                }
-            }
-        }
-
-        int hp = BotBowsManager.playerHP.get(p);
-        int maxHp = BotBowsManager.playerMaxHP.get(p);
+        int hp = p.getHP();
+        int maxHp = p.getMaxHP();
         int playerLineIndex; // which line of the scoreboard the player stats will be shown
-        if (BotBowsManager.team1.hasPlayer(p)) { //
-            playerLineIndex = BotBowsManager.team1.getPlayerID(p) + BotBowsManager.team2.size() + 1;
+        if (BotBows.settings.team1.hasPlayer(p)) { //
+            playerLineIndex = BotBows.settings.team1.getPlayerID(p) + BotBows.settings.team2.size() + 1;
         } else {
-            playerLineIndex = BotBowsManager.team2.getPlayerID(p);
+            playerLineIndex = BotBows.settings.team2.getPlayerID(p);
         }
 
         String healthBar;
         if (maxHp > 5) {
-            healthBar = STR."\{ChatColor.RED}\{"▏".repeat(hp)}\{ChatColor.GRAY}\{"▏".repeat(maxHp - hp)}\{BotBowsManager.getTeam(p).COLOR} \{p.getPlayerListName()}";
+            healthBar = ChatColor.RED + "▏".repeat(hp) + ChatColor.GRAY + "▏".repeat(maxHp - hp) + p.getTeam().COLOR + " " + p.PLAYER.getPlayerListName();
         } else {
-            healthBar = STR."\{ChatColor.RED}\{"❤".repeat(hp)}\{ChatColor.GRAY}\{"❤".repeat(maxHp - hp)}\{BotBowsManager.getTeam(p).COLOR} \{p.getPlayerListName()}";
+            healthBar = ChatColor.RED + "❤".repeat(hp) + ChatColor.GRAY + "❤".repeat(maxHp - hp) + p.getTeam().COLOR + " " + p.PLAYER.getPlayerListName();
         }
 
         setScore(healthBar, playerLineIndex);
-
     }
 
-    public static void updateTeamScores() {
+    public static void removePlayerScore(BotBowsPlayer p) {
         Scoreboard sb = objective.getScoreboard();
-        int winThreshold = BotBowsManager.winThreshold;
-
         for (Objective ignored : sb.getObjectives()) {
             for (String entries : sb.getEntries()) {
-                if (entries.contains(STR."\{BotBowsManager.team1.NAME}: ")) {
-                    sb.resetScores(entries);
-                }
-                if (entries.contains(STR."\{BotBowsManager.team2.NAME}: ")) {
+                if (entries.contains(p.PLAYER.getPlayerListName())) {
                     sb.resetScores(entries);
                 }
             }
         }
-        BotBowsTeam team1 = BotBowsManager.team1;
-        BotBowsTeam team2 = BotBowsManager.team2;
-        int totalPlayers = BotBowsManager.getTotalPlayers();
+    }
+
+    public static void updateTeamScores() {
+        Scoreboard sb = objective.getScoreboard();
+        int winThreshold = BotBows.settings.getWinThreshold();
+
+        for (Objective ignored : sb.getObjectives()) {
+            for (String entries : sb.getEntries()) {
+                if (entries.contains(BotBows.settings.team1.NAME + ": ")) {
+                    sb.resetScores(entries);
+                }
+                if (entries.contains(BotBows.settings.team2.NAME + ": ")) {
+                    sb.resetScores(entries);
+                }
+            }
+        }
+        BotBowsTeam team1 = BotBows.settings.team1;
+        BotBowsTeam team2 = BotBows.settings.team2;
+        int totalPlayers = BotBows.getTotalPlayers();
         if (winThreshold == -1) {
-            setScore(STR."\{team1}: \{ChatColor.RESET}\{team1.getPoints()}", 4 + totalPlayers); // legger inn scoren til hvert team
-            setScore(STR."\{team2}: \{ChatColor.RESET}\{team2.getPoints()}", 3 + totalPlayers);
+            setScore(team1 + ": " + ChatColor.RESET + team1.getPoints(), 4 + totalPlayers); // legger inn scoren til hvert team
+            setScore(team2 + ": " + ChatColor.RESET + team2.getPoints(), 3 + totalPlayers);
         } else if (winThreshold >= 35) {
-            setScore(STR."\{team1}: \{ChatColor.RESET}\{team1.getPoints()} / \{ChatColor.GRAY}\{winThreshold}", 4 + totalPlayers); // legger inn scoren til hvert team
-            setScore(STR."\{team2}: \{ChatColor.RESET}\{team2.getPoints()} / \{ChatColor.GRAY}\{winThreshold}", 3 + totalPlayers);
+            setScore(team1 + ": " + ChatColor.RESET + team1.getPoints() + " / " + ChatColor.GRAY + winThreshold, 4 + totalPlayers); // legger inn scoren til hvert team
+            setScore(team2 + ": " + ChatColor.RESET + team2.getPoints() + " / " + ChatColor.GRAY + winThreshold, 3 + totalPlayers);
         } else { // få plass til mest mulig streker
             String healthSymbol = getHealthSymbol(winThreshold);
-            int team1Points = Math.min(BotBowsManager.winThreshold, team1.getPoints());
-            int team2Points = Math.min(BotBowsManager.winThreshold, team2.getPoints());
+            int team1Points = Math.min(BotBows.settings.getWinThreshold(), team1.getPoints());
+            int team2Points = Math.min(BotBows.settings.getWinThreshold(), team2.getPoints());
 
-            setScore(STR."\{team1}: \{ChatColor.GREEN}\{healthSymbol.repeat(team1Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team1Points)}", 4 + totalPlayers); // legger inn scoren til hvert team
-            setScore(STR."\{team2}: \{ChatColor.GREEN}\{healthSymbol.repeat(team2Points)}\{ChatColor.GRAY}\{healthSymbol.repeat(winThreshold - team2Points)}", 3 + totalPlayers);
+            setScore(team1 + ": " + ChatColor.GREEN + healthSymbol.repeat(team1Points) + ChatColor.GRAY + healthSymbol.repeat(winThreshold - team1Points), 4 + totalPlayers); // legger inn scoren til hvert team
+            setScore(team2 + ": " + ChatColor.GREEN + healthSymbol.repeat(team2Points) + ChatColor.GRAY + healthSymbol.repeat(winThreshold - team2Points), 3 + totalPlayers);
         }
     }
 
@@ -151,7 +152,7 @@ public class Board {
         } else if (colorName.startsWith("LIGHT_")) {
             return ChatColor.valueOf(colorName.replace("LIGHT_", ""));
         } else {
-            return ChatColor.valueOf(STR."DARK_\{colorName}");
+            return ChatColor.valueOf("DARK_" + colorName);
         }
     }
 }

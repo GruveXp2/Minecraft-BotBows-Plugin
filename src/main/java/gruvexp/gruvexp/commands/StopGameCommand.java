@@ -1,6 +1,6 @@
 package gruvexp.gruvexp.commands;
 
-import gruvexp.gruvexp.twtClassic.BotBowsManager;
+import gruvexp.gruvexp.twtClassic.BotBows;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,11 +12,11 @@ public class StopGameCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
 
-        if (BotBowsManager.activeGame) {
-            BotBowsManager.messagePlayers(STR."The game was ended by \{p.getPlayerListName()}");
-            BotBowsManager.endGame();
+        if (BotBows.activeGame) {
+            BotBows.messagePlayers("The game was ended by " + p.getPlayerListName());
+            BotBows.botBowsGame.endGame();
         } else {
-            p.sendMessage(STR."\{ChatColor.RED}The game hast even started!");
+            p.sendMessage(ChatColor.RED + "The game hasn't even started!");
         }
         return true;
     }
